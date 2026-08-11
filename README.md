@@ -49,4 +49,3 @@ This knowledge base was compiled from the following sources.
 - Eugene Yan, [*What I Love About Scrum for Data Science*](https://eugeneyan.com/writing/what-i-love-about-scrum-for-data-science/#retrospectives-feedback-loop-for-improvement)
 - Snoek, Larochelle & Adams, [*Practical Bayesian Optimization of Machine Learning Algorithms*](https://arxiv.org/abs/1206.2944)
 - AWS Well-Architected, [*Correction of Errors*](https://wa.aws.amazon.com/wat.concept.coe.en.html), and the [`JDHarris007/coe`](https://github.com/JDHarris007/coe/blob/master/CoE.md) example
-- TensorFlow (2021)
