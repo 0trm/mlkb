@@ -1,6 +1,6 @@
 # Machine Learning Knowledge Base
 
-A centralized wiki for knowledge, frameworks, and playbooks related to Machine Learning (ML).
+A repository for knowledge, frameworks, and playbooks related to Machine Learning (ML).
 
 ## Contents
 
