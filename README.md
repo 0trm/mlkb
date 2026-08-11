@@ -2,8 +2,6 @@
 
 A repository for knowledge, frameworks, and playbooks related to Machine Learning (ML).
 
-![](images/image39.png)
-
 ## Contents
 
 ### [1. Overview](01-overview.md)
