@@ -1,6 +1,6 @@
 # Machine Learning Knowledge Base
 
-This document serves as a centralized wiki for all knowledge, frameworks, and playbooks related to Machine Learning (ML). It is designed to be a living document, constantly updated and refined to reflect the latest advancements and best practices in the field.
+A centralized wiki for knowledge, frameworks, and playbooks related to Machine Learning (ML).
 
 ## Contents
 
