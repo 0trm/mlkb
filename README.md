@@ -42,9 +42,3 @@ This document serves as a centralized wiki for all knowledge, frameworks, and pl
 ## Sources
 
 This knowledge base was compiled from several external sources. See **[SOURCES.md](SOURCES.md)** for the full list and which sections map to which source.
-
-## About this repository
-
-Migrated from a Google Doc. The prose is reproduced as written in the source document; only formatting was converted to Markdown.
-
-All 136 diagrams from the source document are included in [`images/`](images), each placed at the point in the text where it appears in the original. Many are preceded by the description paragraph that accompanies them in the Doc.
