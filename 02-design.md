@@ -8,13 +8,13 @@ This section will house fundamental concepts, theoretical underpinnings, and key
 
 Choosing the right ML project is a rare and valuable skill. Careful scoping—evaluating options and selecting high-impact projects—maximizes success.
 
-![](images/image130.png)
+<img src="images/image130.png" alt="" width="620">
 
 ### 2.1.2. Scoping Process
 
 Scoping involves identifying business problems, brainstorming AI solutions, and assessing feasibility and value.
 
-![](images/image43.png)
+<img src="images/image43.png" alt="" width="620">
 
 For an e-commerce retailer aiming to increase sales (as an example), follow these steps:
 
@@ -23,7 +23,7 @@ For an e-commerce retailer aiming to increase sales (as an example), follow thes
   - Collaborate with business owners to brainstorm problems (e.g., low conversions, excess inventory, low profit margins).
   - Focus on business objectives, not AI solutions. Ask, “What are the top three things you wish worked better?” Avoid AI-specific discussions initially.
 
-![](images/image91.png)
+<img src="images/image91.png" alt="" width="620">
 
 ### ii. Brainstorm AI Solutions
 
@@ -38,7 +38,7 @@ For an e-commerce retailer aiming to increase sales (as an example), follow thes
 
   - **Feasibility**: Evaluate technical viability using benchmarks (e.g., literature, competitor solutions) and a 2x2 matrix:
 
-![](images/image47.png)
+<img src="images/image47.png" alt="" width="620">
   - **Unstructured Data**:
 
       - **New Projects**: Use HLP to assess feasibility. If humans can perform the task (e.g., detect scratches in images), an algorithm likely can too.
@@ -49,11 +49,11 @@ For an e-commerce retailer aiming to increase sales (as an example), follow thes
       - **Existing Projects**: Identify new predictive features to improve performance.
   - **HLP for Unstructured Data**: Ensure humans receive the same data as the algorithm (e.g., only camera images for traffic light detection, not in-car views). If humans can’t perform the task, improve inputs (e.g., better cameras) before proceeding.
 
-![](images/image15.png)
+<img src="images/image15.png" alt="" width="620">
 
   - **Structured Data Feasibility**: Verify that input features (x) predict outputs (y).
 
-![](images/image94.png)
+<img src="images/image94.png" alt="" width="620">
 
 Examples:
 
@@ -63,7 +63,7 @@ Examples:
   - **Fashion Trends from Social Media**: Predicting future trends is difficult (iffy).
   - **Stock Prices**: Historical prices are not predictive (infeasible).
 
-![](images/image104.png)
+<img src="images/image104.png" alt="" width="620">
 
   - **Value**: Estimate business impact, bridging ML and business metrics:
 
@@ -71,11 +71,11 @@ Examples:
       - Use Fermi estimates to relate ML improvements (e.g., 1% word accuracy increase) to business outcomes (e.g., 0.7% query accuracy increase, improving user engagement and revenue).
       - Compromise on metrics that both teams accept, requiring ML teams to stretch toward business goals and business teams to accept technical constraints.
 
-![](images/image96.png)
+<img src="images/image96.png" alt="" width="620">
 
   - **Ethical Considerations**: Ensure the project creates positive societal value and is fair and unbiased. Consult industry-specific ethical frameworks (e.g., for lending, healthcare, or retail). If a project lacks societal benefit, consider abandoning it, even if economically viable.
 
-![](images/image9.png)
+<img src="images/image9.png" alt="" width="620">
 
 ### iv. Define Milestones and Resources
 
@@ -83,13 +83,13 @@ Examples:
   - Estimate **resources**: Data volume, team involvement, cross-functional support, and timelines.
   - If specifications are unclear, conduct **benchmarking** (compare to similar projects) or build a **proof of concept** to refine estimates.
 
-![](images/image7.png)
+<img src="images/image7.png" alt="" width="620">
 
 ### v. Define Key Metrics
 
 Successful data-driven initiatives require collaboration between technical experts (data scientists), domain specialists (SMEs), and business leaders (stakeholders) to achieve measurable business benefits like increased accuracy, customer satisfaction, and revenue generation. It underscores the interdisciplinary nature of bringing data insights to fruition.
 
-![](images/image124.png)
+<img src="images/image124.png" alt="" width="620">
 
 ### 2.1.3. Workflows
 
@@ -97,21 +97,21 @@ Successful data-driven initiatives require collaboration between technical exper
 
 This image illustrates a simplified workflow for an ML Project, outlining a typical iterative development process. It begins with defining the "problem," which then feeds into an "analysis" phase where data exploration and initial model considerations would take place. Following analysis, "development" occurs. Crucially, the "ML application" box, containing "ML model A" and "ML model B," represents the practical implementation where developed models are integrated for use. The arrows indicate an iterative loop, showing that insights or performance from the ML application can feed back into the "analysis" and "development" stages, suggesting continuous improvement and refinement of the models and the overall solution based on real-world application or further analysis of the problem.
 
-![](images/image62.png)
+<img src="images/image62.png" alt="" width="620">
 
 ### ii. Modeling Workflow
 
 This image demonstrates that an ML model acts as an intelligent function: it takes "input data" (raw information) and, based on its learned patterns, produces "predictions" (derived insights or decisions), functioning as a sophisticated transformer of information.
 
-![](images/image26.png)
+<img src="images/image26.png" alt="" width="620">
 
 This image illustrates how an ML model is integrated within a broader application. The 'ML model' box represents the core predictive engine, receiving 'input data' via an API and generating predictions. These predictions can also contain 'business rules' to make decisions or drive actions, and are often presented to users through a GUI. The database stores the data used by the model and the results it generates.
 
-![](images/image37.png)
+<img src="images/image37.png" alt="" width="620">
 
 This diagram illustrates the independent but often synchronized lifecycles of an "Application" and its embedded "Model" over time. The key takeaway is that the model's lifecycle, including its updates and retraining, can operate independently from the application's release schedule, allowing for agile improvements to the ML intelligence without requiring a full application redeployment, or vice-versa, which is a core concept in modern MLOps practices.
 
-![](images/image84.png)
+<img src="images/image84.png" alt="" width="620">
 
 ## 2.2. Data
 
@@ -119,7 +119,7 @@ This diagram illustrates the independent but often synchronized lifecycles of an
 
 Modern AI often leverages massive datasets from large internet companies with billions of users. While big data can significantly boost performance, many industries lack access to such volumes. In these cases, focusing on good data—high-quality, well-curated data—is critical.
 
-![](images/image11.png)
+<img src="images/image11.png" alt="" width="620">
 
 ### i. Characteristics of Good Data
 
@@ -143,7 +143,7 @@ Data Quality can be thought of having 4 dimensions:
   - Consistency
   - Timeliness
 
-![](images/image67.png)
+<img src="images/image67.png" alt="" width="620">
 
 ### 2.2.2. Challenges in Data Definition
 
@@ -155,7 +155,7 @@ Defining consistent data labels is challenging due to subjective interpretations
   - **Convention 2**: Slightly larger box including the tail.
   - **Convention 3**: Broad box encompassing the entire scene.
 
-![](images/image122.png)
+<img src="images/image122.png" alt="" width="620">
 
 While any single convention may be acceptable (with the first two preferred), inconsistency—where each labeler uses a different convention—confuses the ML algorithm, reducing performance.
 
@@ -165,7 +165,7 @@ Similarly, in smartphone defect detection, labelers might identify “significan
   - **Labeler 2**: Marks multiple defects (e.g., a scratch and a pit mark).
   - **Labeler 3**: Marks a single box covering all defects.
 
-![](images/image64.png)
+<img src="images/image64.png" alt="" width="620">
 
 The second approach (marking multiple defects) is often most effective, but ambiguous instructions lead to inconsistent labeling, undermining the model. Clear, standardized instructions are essential to mitigate this issue.
 
@@ -177,7 +177,7 @@ Ambiguity in labeling extends to other domains, such as audio transcription. For
   - “Um, nearest gas station” (with a comma).
   - “Nearest gas station \[unintelligible\].”
 
-![](images/image128.png)
+<img src="images/image128.png" alt="" width="620">
 
 These variations—differing in punctuation, spelling, or annotations—introduce noise. Standardizing one convention enhances the consistency of speech recognition data.
 
@@ -191,7 +191,7 @@ Many ML practitioners initially use pre-prepared datasets from the internet, whi
 
 User ID merging is a common challenge in large companies, where multiple data records may correspond to the same person. For example, an online job listing website might have a user record with email, name, and address. After acquiring a mobile app for resume advice, the company faces a new database with potentially overlapping users.
 
-![](images/image114.png)
+<img src="images/image114.png" alt="" width="620">
 
 A supervised learning algorithm can predict whether two records represent the same person (output: 1 for same, 0 for different). Ground truth can be obtained if users explicitly link accounts, providing labeled examples. Without such data, companies often rely on human labelers (e.g., product managers) to manually compare records with similar names or ZIP codes. However, human judgment can be ambiguous, as records may or may not refer to the same person. Consistent labeling, even in ambiguous cases, improves algorithm performance.
 
@@ -221,7 +221,7 @@ For structured data, selecting predictive features is key. In user ID merging, i
 
 Consistent labels (y) are essential. Ambiguous labeling instructions lead to inconsistent data, as seen in the iguana and smartphone examples. Strategies to ensure consistency are discussed below.
 
-![](images/image52.png)
+<img src="images/image52.png" alt="" width="620">
 
 ### iii. Data Types and Sizes
 
@@ -232,7 +232,7 @@ Best practices vary based on data type (unstructured vs. structured) and dataset
   - **Small Datasets (\<10,000 examples)**: Clean, consistent labels are critical, as a single mislabeled example can significantly impact performance (e.g., 1% of a 100-example dataset). Manual review is feasible.
   - **Large Datasets (\>10,000 examples)**: Manual review is impractical, so focus on robust data processes, clear labeling instructions, and scalable labeling teams.
 
-![](images/image53.png)
+<img src="images/image53.png" alt="" width="620">
 
 **Examples**:
 
@@ -241,17 +241,17 @@ Best practices vary based on data type (unstructured vs. structured) and dataset
   - **Large Unstructured**: Speech recognition with 50 million audio clips.
   - **Large Structured**: Online shopping recommendations with 1 million users.
 
-![](images/image68.png)
+<img src="images/image68.png" alt="" width="620">
 
 For unstructured data, abundant unlabeled data (e.g., thousands of unlabeled smartphone images) can be labeled by humans or augmented. Structured data is harder to expand, as user bases are finite, and human labeling is often ambiguous.
 
-![](images/image71.png)
+<img src="images/image71.png" alt="" width="620">
 
 ### iv. Importance of Clean Labels
 
 In small datasets, label consistency is paramount. For example, in a project to predict helicopter rotor speed from motor voltage, a small dataset of five noisy examples makes it difficult to determine the correct function (linear or curved). With clean, consistent labels, even five examples can yield a reliable model. Similarly, computer vision systems can perform well with just 30 consistently labeled images.
 
-![](images/image31.png)
+<img src="images/image31.png" alt="" width="620">
 
 Large datasets can face small data challenges in the “long tail” of rare events:
 
@@ -261,9 +261,9 @@ Large datasets can face small data challenges in the “long tail” of rare eve
 
 Consistent labeling of these rare cases improves model performance, even in large datasets.
 
-![](images/image20.png)
+<img src="images/image20.png" alt="" width="620">
 
-![](images/image60.png)
+<img src="images/image60.png" alt="" width="620">
 
 ### 2.2.4. Improving Label Consistency
 
@@ -283,7 +283,7 @@ Standardizing on a single convention (e.g., one transcription format for audio c
 
 When distinguishing between classes is ambiguous (e.g., deep vs. shallow scratches), merging them into a single class (e.g., “scratch”) eliminates inconsistencies, simplifying the task for the algorithm. This is effective when the distinction isn’t critical.
 
-![](images/image108.png)
+<img src="images/image108.png" alt="" width="620">
 
 ### iii. Creating Uncertainty Classes
 
@@ -292,7 +292,7 @@ For ambiguous cases, introduce a new label to capture uncertainty:
   - **Smartphone Defects**: Label scratches as “defective,” “non-defective,” or “borderline” for ambiguous cases (e.g., medium-length scratches).
   - **Speech Recognition**: Use an “unintelligible” tag for unclear audio clips (e.g., “Nearest gas station \[unintelligible\]” instead of guessing “Nearly go” or “Nearest grocery”).
 
-![](images/image2.png)
+<img src="images/image2.png" alt="" width="620">
 
 This approach improves consistency by allowing labelers to flag ambiguity explicitly.
 
@@ -311,7 +311,7 @@ Consensus labeling (voting by multiple labelers) can improve accuracy but is ove
 
 HLP is a valuable benchmark for unstructured data tasks, estimating Bayes error (irreducible error) and aiding in error analysis and prioritization. For example, in visual inspection, if a business demands 99% accuracy but human inspectors achieve only 66.7% on a dataset (e.g., correctly labeling 4/6 examples), HLP sets a realistic baseline, showing that 99% may be unattainable.
 
-![](images/image109.png)
+<img src="images/image109.png" alt="" width="620">
 
 ### ii. Defining Ground Truth
 
@@ -320,7 +320,7 @@ HLP’s interpretation depends on the ground truth:
   - **External Ground Truth**: In medical imaging, if ground truth comes from a biopsy, HLP measures how well a doctor predicts the biopsy outcome, providing a clear baseline for algorithm performance.
   - **Human-Defined Ground Truth**: In visual inspection, where ground truth is another human’s label, HLP measures agreement between humans, not absolute accuracy.
 
-![](images/image125.png)
+<img src="images/image125.png" alt="" width="620">
 
 ### iii. Limitations of HLP
 
@@ -328,7 +328,7 @@ HLP can be misleading due to inconsistent labeling. For example, in speech recog
 
 \[ 0.7^2 + 0.3^2 = 0.49 + 0.09 = 0.58 \]
 
-![](images/image132.png)
+<img src="images/image132.png" alt="" width="620">
 
 Thus, HLP is calculated as 58%, reflecting labeler agreement rather than true performance. An algorithm consistently choosing the ellipsis convention achieves 70% agreement with humans, appearing to “outperform” HLP by 12%. However, this improvement is trivial, as both conventions are equally valid, and it may mask significant errors in other areas, creating a false impression of superiority.
 
@@ -336,7 +336,7 @@ Thus, HLP is calculated as 58%, reflecting labeler agreement rather than true pe
 
 Improving label consistency can raise HLP, benefiting the model. In the visual inspection example, if inspectors agree on a 0.3mm threshold for defects, re-evaluating a dataset might correct mislabels (e.g., a 0.2mm scratch labeled as non-defective), raising HLP from 66.7% to 100%. While this makes beating HLP impossible, it provides cleaner data, ultimately improving model performance.
 
-![](images/image77.png)
+<img src="images/image77.png" alt="" width="620">
 
 ### v. Structured Data and HLP
 
@@ -348,7 +348,7 @@ HLP is less common in structured data due to the difficulty of human labeling. E
 
 In these cases, low HLP often indicates inconsistent labeling. Improving labeling standards raises HLP and provides cleaner data, enhancing model performance.
 
-![](images/image69.png)
+<img src="images/image69.png" alt="" width="620">
 
 ### 2.2.6. Obtaining Data
 
@@ -359,7 +359,7 @@ ML development is iterative, involving model selection, hyperparameter tuning, t
   - **Quick Start**: Aim to collect an initial dataset in a short time (e.g., 2–7 days) to enter the iteration loop quickly. For example, a week-long data collection sprint can yield creative solutions.
   - **Iterative Expansion**: After training and error analysis, collect more data as needed.
 
-![](images/image27.png)
+<img src="images/image27.png" alt="" width="620">
 
 Exception: If prior experience indicates a minimum dataset size (e.g., hours of speech data for recognition), invest upfront to meet that threshold. For new problems, start small, train, and use error analysis to guide further collection.
 
@@ -372,7 +372,7 @@ Brainstorm potential data sources and evaluate their costs and timelines. For sp
   - **Crowdsourced Transcription**: Pay to transcribe unlabeled audio, yielding natural speech (cost: higher, time: \~1–2 weeks for management).
   - **Purchased Data**: Buy audio from commercial providers (cost: high, time: fast).
 
-![](images/image17.png)
+<img src="images/image17.png" alt="" width="620">
 
 Consider data quality, privacy, and regulatory constraints alongside financial and time costs. This inventory ensures informed decisions.
 
@@ -384,7 +384,7 @@ Common labeling approaches include:
   - **Outsourced**: Hire specialized companies for efficient labeling, especially for niche tasks.
   - **Crowdsourced**: Use platforms to engage large groups, suitable for general tasks like audio transcription.
 
-![](images/image74.png)
+<img src="images/image74.png" alt="" width="620">
 
 For specialized tasks (e.g., medical imaging, factory inspection), subject matter experts (SMEs) are often required, as typical labelers lack the expertise to diagnose X-rays or identify defects accurately.
 
@@ -404,7 +404,7 @@ When expanding a dataset (e.g., from 1,000 examples), avoid increasing by more t
 
 A data pipeline processes raw data into a format suitable for ML. For example, to predict if a user is job-hunting based on their data, preprocessing steps like spam cleanup and user ID merging are necessary. These steps can be scripted or use ML algorithms, though scripting is simpler to manage.
 
-![](images/image25.png)
+<img src="images/image25.png" alt="" width="620">
 
 ### i. Replicability Challenges
 
@@ -413,7 +413,7 @@ During development, preprocessing scripts can be ad hoc, involving manual steps 
   - **Proof of Concept (POC) Phase**: Focus on validating the application’s feasibility. Manual preprocessing is acceptable, but take detailed notes and comment scripts to aid future replication. Avoid heavy process investment at this stage.
   - **Production Phase**: Prioritize replicability using tools like **TensorFlow Transform**, **Apache Beam**, or **Airflow** to create a robust, reproducible pipeline.
 
-![](images/image97.png)
+<img src="images/image97.png" alt="" width="620">
 
 ### ii. Complex Pipelines
 
@@ -425,7 +425,7 @@ Consider a pipeline for job-hunting prediction:
 
 If errors are found (e.g., incorrect IP blacklists), updating the pipeline is challenging, especially if scripts are scattered across team members’ systems. **Data provenance** (data source) and **lineage** (processing steps) are critical for maintenance. Extensive documentation or tools like TensorFlow Transform help, though ML tools for provenance and lineage remain immature (TensorFlow, 2021).
 
-![](images/image8.png)
+<img src="images/image8.png" alt="" width="620">
 
 ### iii. Metadata
 
@@ -434,11 +434,11 @@ If errors are found (e.g., incorrect IP blacklists), updating the pipeline is ch
   - **Visual Inspection**: Metadata includes photo timestamp, factory, line number, camera settings (e.g., exposure, aperture), and inspector ID. If certain samples produce errors, metadata helps identify patterns (e.g., specific factory lines).
   - **Speech Recognition**: Metadata like smartphone brand or voice activity detection model can reveal error sources.
 
-![](images/image112.png)
+<img src="images/image112.png" alt="" width="620">
 
 Storing metadata in MLOps frameworks (e.g., MLflow) facilitates analysis and improves algorithm performance, similar to commenting code (TensorFlow, 2021).
 
-![](images/image12.png)
+<img src="images/image12.png" alt="" width="620">
 
 ### 2.2.8. Balanced T/D/T Splits
 
@@ -449,7 +449,7 @@ For small datasets, balanced splits ensure representative train, development (de
 
 Balanced splits maintain the dataset’s true distribution (30% defective), improving model evaluation. For large datasets, random splits are typically representative, making balancing less critical.
 
-![](images/image16.png)
+<img src="images/image16.png" alt="" width="620">
 
 ### i. Testing and Validating
 
@@ -459,7 +459,7 @@ Split the data into training set and test set (typically 80-20%; if it’s big d
 
 Evaluating a model is simple enough but what if you are hesitating between two types of models? Train both and compare how well they generalize using the test set. Now suppose model A performs better and now you want to apply some regularization to avoid overfitting. How do you choose the value of the regularization hyperparameter? Can’t use the test set multiple times because it will overfit. A solution to this problem is creating a validation set (aka dev set): you hold out part of the training set to evaluate several candidate models and select the best one. More specifically, you train multiple models with various hyperparameters on the reduced training set (training set - dev set) and select the model that performs best on the dev set. After that, you train the best model on the full training set and this gives you the final model. Lastly, you evaluate this final model on the test set to get an estimate of the generalization error. Use cross-validation on the dev set.
 
-![](images/image134.png)
+<img src="images/image134.png" alt="" width="425">
 
 An important rule to remember is that both the validation set and the test set must be as representative as possible of the data you expect to use in production.
 

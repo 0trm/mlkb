@@ -6,7 +6,7 @@ Machine learning development often revolves around two philosophies: model-centr
 
 ### i. Model-centric and Data-centric AI
 
-![](images/image66.png)
+<img src="images/image66.png" alt="" width="620">
 
 1.  In a **model-centric** approach, the emphasis is on crafting the perfect algorithm. Imagine you’re tuning a car’s engine—researchers might spend months designing a sophisticated neural network, tweaking its layers and connections, all while using a fixed dataset like a standard image collection. Historically, this has been the dominant method in AI research, with the focus on building ever-better models to outshine competitors on the same data.
 2.  By contrast, a **data-centric** approach shifts the spotlight to the data itself. Here, the idea is to feed a solid but simpler model with high-quality, carefully curated data. It’s like ensuring the car runs on premium fuel rather than tinkering endlessly with the engine. In practice, this might mean cleaning up messy data, adding new examples, or enhancing what you already have. For many real-world projects, this method proves more efficient—great data can lift a basic model to impressive heights, often faster than perfecting a complex algorithm. For example, improving a dataset of customer reviews by removing duplicates and clarifying labels might boost a sentiment analysis model more than redesigning its architecture.
@@ -19,11 +19,11 @@ Building a machine learning system is a balancing act between three core element
   - **Data**: The examples your model learns from.
   - **Hyperparameters**: Settings like how fast the model learns that guide its training.
 
-![](images/image45.png)
+<img src="images/image45.png" alt="" width="620">
 
 These pieces don’t come together in a straight line—it’s an iterative process. You start by training a model, test how it performs, spot where it goes wrong, and then adjust one of those three components. Maybe the code needs a bug fix, the data needs more variety, or the hyperparameters need fine-tuning. Then you try again. This cycle is normal and even valuable; each mistake teaches you something about what your system needs.
 
-![](images/image86.png)
+<img src="images/image86.png" alt="" width="620">
 
 A key part of this process is figuring out *why* the model fails, which is where error analysis comes in. Suppose you’re building a speech recognition system, and it stumbles on clips with background noise. By studying those failures, you might realize the data lacks enough noisy examples, prompting you to add more. This interplay between code, data, and settings is what drives progress, making patience and curiosity essential traits for an ML developer.
 
@@ -49,14 +49,14 @@ Goal is to enhance model performance. Tools and techniques help to process, sele
       - Other methods: univariate selection, Principal Component Analysis (PCA), Recursive Feature Elimination (RFE)
   - Feature store - only relevant for large teams working on multiple projects that use the same features
 
-![](images/image102.png)
+<img src="images/image102.png" alt="" width="620">
 
   - Data version control
 
       - Tracking dataset changes
       - Maintaining consistency
 
-![](images/image33.png)
+<img src="images/image33.png" alt="" width="620">
 
 ## 3.2. Model Baseline
 
@@ -70,11 +70,11 @@ This approach gets you moving fast. You’ll learn more from tweaking and testin
 
 A model with a low average error might seem like a winner, but that number can hide serious flaws. Imagine a web search model that’s 99% accurate but fails to rank "[Google.com](http://google.com/)" correctly for a search on "Google"—that’s a critical miss, even if rare. Or consider a medical diagnosis model trained on data where 99% of patients are healthy. It could predict "healthy" every time, scoring 99% accuracy, yet miss every sick patient. That’s not just misleading—it’s dangerous.
 
-![](images/image117.png)
+<img src="images/image117.png" alt="" width="620">
 
 The problem often stems from skewed data or overlooking rare but vital cases. Average error smooths over these issues, so you need to dig deeper. Check how the model handles the tough stuff—the edge cases or the minority classes that matter most to your application.
 
-![](images/image22.png)
+<img src="images/image22.png" alt="" width="620">
 
 ### iii. Setting a Baseline
 
@@ -89,7 +89,7 @@ Every ML project needs a starting point, or baseline, to measure progress agains
 
 Suppose you’ve identified four major speech categories in your dataset, with your model achieving accuracies of 94%, 89%, 87%, and 70%, respectively. You might initially focus on improving the lowest-performing category (e.g., low-bandwidth audio at 70%). However, before prioritizing, it’s critical to establish a baseline for all categories.
 
-![](images/image48.png)
+<img src="images/image48.png" alt="" width="620">
 
 To do this, have human transcriptionists label the data and measure their accuracy. This establishes the **human-level performance (HLP)** for each category. For instance, you might find that improving performance on clear speech to HLP could yield a 1% gain, while improving performance on audio with background car noise could yield a 4% gain. For low-bandwidth audio, however, the improvement might be negligible (0%).
 
@@ -118,7 +118,7 @@ Training a machine learning algorithm rarely yields perfect results on the first
 
 To understand errors in a system, such as a speech recognition model, follow this process:
 
-![](images/image1.png)
+<img src="images/image1.png" alt="" width="620">
 
   - **Examine Misclassified Examples**: Select a sample from your development set, such as 100 mislabeled audio clips. Listen to each clip and annotate relevant characteristics in a spreadsheet (e.g., Google Sheets, Excel, or Numbers). For instance, note if an audio clip contains background car noise.
   - **Purpose**: This process reveals which categories or tags (e.g., car noise) contribute significantly to errors, helping you prioritize areas for improvement.
@@ -147,7 +147,7 @@ The distribution of data across categories significantly influences prioritizati
   - People noise: 30%
   - Low-bandwidth audio: 6%
 
-![](images/image40.png)
+<img src="images/image40.png" alt="" width="620">
 
 Improving accuracy on clean speech from 94% to 95% (a 1% gain) across 60% of the data would increase overall system accuracy by 0.6% (1% × 60%). In contrast, improving car noise performance by 4% across 4% of the data yields only a 0.16% overall improvement (4% × 4%).
 
@@ -171,7 +171,7 @@ Once you identify priority categories, focus on improving performance by enhanci
   - **Collect More Data**: If car noise is a priority, gather additional audio samples with car noise. Targeted data collection is more efficient than collecting generic data, which can be time-consuming and costly.
   - **Use Data Augmentation**: Apply techniques to generate synthetic data for the target category, such as simulating car noise in existing audio samples. This can boost performance without extensive data collection.
 
-![](images/image3.png)
+<img src="images/image3.png" alt="" width="620">
 
 For example, rather than broadly collecting data from low-bandwidth cell phone connections, focus on acquiring or augmenting data specifically for car noise or people noise. This precision ensures resources are used effectively to improve algorithm performance where it matters most.
 
@@ -183,7 +183,7 @@ Skewed datasets, where one class significantly outnumbers another, pose challeng
 
 In skewed datasets, the majority class dominates, making high accuracy achievable with simplistic models that fail to detect the minority class. Consider these examples:
 
-![](images/image107.png)
+<img src="images/image107.png" alt="" width="620">
 
   - **Manufacturing Smartphones**: If 99.7% of smartphones have no defects (labeled y=0) and only 0.3% are defective (y=1), an algorithm that always predicts "no defect" achieves 99.7% accuracy, despite being ineffective at identifying defects.
   - **Medical Diagnosis**: If 99% of patients don’t have a disease, predicting "no disease" for everyone yields 99% accuracy, yet fails to identify any actual cases.
@@ -195,7 +195,7 @@ In such cases, always predicting the majority class produces high accuracy but m
 
 For skewed datasets, a confusion matrix is a more effective evaluation tool. It organizes predictions against actual labels, with one axis representing ground truth (y=0 or y=1) and the other representing predictions. For a dataset with 1,000 examples (914 negative, 86 positive, i.e., 91.4% negative, 8.6% positive), a confusion matrix reveals how well the model handles both classes.
 
-![](images/image24.png)
+<img src="images/image24.png" alt="" width="620">
 
 ### iii. Precision and Recall
 
@@ -204,7 +204,7 @@ For skewed datasets, a confusion matrix is a more effective evaluation tool. It 
   - **Precision**: The proportion of positive predictions that are correct.
   - **Recall**: The proportion of actual positive cases correctly identified.
 
-![](images/image98.png)
+<img src="images/image98.png" alt="" width="620">
 
 For the example dataset (914 negative, 86 positive), an algorithm that always predicts "negative" achieves:
 
@@ -217,7 +217,7 @@ Low recall flags the algorithm’s failure to identify the minority class, makin
 
 When comparing models with different precision and recall values, the F1 score provides a single, balanced metric. The F1 score is the harmonic mean of precision and recall, emphasizing the lower of the two values to ensure both are reasonably high. Mathematically:
 
-![](images/image49.png)
+<img src="images/image49.png" alt="" width="620">
 
 While the F1 score is widely used, you may adjust the weighting of precision and recall based on your application’s needs. For instance, some scenarios may prioritize recall over precision or vice versa.
 
@@ -230,7 +230,7 @@ While the F1 score is widely used, you may adjust the weighting of precision and
   - ### **High Recall Preference**: Manufacturing often prioritizes high recall to minimize defective phones reaching customers. Slightly lower precision is tolerable, as human inspectors can verify flagged phones to filter out false positives.
   - ### **F1 Score for Comparison**: Compute the F1 score for each defect type to obtain a single metric for performance across all classes. This helps benchmark against human-level performance and prioritize which defect type to address next.
 
-![](images/image111.png)
+<img src="images/image111.png" alt="" width="620">
 
 Using the F1 score avoids the pitfalls of accuracy, which remains high even if the algorithm misses rare defects. It also guides prioritization by highlighting the most impactful defect types to improve.
 
@@ -238,7 +238,7 @@ Using the F1 score avoids the pitfalls of accuracy, which remains high even if t
 
 Even when a machine learning model performs well on metrics like accuracy or F1 score, conducting a final performance audit before deployment is critical. This step can prevent significant post-deployment issues by identifying potential problems in accuracy, fairness, bias, and other areas.
 
-![](images/image136.png)
+<img src="images/image136.png" alt="" width="620">
 
 After multiple iterations of model development, a performance audit serves as a final check to ensure the system is robust and equitable. It helps uncover issues that might not be evident from standard metrics, safeguarding against real-world failures.
 
@@ -272,7 +272,7 @@ Define metrics to assess performance against identified risks, focusing on **dat
 
 **MLOps Tools**: Tools like **TensorFlow Model Analysis (TFMA)** can automate the computation of detailed metrics across data slices, streamlining the auditing process for each model iteration.
 
-![](images/image57.png)
+<img src="images/image57.png" alt="" width="620">
 
 #### Step 3: Secure Stakeholder Buy-in
 
@@ -299,7 +299,7 @@ In model-centric development, the dataset is fixed, and efforts focus on iterati
 
 In contrast, data-centric development emphasizes data quality. Instead of refining the model while keeping the data constant, you maintain a relatively stable model and iteratively enhance the data using techniques like error analysis and data augmentation. For many applications, high-quality data enables multiple models to perform adequately, reducing the need for cutting-edge algorithms.
 
-![](images/image10.png)
+<img src="images/image10.png" alt="" width="620">
 
 Both approaches are valuable, but if you’re accustomed to model-centric thinking, adopting a data-centric perspective can complement your workflow and accelerate performance improvements.
 
@@ -310,7 +310,7 @@ Imagine a graph where:
   - The **vertical axis** represents model performance (e.g., accuracy).
   - The **horizontal axis** conceptually represents the space of possible inputs (e.g., speech with background noises like car, plane, train, cafe, library, or food court).
 
-![](images/image87.png)
+<img src="images/image87.png" alt="" width="620">
 
 **Mechanical noises** (car, plane, train) are similar to each other, as are **human-related noises** (cafe, library, food court). A model’s performance varies across these inputs, forming a curve (visualized as a blue rubber band) that reflects accuracy for each input type. Human-level performance (HLP) forms a separate curve (green line), and the gap between the two curves indicates opportunities for improvement.
 
@@ -329,12 +329,12 @@ To augment an audio clip, you might add background cafe noise by summing the wav
   - **Type of Noise**: Cafe, car, or other relevant sounds.
   - **Noise Volume**: The loudness relative to the speech.
 
-![](images/image18.png)
+<img src="images/image18.png" alt="" width="620">
 
 **
 ****Framework for Effective Data Augmentation**
 
-![](images/image4.png)
+<img src="images/image4.png" alt="" width="620">
 
 **Create augmented examples that are:**
 
@@ -360,7 +360,7 @@ For a small dataset of smartphone images with scratches, augmentation techniques
   - Contrast Adjustment: Brightens the image to highlight the scratch, remaining realistic and human-interpretable.
   - Avoid Over-Augmentation: Darkening an image excessively may obscure the scratch, failing the checklist as humans can’t identify it.
 
-![](images/image95.png)
+<img src="images/image95.png" alt="" width="620">
 
 Advanced methods, like using Photoshop to draw synthetic scratches or GANs to generate them, can work but are often unnecessary. Simpler techniques are typically faster and equally effective.
 
@@ -373,7 +373,7 @@ In data-centric AI, adopt a data iteration loop:
 3.  Add or augment data to address these weaknesses.
 4.  Retrain and repeat.
 
-![](images/image121.png)
+<img src="images/image121.png" alt="" width="620">
 
 This approach, combined with robust hyperparameter tuning, often outperforms model iteration (repeatedly refining the model) for practical applications.
 
@@ -381,7 +381,7 @@ This approach, combined with robust hyperparameter tuning, often outperforms mod
 
 Data augmentation can alter the training set’s distribution. For example, if cafe noise initially comprises 20% of the data but augmentation increases it to 50%, the training set may diverge from the development and test sets. Does this harm performance?
 
-![](images/image73.png)
+<img src="images/image73.png" alt="" width="620">
 
 ### Unstructured Data
 
@@ -405,7 +405,7 @@ This scenario is uncommon, especially in problems like speech recognition where 
 
 For structured data problems (e.g., databases with user or product features), creating new training examples is challenging due to fixed datasets (e.g., a set number of users or products). Instead, feature engineering—adding or enriching features to existing examples—is a powerful strategy.
 
-![](images/image6.png)
+<img src="images/image6.png" alt="" width="620">
 
 **Example: Restaurant Recommendations**
 
@@ -443,7 +443,7 @@ The data iteration loop for structured data involves:
 3.  Adding or enriching features to address these issues.
 4.  Retraining and repeating.
 
-![](images/image133.png)
+<img src="images/image133.png" alt="" width="620">
 
 Unlike unstructured data, where human-level performance provides a clear baseline, structured data lacks such a reference, as humans struggle with tasks like recommending restaurants from raw data. Error analysis, user feedback, and competitor comparisons are thus critical for identifying improvement opportunities.
 
@@ -455,7 +455,7 @@ Before deep learning, feature engineering was essential for machine learning. Wh
 
 Efficient machine learning development requires robust experiment tracking and a focus on high-quality data. These practices ensure systematic improvements and reliable model performance, especially in applications where massive datasets are unavailable.
 
-![](images/image51.png)
+<img src="images/image51.png" alt="" width="620">
 
 ### i. What to Track
 
@@ -466,7 +466,7 @@ Record the following for each experiment:
 3.  **Hyperparameters**: Log all hyperparameter settings.
 4.  **Results**: Save high-level metrics (e.g., accuracy, F1 score) and, if possible, a copy of the trained model.
 
-![](images/image118.png)
+<img src="images/image118.png" alt="" width="620">
 
 ### ii. Tracking Tools
 
@@ -476,7 +476,7 @@ Choose a tracking method based on your needs and scale:
   - **Spreadsheets**: Shared spreadsheets (e.g., Google Sheets) support collaboration and scale better, allowing multiple team members to review and update experiment records.
   - **Formal Experiment Tracking Systems**: Tools like Weights & Biases, Comet, MLflow, SageMaker Studio, or LandingAI’s computer vision-focused tool offer advanced features. These systems are evolving rapidly and cater to larger teams or complex projects.
 
-![](images/image99.png)
+<img src="images/image99.png" alt="" width="620">
 
 ### iii. Key Features
 
