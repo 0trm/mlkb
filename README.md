@@ -39,6 +39,16 @@ This document serves as a centralized wiki for all knowledge, frameworks, and pl
 
 ### [5. Templates](05-templates.md)
 
-## Sources
+## References
 
-This knowledge base was compiled from several external sources. See **[SOURCES.md](SOURCES.md)** for the full list and which sections map to which source.
+This knowledge base was compiled from the following sources.
+
+| Source | Covers |
+| --- | --- |
+| Andrew Ng / DeepLearning.AI, [*Machine Learning Engineering for Production (MLOps) Specialization*](https://www.coursera.org/specializations/machine-learning-engineering-for-production-mlops) | The ML project lifecycle and most of [2. Design](02-design.md), [3. Development](03-development.md), and [4. Deployment](04-deployment.md) — human-level performance, label consistency, data-centric AI, error analysis and prioritization, performance auditing, the degree-of-automation spectrum, shadow/canary/blue-green deployment, concept vs. data drift, and both case studies ([speech recognition](01-overview.md#15-case-study-speech-recognition-system), [defect inspection](04-deployment.md#45-case-study-defect-inspection-in-manufacturing)) |
+| Aurélien Géron, [*Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow*](https://www.oreilly.com/library/view/hands-on-machine-learning/9781098125967/) (O'Reilly) | [1.1. Introduction](01-overview.md#11-introduction) — why ML, types of ML systems, batch vs. online learning, main challenges — and the eight-step [1.3. ML Project Checklist](01-overview.md#13-ml-project-checklist) |
+| Eugene Yan, [*Writing Docs: Why, What, and How*](https://eugeneyan.com/writing/writing-docs-why-what-how/) | [5. Templates](05-templates.md) — one-pagers, design docs, and after-action reviews |
+| Eugene Yan, [*What I Love About Scrum for Data Science*](https://eugeneyan.com/writing/what-i-love-about-scrum-for-data-science/#retrospectives-feedback-loop-for-improvement) | Retrospectives, referenced in [5. Templates](05-templates.md) |
+| Snoek, Larochelle & Adams, [*Practical Bayesian Optimization of Machine Learning Algorithms*](https://arxiv.org/abs/1206.2944) | Hyperparameter tuning in [1.3. ML Project Checklist](01-overview.md#13-ml-project-checklist) |
+| AWS Well-Architected, [*Correction of Errors*](https://wa.aws.amazon.com/wat.concept.coe.en.html), and the [`JDHarris007/coe`](https://github.com/JDHarris007/coe/blob/master/CoE.md) example | Error reviews in [5. Templates](05-templates.md) |
+| TensorFlow (2021) | TensorFlow Transform and data provenance/lineage in [2.2.7. Data Pipelines](02-design.md#227-data-pipelines) |
