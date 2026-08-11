@@ -4,12 +4,16 @@
 
 Development environment is different from Production environment, and this poses a few challenges.
 
+![](images/image5.png)
+
   - Model object + deployment resources = model deployment package
   - Putting our model in use = deployment
 
 Deployment involves two primary challenge categories:
 
 ### i. Machine Learning Challenges
+
+![](images/image93.png)
 
 In this scenario, a machine learning model is trained to detect defects in smartphone images. The training data includes:
 
@@ -75,6 +79,8 @@ Deploying an ML system involves two key sets of tasks:
 1.  **Software Development**: Writing software to deploy the system in production.
 2.  **Monitoring and Maintenance**: Continuously tracking system performance and addressing issues like concept and data drift.
 
+![](images/image131.png)
+
 The practices for initial deployments differ significantly from those for updating or maintaining an already-deployed system. While some engineers view deployment as the finish line, it often marks only the halfway point. Post-deployment work—such as feeding new data back into the system, updating the model, and maintaining performance amid changing data—is equally critical to ensuring long-term success.
 
 ## 4.2. Deployment Architecture
@@ -86,6 +92,8 @@ A runtime environment refers to the specific configuration of software and hardw
 #### Containerization
 
 Containerization is a lightweight, portable, and self-sufficient software package that bundles an application and all its dependencies (libraries, configuration files, and other required assets) into a single, isolated unit.
+
+![](images/image34.png)
 
 There are many benefits of containerization:
 
@@ -114,6 +122,8 @@ There are many benefits of containerization:
 
 Monolithic vs. Microservices architecture
 
+![](images/image38.png)
+
 #### Inferencing
 
 **Inferencing (or Prediction)** is the process in which we send new, unseen input data to a trained machine learning model and receive an output or prediction from the model. This is the "production" phase where the model's learned patterns are applied to solve real-world problems.
@@ -121,6 +131,8 @@ Monolithic vs. Microservices architecture
   - **Input Data:** Can be diverse, e.g., an image for an object detection model, text for a sentiment analysis model, or tabular data for a fraud detection model.
   - **Model Execution:** The trained model's internal logic and parameters are applied to the input data.
   - **Output:** The model generates a prediction, classification, regression value, or other relevant output based on its training.
+
+![](images/image72.png)
 
 **Example:**
 
@@ -130,6 +142,8 @@ Monolithic vs. Microservices architecture
 #### APIs
 
 An API (Application Programming Interface) is a set of rules and protocols that allows different software applications to communicate and interact with each other. In the context of machine learning in production, APIs are crucial for exposing trained models so that other applications or services can consume their predictions.
+
+![](images/image29.png)
 
 **Key Aspects of APIs for ML Models:**
 
@@ -182,11 +196,15 @@ When humans initially perform a task, shadow mode is a common deployment strateg
 
 Shadow mode allows you to collect data on the algorithm’s performance compared to human judgment, enabling you to assess its accuracy before allowing it to make real decisions. This approach is highly effective for validating an algorithm’s reliability.
 
+![](images/image36.png)
+
 #### Canary Deployment
 
 In a canary deployment, the algorithm is rolled out to a small fraction of traffic (e.g., 5% or less) to make real decisions. By limiting the scope, any errors affect only a small portion of users, allowing for close monitoring. Traffic is gradually increased as confidence in the algorithm’s performance grows.
 
 The term “canary deployment” draws from the English idiom referencing coal miners using canaries to detect gas leaks, emphasizing early problem detection to avoid significant issues in the deployment context (e.g., a factory).
+
+![](images/image105.png)
 
 #### Blue-Green Deployment
 
@@ -195,6 +213,8 @@ Blue-green deployment is used when transitioning from an old system (blue) to a 
 Typically, blue-green deployment involves switching all traffic to the green version at once, but a gradual transition is also possible. The key advantage is easy rollback: if issues arise, the router can quickly revert traffic to the blue version, provided it remains operational.
 
 This approach ensures minimal downtime and a straightforward recovery mechanism.
+
+![](images/image89.png)
 
 ### iii. Degree of Automation Framework
 
@@ -206,6 +226,8 @@ Rather than viewing deployment as a binary choice (deploy or not), consider it a
   - **Partial Automation**: The algorithm makes decisions when highly confident (e.g., a phone is clearly fine or defective). If confidence is low, the case is escalated to a human. Human judgments in these cases provide valuable data for further training.
   - **Full Automation**: The algorithm makes all decisions without human intervention.
 
+![](images/image32.png)
+
 This spectrum ranges from fully human-driven to fully automated systems. Many deployments start with lower automation (e.g., shadow mode or AI assistance) and progress toward greater automation as the algorithm’s reliability improves. However, full automation is not always necessary—AI assistance or partial automation may be optimal for some applications, depending on performance and requirements.
 
 Both AI assistance and partial automation are examples of **human-in-the-loop deployments**. While consumer internet applications (e.g., web or product searches) often require full automation due to scale, other contexts, such as factory inspections, may benefit from human-in-the-loop approaches, balancing accuracy with human expertise.
@@ -214,23 +236,35 @@ This framework of deployment patterns and automation levels provides a structure
 
 ### iv. Transparency and Reproducibility
 
-*[Figure — image not migrated from the source Google Doc; the description below comes from the Doc text export.]*
-
 This image humorously illustrates a common challenge in machine learning development. One person, holding a "gift-wrapped" model, enthusiastically requests "deploy, pls\!" from another who appears skeptical. The second person's thought bubble highlights critical questions and concerns that arise before deployment: infrastructure compatibility, transparency, reproducibility, data validation, monitoring, and debugging. This emphasizes the gap between developing a model and successfully integrating it into a production environment, underscoring the importance of addressing operational concerns early in the ML lifecycle.
+
+![](images/image65.png)
 
 This highlights the necessity of meticulously tracking the origins and parameters of a model to ensure accountability, auditability, and the ability to reproduce results or troubleshoot issues.
 
+![](images/image41.png)
+
 The "bonus points: log experiments in metadata store" further reinforces that documenting experimental details is key to achieving both transparency and reproducibility, leading to more robust and reliable ML systems.
+
+![](images/image116.png)
 
 There can be a few concerns when putting a model in production, namely:
 
   - Input data validation - data profiles (aka data expectations)
 
+![](images/image101.png)
+
   - Performance deterioration
+
+![](images/image113.png)
 
   - Debugging
 
+![](images/image50.png)
+
   - Testing
+
+![](images/image19.png)
 
 ### v. Profiling, Versioning, and Feature Stores
 
@@ -238,14 +272,16 @@ There can be a few concerns when putting a model in production, namely:
 
 Automated data analysis and creation of high-level summaries (a.k.a. data profiles, expectations), used for validating and monitoring data in production.
 
+![](images/image126.png)
+
 Risks of **not** using data profiles:
 
   - Clients complaining, although they submitted erroneous inputs to the model
   - No way to identify that data has drifted and our model is no longer valid
 
-*[Figure — image not migrated from the source Google Doc; the description below comes from the Doc text export.]*
-
 This image illustrates a typical ML training pipeline workflow, where raw data from a **Data Store** (like a data lake or warehouse) and model definitions from a **Code Repository** feed into an **ML Training Pipeline**. This pipeline, which should also incorporate metadata about train/test splits for better reproducibility, then generates a trained **Model** that is stored in a **Model Registry**. Crucially, it also populates a **Metadata Store** with vital information such as the dataset version and a unique "fingerprint" for verification, ensuring comprehensive lineage tracking and enabling the recreation of exact model builds.
+
+![](images/image119.png)
 
 A popular tool for data profiling is great\_expectations.
 
@@ -253,35 +289,45 @@ A popular tool for data profiling is great\_expectations.
 
 Versioning in machine learning engineering is the practice of systematically tracking and managing changes to all components of an ML project, including code, data, models, and hyperparameters, over time. Unlike traditional software development where Git excels at versioning code, ML projects involve large datasets and model artifacts that Git cannot efficiently handle.
 
+![](images/image75.png)
+
 Tools like DVC (Data Version Control) extend Git's capabilities by providing a lightweight mechanism to version large files and directories by storing their metadata (like checksums) in Git, while the actual data resides in external storage (e.g., cloud storage, local drives). This allows teams to precisely reproduce past experiments, revert to previous states, track data lineage, and ensure that a specific model was trained with an exact version of data and code, which is crucial for collaboration, debugging, and maintaining reliable production systems.
 
 #### Feature Stores
 
 A feature store in machine learning engineering is a centralized repository that standardizes the management, storage, and serving of features for both model training and real-time inference. It acts as a bridge between data engineering and data science, allowing for the consistent definition, computation, and reuse of features across different models and teams, thereby preventing training-serving skew (where features used for training differ from those used in production). Typically, a feature store includes an offline store for historical, large-volume data used in training and an online store optimized for low-latency, single-record retrieval during live predictions, significantly streamlining the MLOps lifecycle by improving efficiency, reproducibility, and model reliability.
 
-*[Figure — image not migrated from the source Google Doc; the description below comes from the Doc text export.]*
+![](images/image135.png)
 
 This diagram illustrates a conceptual framework for a dual database approach, commonly seen in the context of feature stores, to optimize both training and prediction phases of machine learning. During "Training time," data is sourced from "DB1: Large-volume optimized," which is designed for efficient processing of vast quantities of data by "ML training pipeline \#1" to build a model. Conversely, during "Prediction time" (also known as scoring or inference), the trained "Model" retrieves features from "DB2: Single-record optimized," which is tailored for low-latency retrieval of individual data points required for real-time predictions. This split architecture allows for specialized databases to handle the distinct data access patterns and performance requirements of ML model training and serving, effectively representing the two primary components of a feature store: an offline store for batch training and an online store for real-time inference.
 
+![](images/image115.png)
+
 Some of its benefits include reusability and consistency.
+
+![](images/image59.png)
 
 ### vi. CI/CD
 
-#### Model Build Pipeline
+![](images/image23.png)
 
-*[Figure — image not migrated from the source Google Doc; the description below comes from the Doc text export.]*
+#### Model Build Pipeline
 
 This diagram differentiates between two critical components within an MLOps framework: the "MODEL pipeline" and the "model BUILD pipeline”. This clear separation highlights that while the top section defines *what* the model does, the bottom section describes *how* the model is systematically created and saved, a crucial aspect for integration into CI/CD systems.
 
+![](images/image100.png)
+
 This detailed diagram expands on the "model BUILD pipeline," illustrating how it integrates with versioning and data management to create a robust "Model package" suitable for CI/CD. The pipeline loads both the model definition (from a code repository, with "code versioning" ensuring traceability) and training data (from a data store, with "data versioning" and "data profiles" ensuring data lineage and quality). After training and saving the model, the resulting "Model package" encompasses the model itself along with crucial metadata for "deployment," "reproducibility," and "monitoring." This holistic view emphasizes that a successful model build pipeline in CI/CD is not just about training, but also about meticulously packaging all necessary components and metadata to enable reliable and repeatable operations.
 
-*[Figure — image not migrated from the source Google Doc; the description below comes from the Doc text export.]*
+![](images/image28.png)
 
 This image succinctly introduces the "model BUILD pipeline" as a fundamental component under the umbrella of "MLOPS," signifying its importance in operationalizing machine learning. The pipeline's core steps involve loading the model definition, loading training data, training the model, and finally saving the trained model. Crucially, the image highlights the key benefits and objectives enabled by such a pipeline within a CI/CD framework: automated "Deployment," ensuring "Reproducibility" of results, enabling continuous "Monitoring" of model performance, and seamless "CI/CD integration." This demonstrates that a well-structured model build pipeline is essential for achieving the automation, reliability, and governance required for effective MLOps.
 
-*[Figure — image not migrated from the source Google Doc; the description below comes from the Doc text export.]*
+![](images/image21.png)
 
 This image provides a high-level overview of the inputs and outputs of a "model BUILD pipeline" within a CI/CD context. The pipeline centrally orchestrates the process by drawing "code" from a central code repository, "raw data" from various data stores, and pre-engineered features from a "feature store." Once the build process is complete, the pipeline's outputs are a trained "model," which is then registered in a dedicated "model registry," and comprehensive "metadata" that is stored in a metadata store. This structured flow ensures that all necessary components are systematically gathered and that the resulting model and its associated build information are properly managed for deployment and future reference within an automated CI/CD environment.
+
+![](images/image35.png)
 
 #### APIs
 
@@ -292,6 +338,8 @@ An API
 ## 4.4. Monitoring
 
 To ensure a machine learning (ML) system meets performance expectations, continuous monitoring is essential. The most common approach is to use dashboards to track key metrics over time, providing insights into system health and performance.
+
+![](images/image70.png)
 
   - Is the model server running?
   - Are the model inputs and outputs as expected?
@@ -305,6 +353,8 @@ Dashboards should be tailored to the specific application, tracking metrics rele
   - **Fraction of Non-Null Outputs**: For a speech recognition system, a null output occurs when no speech is detected. A significant change in the frequency of null outputs may signal an issue.
   - **Fraction of Missing Inputs**: Common in structured data tasks, this metric tracks incomplete or missing input data, which could indicate data quality issues.
 
+![](images/image44.png)
+
 To determine what to monitor, follow these steps:
 
 1.  **Brainstorm Potential Issues**: Collaborate with your team to identify everything that could go wrong with the system.
@@ -314,9 +364,15 @@ To determine what to monitor, follow these steps:
 
 A. **Statistical Monitoring:** focuses on the input and output data, including predictions. Examples: customer X has a 72% probability of churning, customer Y has a 31% probability of not churning.
 
+![](images/image88.png)
+
 B. **Computational Monitoring:** Focuses on technical metrics. Examples: server CPU usage, number of incoming requests, number of predictions, downtime of server.
 
+![](images/image54.png)
+
 **Feedback Loop:** The process through which the ground truth is used to improve the machine learning model.
+
+![](images/image90.png)
 
 ### iii. Types of Metrics
 
@@ -364,7 +420,11 @@ Like ML modeling, deployment is an iterative process. Initial dashboards and met
           - Cost: how much does it cost to retrain?
           - Business requirements: what is the required model performance?
 
+![](images/image76.png)
+
 Monitoring enables early detection of issues, prompting deeper error analysis or data collection to update the model and maintain or improve performance.
+
+![](images/image127.png)
 
 ### v. Pipeline Monitoring
 
@@ -375,11 +435,15 @@ Many AI systems involve complex pipelines with multiple components, not just a s
 
 Changes in one component can impact downstream performance. For instance, if a new smartphone microphone alters audio characteristics, the VAD module might clip audio differently (e.g., including more or less silence). This changes the input to the speech recognition module, potentially degrading its performance.
 
+![](images/image110.png)
+
 Another example involves user profiles:
 
   - A system uses clickstream data to build user profiles, predicting attributes like whether a user owns a car to inform decisions (e.g., offering car insurance).
   - These profiles feed into a recommender system that generates product recommendations.
   - If the clickstream data changes (e.g., due to shifts in user behavior), the user profile’s accuracy may decline, increasing “unknown” labels for attributes like car ownership. This altered input can degrade the recommender system’s performance.
+
+![](images/image30.png)
 
 **Monitoring Complex Pipelines**
 
@@ -409,6 +473,8 @@ While these are general observations with exceptions, they provide a framework f
 
 Automated visual defect inspection is a widely adopted process in modern manufacturing, particularly in the production of smartphones. This system utilizes advanced software and machine learning models to ensure product quality and reliability during the manufacturing process.
 
+![](images/image81.png)
+
 ### **Process Overview**
 
 The inspection process is initiated by specialized software that controls a camera stationed along the manufacturing line. As smartphones are assembled, the camera captures high-resolution images of each device. These images are subsequently transmitted to a prediction server through an Application Programming Interface (API) call. The prediction server, equipped with a machine learning model trained to detect defects, analyzes the images and assesses whether each smartphone meets established quality standards.
@@ -435,6 +501,8 @@ Upon receiving the prediction from the server, the inspection control software e
   - Can be automated
   - Enables high data quality
 
+![](images/image80.png)
+
 ### ii. Development
 
 **Feature Store**
@@ -446,6 +514,8 @@ Upon receiving the prediction from the server, the inspection control software e
 
   - Automates tracking
   - Ensures reproducibility
+
+![](images/image61.png)
 
 ### iii. Deployment
 
@@ -463,3 +533,5 @@ Upon receiving the prediction from the server, the inspection control software e
 
   - Improves scalability
   - Independent development and deployment
+
+![](images/image13.png)

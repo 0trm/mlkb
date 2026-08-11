@@ -8,19 +8,17 @@ This section will house fundamental concepts, theoretical underpinnings, and key
 
 Machine Learning is the science and art of programming computers so they can learn from data.
 
-*[Figure — image not migrated from the source Google Doc; the description below comes from the Doc text export.]*
-
 This diagram illustrates a traditional problem-solving workflow. It begins with studying the problem, followed by manually writing rules. The outcome is then evaluated; if successful, it's launched, and if not, errors are analyzed, leading back to studying the problem and refining the rules. The emphasis is on explicit rule creation.
 
-*[Figure — image not migrated from the source Google Doc; the description below comes from the Doc text export.]*
+![](images/image82.png)
 
 This diagram depicts a machine learning workflow. It also starts with studying the problem, but then diverges to training an ML algorithm using data. The resulting solution is evaluated; a successful outcome leads to launch, while an unsuccessful one leads to error analysis and a return to studying the problem, potentially retraining the algorithm with adjusted data or parameters. The key elements here are the data-driven training of an algorithm.
 
-*[Figure — image not migrated from the source Google Doc; the description below comes from the Doc text export.]*
+![](images/image42.png)
 
 This diagram illustrates how a machine learning system can continuously adapt. Data is used to train an ML algorithm, the solution is evaluated, and if successful, it's launched. The key aspect is the feedback loop where the launched system can trigger data updates, which then automatically retrain the algorithm, allowing the system to adapt to new information over time. This cycle can be automated for continuous improvement.
 
-*[Figure — image not migrated from the source Google Doc; the description below comes from the Doc text export.]*
+![](images/image83.png)
 
 This figure shows how machine learning can enhance human understanding. The process starts with **studying a problem** and **training an ML algorithm** with extensive **data** to generate a **solution**. Humans then **inspect this solution**, leading to a deeper **understanding of the problem** itself. This improved insight can then feed back into further study and iteration if necessary, creating a synergistic learning loop between humans and the ML system.
 
@@ -88,9 +86,13 @@ Key challenges include:
   - Managing concept drift and data drift.
   - Handling extensive software infrastructure, where ML code typically comprises only 5-10% of the total codebase.
 
+![](images/image79.png)
+
 Beyond the machine learning code, there are also many other components for managing the data, such as data collection, data verification, feature extraction. And after you are serving it, we also need to consider how to monitor and analyze the system. There are often many other components that need to be built to enable a working production deployment.
 
 **MLOps** encompasses the practices for the continuous, reliable, and efficient design, deployment, and maintenance of machine learning systems in production.
+
+![](images/image106.png)
 
 Originating from DevOps, MLOps addresses the full machine learning lifecycle. Its benefits include:
 
@@ -103,6 +105,10 @@ Originating from DevOps, MLOps addresses the full machine learning lifecycle. It
 When building a machine learning (ML) system, planning the project lifecycle helps outline all necessary steps effectively. As you work on an ML system, this framework will help you identify critical tasks, ensure the system functions properly, and minimize unexpected challenges.
 
 The ML project lifecycle consists of iterative stages that guide the development and deployment of an ML system.
+
+![](images/image39.png)
+
+![](images/image58.png)
 
 The iterative nature of this lifecycle means feedback from later stages often informs adjustments to earlier ones. ML projects are often highly iterative. During error analysis, you may need to refine the model or revisit earlier steps to collect additional data. Before deployment, you typically perform a final check or audit to verify that the system’s performance is adequate and reliable for its intended application. Deploying a system for the first time means you’re only about halfway to completion. Live traffic often reveals critical insights needed to optimize performance.
 
@@ -232,6 +238,8 @@ This checklist can guide you through your ML projects. There are eight main step
       - *To clean and prepare the new instances once your solution is live*
       - *To make it easy to treat your preparation choices as hyperparameters*
 
+![](images/image92.png)
+
   -  Clean the data
 
       - Fix or remove outliers (optional)
@@ -308,7 +316,11 @@ This checklist can guide you through your ML projects. There are eight main step
 
 MLOps (Machine Learning Operations) is a set of practices that integrates Machine Learning, DevOps, and Data Engineering to streamline and automate the entire lifecycle of machine learning models, from development and experimentation to reliable deployment, monitoring, and continuous improvement in production environments.
 
+![](images/image103.png)
+
 It focuses on ensuring reproducibility, scalability, version control, and efficient collaboration among data scientists, ML engineers, and operations teams to deliver and maintain high-performing ML solutions.
+
+![](images/image120.png)
 
 Regarding **maturity levels**, an usual starting point is:
 
@@ -323,6 +335,8 @@ As companies progress in the ML maturity levels:
   - Level of automation, collaboration, and monitoring within MLOps processes
   - Higher level is not necessarily better
   - Focus on development and deployment phase
+
+![](images/image78.png)
 
 **ML Workflows**
 
@@ -365,12 +379,18 @@ ML workflow automation == MLOps maturity
 
 This example illustrates the steps required to build and deploy a speech recognition system using the machine learning (ML) project lifecycle.
 
+![](images/image129.png)
+
 Begin by defining the project, such as developing a speech recognition system for voice search. This involves identifying key metrics, which vary by application. For speech recognition, critical metrics include:
 
   - **Accuracy**: How precise is the system in transcribing speech?
   - **Latency**: How long does it take to process and transcribe speech?
   - **Throughput**: How many queries per second can the system handle?
   - Additionally, estimate the resources needed, such as time, computational power, budget, and project timeline.
+
+![](images/image63.png)
+
+![](images/image56.png)
 
 In this phase, define the data, establish a baseline, and label and organize it. A key challenge in speech recognition is ensuring consistent data labeling. For example, consider an audio clip for voice search with the phrase “Um, today’s weather.” Possible transcriptions include:
 
@@ -385,6 +405,10 @@ Other data definition questions include:
 
 In production systems, datasets are not static. You may need to edit the training or test sets to improve data quality and enhance system performance.
 
+![](images/image46.png)
+
+![](images/image55.png)
+
 Training an ML model requires three key inputs:
 
   - **Code**: The algorithm or neural network architecture.
@@ -394,6 +418,8 @@ Training an ML model requires three key inputs:
 In academic research, the focus is often on varying the code or hyperparameters while keeping the data fixed. However, when building a production ML system, it’s often more effective to use a reliable open-source implementation (e.g., from GitHub) and focus on optimizing the data and hyperparameters. Error analysis is critical here, as it identifies where the model falls short and guides systematic improvements to the data or code.
 
 Rather than collecting more data indiscriminately, which can be costly, error analysis helps target specific data needs, making the process more efficient and leading to a high-accuracy model.
+
+![](images/image14.png)
 
 Once the model is trained and error analysis indicates satisfactory performance, the system is ready for deployment. A typical speech recognition deployment for voice search might involve:
 

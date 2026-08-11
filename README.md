@@ -47,4 +47,4 @@ This knowledge base was compiled from several external sources. See **[SOURCES.m
 
 Migrated from a Google Doc. The prose is reproduced as written in the source document; only formatting was converted to Markdown.
 
-The source document contained 14 diagrams that could not be carried over. In their place the text carries the descriptions produced by the Doc's text export, each marked with a `*[Figure — image not migrated ...]*` note.
+All 136 diagrams from the source document are included in [`images/`](images), each placed at the point in the text where it appears in the original. Many are preceded by the description paragraph that accompanies them in the Doc.
