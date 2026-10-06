@@ -1,6 +1,6 @@
 # Machine Learning Knowledge Base
 
-A repository for knowledge, frameworks, and playbooks related to Machine Learning (ML).
+Study notes on designing, developing, and deploying ML systems, compiled from the courses, books, and essays listed under [Sources](#sources). Examples and case studies come from those sources; they are not my own projects.
 
 ## Contents
 

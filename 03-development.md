@@ -187,7 +187,7 @@ In skewed datasets, the majority class dominates, making high accuracy achievabl
 
   - **Manufacturing Smartphones**: If 99.7% of smartphones have no defects (labeled y=0) and only 0.3% are defective (y=1), an algorithm that always predicts "no defect" achieves 99.7% accuracy, despite being ineffective at identifying defects.
   - **Medical Diagnosis**: If 99% of patients don’t have a disease, predicting "no disease" for everyone yields 99% accuracy, yet fails to identify any actual cases.
-  - **Wake Word Detection**: In systems detecting wake words (e.g., "Hey Siri"), the wake word is rarely spoken. One dataset I worked with had 96.7% negative examples (no wake word) and 3.3% positive examples, making accuracy a poor metric.
+  - **Wake Word Detection**: In systems detecting wake words (e.g., "Hey Siri"), the wake word is rarely spoken. A typical dataset might have 96.7% negative examples (no wake word) and 3.3% positive examples, making accuracy a poor metric.
 
 In such cases, always predicting the majority class produces high accuracy but misses critical minority class instances, rendering the model practically useless.
 
