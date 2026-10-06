@@ -56,7 +56,7 @@ When implementing a prediction service that takes queries (X) and outputs predic
       - **Web Browser**: Modern browsers increasingly support deploying ML models directly, offering new deployment options.
 3.  **Resource Constraints**:
 
-     Computational resources (CPU, GPU, memory) available for deployment often differ from those used during training. For instance, I’ve trained neural networks on powerful GPUs only to find that deployment required less powerful hardware, necessitating model compression or simplification. Understanding resource constraints helps select an appropriate software architecture.
+     Computational resources (CPU, GPU, memory) available for deployment often differ from those used during training. For instance, a neural network trained on powerful GPUs may have to run on less powerful hardware in deployment, which calls for model compression or simplification. Understanding resource constraints helps select an appropriate software architecture.
 
 4.  **Latency and Throughput**:
 

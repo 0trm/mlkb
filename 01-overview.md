@@ -431,6 +431,6 @@ Deploying the system requires integrating it into production, developing support
 
 ### **Maintenance**
 
-Post-deployment, continuous monitoring and maintenance are essential. For example, my team once deployed a speech recognition system trained primarily on adult voices. After deployment, we noticed an increasing number of younger users (teenagers and children) whose voices differed significantly, causing performance degradation. To address this, we collected additional data from younger speakers to retrain the model.
+Post-deployment, continuous monitoring and maintenance are essential. Andrew Ng's course gives an example: a speech recognition system trained mostly on adult voices was deployed, and an increasing number of younger users (teenagers and children), whose voices differed significantly, degraded its performance. The team collected additional data from younger speakers to retrain the model.
 
 A key challenge in deployment is **concept drift** or **data drift**, where the data distribution changes (e.g., more young voices). Effective monitoring systems are crucial for detecting such issues, and timely fixes—such as collecting targeted data or retraining the model—are necessary to maintain performance and deliver value.
