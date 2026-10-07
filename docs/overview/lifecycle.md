@@ -4,9 +4,24 @@ When building a machine learning (ML) system, planning the project lifecycle hel
 
 The ML project lifecycle consists of iterative stages that guide the development and deployment of an ML system.
 
-![](../images/image39.png)
+```mermaid
+flowchart LR
+  subgraph design[Design]
+    direction TB
+    A[Define project] --> B[Define data and<br>establish baseline] --> C[Label and<br>organize data]
+  end
+  subgraph development[Development]
+    direction TB
+    D[Select and<br>train model] --> E[Perform<br>error analysis]
+  end
+  subgraph deployment[Deployment]
+    direction TB
+    F[Deploy in<br>production] --> G[Monitor and<br>maintain system]
+  end
+  design --> development --> deployment
+```
 
-![](../images/image58.png)
+*The ML project lifecycle. Each stage also loops back: error analysis can send you back to collect more data, and monitoring triggers retraining. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 The iterative nature of this lifecycle means feedback from later stages often informs adjustments to earlier ones. ML projects are often highly iterative. During error analysis, you may need to refine the model or revisit earlier steps to collect additional data. Before deployment, you typically perform a final check or audit to verify that the system’s performance is adequate and reliable for its intended application. Deploying a system for the first time means you’re only about halfway to completion. Live traffic often reveals critical insights needed to optimize performance.
 

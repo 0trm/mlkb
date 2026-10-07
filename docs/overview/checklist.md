@@ -77,7 +77,14 @@ This checklist, adapted from Géron's *Hands-On Machine Learning*, can guide you
       - *To clean and prepare the new instances once your solution is live*
       - *To make it easy to treat your preparation choices as hyperparameters*
 
-![](../images/image92.png)
+| Data preprocessing | Examples |
+|---|---|
+| Data cleaning | Removing duplicates, handling missing values |
+| Data transformation | Scaling, encoding |
+| Data integration | Joining, merging |
+| Data reduction | Sampling, dimensionality reduction |
+
+*The four kinds of data preprocessing, with examples.*
 
   -  Clean the data
 

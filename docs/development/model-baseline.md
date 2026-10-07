@@ -10,11 +10,23 @@ This approach gets you moving fast. You’ll learn more from tweaking and testin
 
 A model with a low average error might seem like a winner, but that number can hide serious flaws. Imagine a web search model that’s 99% accurate but fails to rank "[Google.com](http://google.com/)" correctly for a search on "Google"—that’s a critical miss, even if rare. Or consider a medical diagnosis model trained on data where 99% of patients are healthy. It could predict "healthy" every time, scoring 99% accuracy, yet miss every sick patient. That’s not just misleading—it’s dangerous.
 
-![](../images/image117.png)
+Check performance on the key slices of the dataset, not only the average:
+
+  - **Loan approval**: make sure not to discriminate by ethnicity, gender, location, language or other protected attributes.
+  - **Product recommendations from retailers**: treat all major user, retailer and product categories fairly.
 
 The problem often stems from skewed data or overlooking rare but vital cases. Average error smooths over these issues, so you need to dig deeper. Check how the model handles the tough stuff—the edge cases or the minority classes that matter most to your application.
 
-![](../images/image22.png)
+Rare classes show the same problem. With 99% negative and 1% positive examples, `print("0")` already scores 99% accuracy. CheXNet, a 121-layer CNN that reads chest X-rays, scores well on average, yet its rare conditions score lower:
+
+| Condition | Training examples | Performance |
+|---|---|---|
+| Effusion | ~10,000 | 0.901 |
+| Edema | | 0.924 |
+| Mass | | 0.909 |
+| Hernia | ~100 | 0.851 |
+
+*Per-condition performance of CheXNet: Hernia, with about 100 examples, trails Effusion, with about 10,000. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 ## iii. Setting a Baseline
 
@@ -29,7 +41,14 @@ Every ML project needs a starting point, or baseline, to measure progress agains
 
 Suppose you’ve identified four major speech categories in your dataset, with your model achieving accuracies of 94%, 89%, 87%, and 70%, respectively. You might initially focus on improving the lowest-performing category (e.g., low-bandwidth audio at 70%). However, before prioritizing, it’s critical to establish a baseline for all categories.
 
-![](../images/image48.png)
+| Type | Accuracy | Human-level performance | Gap to HLP |
+|---|---|---|---|
+| Clear speech | 94% | 95% | 1% |
+| Car noise | 89% | 93% | 4% |
+| People noise | 87% | 89% | 2% |
+| Low bandwidth | 70% | 70% | ~0% |
+
+*Accuracy and human-level performance per speech category. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 To do this, have human transcriptionists label the data and measure their accuracy. This establishes the **human-level performance (HLP)** for each category. For instance, you might find that improving performance on clear speech to HLP could yield a 1% gain, while improving performance on audio with background car noise could yield a 4% gain. For low-bandwidth audio, however, the improvement might be negligible (0%).
 

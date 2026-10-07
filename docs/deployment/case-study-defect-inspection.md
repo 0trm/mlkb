@@ -2,7 +2,20 @@
 
 Automated visual defect inspection is a widely adopted process in modern manufacturing, particularly in the production of smartphones. This system utilizes advanced software and machine learning models to ensure product quality and reliability during the manufacturing process.
 
-![](../images/image81.png)
+```mermaid
+flowchart LR
+  subgraph edge[Edge device: inspection software]
+    Cam[Camera]
+    Ctl[Control software]
+  end
+  subgraph cloud[Cloud]
+    PS[Prediction server]
+  end
+  Cam -->|API call with<br>photo from camera| PS
+  PS -->|prediction| Ctl
+```
+
+*The inspection software on the edge device sends each photo to the prediction server through an API and acts on the prediction it gets back. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 ## Process Overview
 

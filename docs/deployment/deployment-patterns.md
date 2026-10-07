@@ -37,15 +37,11 @@ When humans initially perform a task, shadow mode is a common deployment strateg
 
 Shadow mode allows you to collect data on the algorithm’s performance compared to human judgment, enabling you to assess its accuracy before allowing it to make real decisions. This approach is highly effective for validating an algorithm’s reliability.
 
-![](../images/image36.png)
-
 ### Canary Deployment
 
 In a canary deployment, the algorithm is rolled out to a small fraction of traffic (e.g., 5% or less) to make real decisions. By limiting the scope, any errors affect only a small portion of users, allowing for close monitoring. Traffic is gradually increased as confidence in the algorithm’s performance grows.
 
 The term “canary deployment” draws from the English idiom referencing coal miners using canaries to detect gas leaks, emphasizing early problem detection to avoid significant issues in the deployment context (e.g., a factory).
-
-![](../images/image105.png)
 
 ### Blue-Green Deployment
 
@@ -55,7 +51,14 @@ Typically, blue-green deployment involves switching all traffic to the green ver
 
 This approach ensures minimal downtime and a straightforward recovery mechanism.
 
-![](../images/image89.png)
+```mermaid
+flowchart LR
+  I([Phone images]) --> R[Router]
+  R -.->|rollback| B[Old/blue<br>version]
+  R -->|after switch| G[New/green<br>version]
+```
+
+*The router sends traffic to the new (green) version; switching it back to the old (blue) version is an easy rollback. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 ## iii. Degree of Automation Framework
 
@@ -67,7 +70,17 @@ Rather than viewing deployment as a binary choice (deploy or not), consider it a
   - **Partial Automation**: The algorithm makes decisions when highly confident (e.g., a phone is clearly fine or defective). If confidence is low, the case is escalated to a human. Human judgments in these cases provide valuable data for further training.
   - **Full Automation**: The algorithm makes all decisions without human intervention.
 
-![](../images/image32.png)
+```mermaid
+flowchart LR
+  H[Human<br>only] --> S[Shadow<br>mode] --> hitl
+  subgraph hitl[Human in the loop]
+    direction LR
+    A[AI<br>assistance] --> P[Partial<br>automation]
+  end
+  hitl --> F[Full<br>automation]
+```
+
+*Degrees of automation, from human to AI. In partial automation, cases the model is unsure about go to a human. You can choose to stop before full automation. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 This spectrum ranges from fully human-driven to fully automated systems. Many deployments start with lower automation (e.g., shadow mode or AI assistance) and progress toward greater automation as the algorithm’s reliability improves. However, full automation is not always necessary—AI assistance or partial automation may be optimal for some applications, depending on performance and requirements.
 

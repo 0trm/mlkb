@@ -4,7 +4,14 @@ Write three types of documents when building/operating a system. The first two h
 
 *The document types below are adapted from Eugene Yan, [Writing Docs: Why, What, and How](https://eugeneyan.com/writing/writing-docs-why-what-how/); the first-person voice in the original is his.*
 
-![](images/image123.png)
+```mermaid
+flowchart LR
+  Idea[Idea] --> OP([One-pager])
+  OP -- align on<br>one-pager --> DD([Design doc])
+  DD -- review design doc,<br>then execute --> AAR([After-action<br>review])
+```
+
+*Where each document falls on a project timeline (not to scale). Adapted from Eugene Yan, *Writing Docs: Why, What, and How*.*
 
 **One-pagers:** Used to achieve alignment with business/product stakeholders. Also used as background memos for quarterly/yearly prioritization. In a single page, they should allow readers to quickly understand the problem, expected outcomes, proposed solution, and high-level approach. Extremely useful to reference when you’re deep in the weeds of a project, or encounter scope creep.
 

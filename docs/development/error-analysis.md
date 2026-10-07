@@ -4,10 +4,13 @@ Training a machine learning algorithm rarely yields perfect results on the first
 
 To understand errors in a system, such as a speech recognition model, follow this process:
 
-![](../images/image1.png)
-
   - **Examine Misclassified Examples**: Select a sample from your development set, such as 100 mislabeled audio clips. Listen to each clip and annotate relevant characteristics in a spreadsheet (e.g., Google Sheets, Excel, or Numbers). For instance, note if an audio clip contains background car noise.
   - **Purpose**: This process reveals which categories or tags (e.g., car noise) contribute significantly to errors, helping you prioritize areas for improvement.
+
+The process is iterative: examining and tagging examples suggests new tags, and each new tag sends you back to the examples. Tags that work in other applications:
+
+  - **Visual inspection**: specific class labels (scratch, dent), image properties (blurry, dark or light background, reflection), other metadata (phone model, factory).
+  - **Product recommendations**: user demographics, product features or category.
 
 Error analysis has traditionally been manual, often performed in tools like Jupyter Notebooks or spreadsheets. While this approach remains effective, emerging MLOps tools streamline the process.
 

@@ -2,8 +2,6 @@
 
 Even when a machine learning model performs well on metrics like accuracy or F1 score, conducting a final performance audit before deployment is critical. This step can prevent significant post-deployment issues by identifying potential problems in accuracy, fairness, bias, and other areas.
 
-![](../images/image136.png)
-
 After multiple iterations of model development, a performance audit serves as a final check to ensure the system is robust and equitable. It helps uncover issues that might not be evident from standard metrics, safeguarding against real-world failures.
 
 ## i. Auditing Framework
@@ -33,8 +31,6 @@ Define metrics to assess performance against identified risks, focusing on **dat
   - Precision and recall for rare defect types in manufacturing.
 
 **MLOps Tools**: Tools like **TensorFlow Model Analysis (TFMA)** can automate the computation of detailed metrics across data slices, streamlining the auditing process for each model iteration.
-
-![](../images/image57.png)
 
 ### Step 3: Secure Stakeholder Buy-in
 

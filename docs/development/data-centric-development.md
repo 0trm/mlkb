@@ -6,7 +6,12 @@ Traditional AI development often adopts a model-centric approach, focusing on op
 
 The two philosophies are introduced in [3.1 i](modeling-overview.md#i-model-centric-and-data-centric-ai). In data-centric development you keep a relatively stable model and iteratively improve the data with error analysis and data augmentation. For many applications, high-quality data lets several different models perform adequately, which reduces the need for cutting-edge algorithms.
 
-![](../images/image10.png)
+|  | Model-centric view | Data-centric view |
+|---|---|---|
+| **Idea** | Take the data you have and develop a model that does as well as possible on it | Data quality is paramount: use tools to improve it, which lets multiple models do well |
+| **What you iterate on** | Hold the data fixed and iteratively improve the code/model | Hold the code fixed and iteratively improve the data |
+
+*The two views side by side. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 ## ii. Data Augmentation
 
@@ -15,11 +20,18 @@ Imagine a graph where:
   - The **vertical axis** represents model performance (e.g., accuracy).
   - The **horizontal axis** conceptually represents the space of possible inputs (e.g., speech with background noises like car, plane, train, cafe, library, or food court).
 
-![](../images/image87.png)
+| Input | Noise type | Model vs. HLP | After augmenting cafe noise |
+|---|---|---|---|
+| Plane, car, train, machine noise | Mechanical | Close to HLP | Small change |
+| Library noise | Human | Well below HLP | Lifted |
+| Cafe noise | Human | Well below HLP | Lifted most (augmentation target) |
+| Food court noise | Human | Well below HLP | Lifted |
 
-**Mechanical noises** (car, plane, train) are similar to each other, as are **human-related noises** (cafe, library, food court). A model’s performance varies across these inputs, forming a curve (visualized as a blue rubber band) that reflects accuracy for each input type. Human-level performance (HLP) forms a separate curve (green line), and the gap between the two curves indicates opportunities for improvement.
+*Speech recognition example: augmenting cafe noise pulls up performance on cafe noise and on similar inputs nearby, with little effect on distant ones. Adapted from DeepLearning.AI, MLOps Specialization.*
 
-Data augmentation targets underperforming inputs (e.g., cafe noise). By adding augmented data, you “pull up” the blue curve at that point, improving performance. This often lifts nearby points (e.g., library or food court noise) as well, with diminishing effects on distant points (e.g., mechanical noises). For unstructured data, improving one area rarely degrades performance elsewhere, making data augmentation highly effective.
+**Mechanical noises** (car, plane, train) are similar to each other, as are **human-related noises** (cafe, library, food court). A model’s performance varies across these inputs, forming a curve (think of it as a rubber band) that reflects accuracy for each input type. Human-level performance (HLP) forms a separate curve, and the gap between the two curves indicates opportunities for improvement.
+
+Data augmentation targets underperforming inputs (e.g., cafe noise). By adding augmented data, you “pull up” the model's curve at that point, improving performance. This often lifts nearby points (e.g., library or food court noise) as well, with diminishing effects on distant points (e.g., mechanical noises). For unstructured data, improving one area rarely degrades performance elsewhere, making data augmentation highly effective.
 
 **Error Analysis Role**: Error analysis identifies the largest gaps to HLP, guiding where to collect or augment data to maximize performance gains.
 
@@ -34,11 +46,7 @@ To augment an audio clip, you might add background cafe noise by summing the wav
   - **Type of Noise**: Cafe, car, or other relevant sounds.
   - **Noise Volume**: The loudness relative to the speech.
 
-![](../images/image18.png)
-
 **Framework for Effective Data Augmentation**
-
-![](../images/image4.png)
 
 **Create augmented examples that are:**
 
@@ -64,8 +72,6 @@ For a small dataset of smartphone images with scratches, augmentation techniques
   - Contrast Adjustment: Brightens the image to highlight the scratch, remaining realistic and human-interpretable.
   - Avoid Over-Augmentation: Darkening an image excessively may obscure the scratch, failing the checklist as humans can’t identify it.
 
-![](../images/image95.png)
-
 Advanced methods, like using Photoshop to draw synthetic scratches or GANs to generate them, can work but are often unnecessary. Simpler techniques are typically faster and equally effective.
 
 **Data Iteration Loop**
@@ -77,15 +83,19 @@ In data-centric AI, adopt a data iteration loop:
 3.  Add or augment data to address these weaknesses.
 4.  Retrain and repeat.
 
-![](../images/image121.png)
+```mermaid
+flowchart LR
+  A["Add/improve data<br>(holding model fixed)"] --> B[Training] --> C[Error analysis]
+  C --> A
+```
+
+*The data iteration loop. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 This approach, combined with robust hyperparameter tuning, often outperforms model iteration (repeatedly refining the model) for practical applications.
 
 **Does Adding Data Hurt Performance?**
 
 Data augmentation can alter the training set’s distribution. For example, if cafe noise initially comprises 20% of the data but augmentation increases it to 50%, the training set may diverge from the development and test sets. Does this harm performance?
-
-![](../images/image73.png)
 
 ### Unstructured Data
 
@@ -108,8 +118,6 @@ This scenario is uncommon, especially in problems like speech recognition where 
 ### Structured Data
 
 For structured data problems (e.g., databases with user or product features), creating new training examples is challenging due to fixed datasets (e.g., a set number of users or products). Instead, feature engineering—adding or enriching features to existing examples—is a powerful strategy.
-
-![](../images/image6.png)
 
 **Example: Restaurant Recommendations**
 
@@ -147,7 +155,13 @@ The data iteration loop for structured data involves:
 3.  Adding or enriching features to address these issues.
 4.  Retraining and repeating.
 
-![](../images/image133.png)
+```mermaid
+flowchart LR
+  A["Model<br>(add features)"] --> B[Training] --> C[Error analysis]
+  C --> A
+```
+
+*The iteration loop for structured data, where each round adds features to the model. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 Unlike unstructured data, where human-level performance provides a clear baseline, structured data lacks such a reference, as humans struggle with tasks like recommending restaurants from raw data. Error analysis, user feedback, and competitor comparisons are thus critical for identifying improvement opportunities.
 

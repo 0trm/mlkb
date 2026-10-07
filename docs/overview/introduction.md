@@ -6,17 +6,58 @@ Machine Learning is the science and art of programming computers so they can lea
 
 **Traditional approach.** You study the problem, write rules by hand, evaluate them, and launch if they work. If they don't, you analyze the errors and refine the rules. The list of rules keeps growing and gets hard to maintain.
 
-![](../images/image82.png)
+```mermaid
+flowchart LR
+  A[Study the<br>problem] --> B[Write rules] --> C{Evaluate}
+  C -- pass --> D[Launch!]
+  C -- fail --> E[Analyze errors]
+  E --> A
+  classDef hl stroke-width:2.5px
+  class B hl
+```
+
+*The traditional approach: hand-written rules, refined after each failed evaluation. Adapted from Géron, *Hands-On Machine Learning* (Figure 1-1).*
 
 **Machine learning approach.** You still start by studying the problem, but instead of writing rules you train an algorithm on data. If the evaluated solution falls short, error analysis sends you back to the problem, the data, or the training setup.
 
-![](../images/image42.png)
+```mermaid
+flowchart LR
+  A[Study the<br>problem] --> B[Train ML<br>algorithm] --> C{Evaluate<br>solution}
+  C -- pass --> D[Launch!]
+  C -- fail --> E[Analyze errors]
+  A ~~~ Data
+  E --> A
+  Data([Data]) -.-> B
+  classDef hl stroke-width:2.5px
+  class B hl
+```
+
+*The machine learning approach: the rule-writing step becomes training on data. Adapted from Géron, *Hands-On Machine Learning* (Figure 1-2).*
 
 **Adapting to change.** Once launched, the system can be retrained automatically as new data arrives, so it keeps up with a changing environment without anyone rewriting rules.
 
-![](../images/image83.png)
+```mermaid
+flowchart LR
+  L[Launch!] --> U[Update data] --> T[Train ML<br>algorithm] --> C{Evaluate<br>solution}
+  C --> L
+  U -.-> Data([Data])
+  Data -.-> T
+```
+
+*Automatically adapting to change: the whole loop can be automated. Adapted from Géron, *Hands-On Machine Learning* (Figure 1-3).*
 
 **Helping humans learn.** Inspecting a trained model (for example, which features it relies on most) can reveal patterns in the problem that people hadn't noticed, and that insight feeds back into how the problem is understood.
+
+```mermaid
+flowchart LR
+  A[Study the<br>problem] --> B[Train ML<br>algorithm] --> S([Solution])
+  A ~~~ Lots
+  Lots([Lots of data]) -.-> B
+  S --> I[Inspect the<br>solution] --> U([Understand the<br>problem better])
+  U -. iterate if needed .-> A
+```
+
+*Machine learning can help humans learn: inspecting the trained solution gives insight into the problem. Adapted from Géron, *Hands-On Machine Learning* (Figure 1-4).*
 
 To summarize, ML is great for:
 
@@ -86,13 +127,34 @@ Key challenges include:
   - Managing concept drift and data drift.
   - Handling extensive software infrastructure, where ML code typically comprises only 5-10% of the total codebase.
 
-![](../images/image79.png)
+```mermaid
+flowchart TB
+  subgraph r1[" "]
+    direction LR
+    A[Configuration] ~~~ B[Data collection] ~~~ C[Testing and<br>debugging] ~~~ D[Resource<br>management]
+  end
+  subgraph r2[" "]
+    direction LR
+    E[Data verification] ~~~ F[ML code] ~~~ G[Model analysis] ~~~ H[Serving<br>infrastructure]
+  end
+  subgraph r3[" "]
+    direction LR
+    I[Automation] ~~~ J[Feature engineering] ~~~ K[Process<br>management] ~~~ L[Monitoring]
+  end
+  M[Metadata management]
+  r1 ~~~ r2 ~~~ r3 ~~~ M
+  classDef hl fill:#24292f,color:#ffffff,stroke:#24292f
+  class F hl
+  style r1 fill:none,stroke:none
+  style r2 fill:none,stroke:none
+  style r3 fill:none,stroke:none
+```
+
+*In a production ML system, the ML code is one small part of a much larger system. Adapted from Sculley et al., *Hidden Technical Debt in Machine Learning Systems* (2015).*
 
 Beyond the machine learning code, there are also many other components for managing the data, such as data collection, data verification, feature extraction. And after you are serving it, we also need to consider how to monitor and analyze the system. There are often many other components that need to be built to enable a working production deployment.
 
 **MLOps** encompasses the practices for the continuous, reliable, and efficient design, deployment, and maintenance of machine learning systems in production.
-
-![](../images/image106.png)
 
 Originating from DevOps, MLOps addresses the full machine learning lifecycle. Its benefits include:
 

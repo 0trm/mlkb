@@ -10,7 +10,22 @@ Split the data into training set and test set (typically 80-20%; if it’s big d
 
 Evaluating a model is simple enough but what if you are hesitating between two types of models? Train both and compare how well they generalize using the test set. Now suppose model A performs better and now you want to apply some regularization to avoid overfitting. How do you choose the value of the regularization hyperparameter? You can’t keep reusing the test set, or the model and its hyperparameters will end up fitted to it. A solution to this problem is creating a validation set (aka dev set): you hold out part of the training set to evaluate several candidate models and select the best one. More specifically, you train multiple models with various hyperparameters on the reduced training set (training set - dev set) and select the model that performs best on the dev set. After that, you train the best model on the full training set and this gives you the final model. Lastly, you evaluate this final model on the test set to get an estimate of the generalization error. When data is scarce, use cross-validation instead of a single dev set: evaluate each candidate on several small validation folds and average the results.
 
-![](../images/image134.png)
+```mermaid
+flowchart TB
+  TR([Training set]) -- minus dev set --> S1[1. Train multiple<br>models]
+  DV([Dev set])
+  TE([Test set])
+  S1 --> S2[2. Evaluate models]
+  DV -.-> S2
+  S2 -- rejected --> S1
+  S2 -- best --> S3[3. Retrain the<br>best model]
+  TR -.-> S3
+  DV -.-> S3
+  S3 --> S4[4. Evaluate the<br>final model]
+  TE -.-> S4
+```
+
+*Model selection using holdout validation: candidates are compared on the dev set, the winner is retrained on training plus dev data, and the test set is used once at the end. Dashed arrows are data feeds. Adapted from Géron, *Hands-On Machine Learning* (Figure 1-25).*
 
 An important rule to remember is that both the validation set and the test set must be as representative as possible of the data you expect to use in production.
 
@@ -41,5 +56,3 @@ For small datasets, balanced splits ensure representative train, development (de
   - **Balanced Split**: Train (18 defective, 30%), Dev (6 defective, 30%), Test (6 defective, 30%).
 
 Balanced splits maintain the dataset’s true distribution (30% defective), improving model evaluation. For large datasets, random splits are typically representative, making balancing less critical.
-
-![](../images/image16.png)
