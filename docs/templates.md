@@ -1,10 +1,10 @@
-# 5. Templates
+# Templates
 
 Write three types of documents when building/operating a system. The first two help to get alignment and feedback; the last is used to reflect, and all three assist with thinking deeply and improving outcomes.
 
 *The document types below are adapted from Eugene Yan, [Writing Docs: Why, What, and How](https://eugeneyan.com/writing/writing-docs-why-what-how/); the first-person voice in the original is his.*
 
-<img src="images/image123.png" alt="" width="620">
+![](images/image123.png)
 
 **One-pagers:** Used to achieve alignment with business/product stakeholders. Also used as background memos for quarterly/yearly prioritization. In a single page, they should allow readers to quickly understand the problem, expected outcomes, proposed solution, and high-level approach. Extremely useful to reference when you’re deep in the weeds of a project, or encounter scope creep.
 
@@ -18,6 +18,6 @@ An error review (e.g., the system goes down) diagnoses the root cause and identi
 
 **Where each fits in the lifecycle**
 
-  - **One-pager**: during scoping, before any data work ([2.1 Scoping](02-design.md#21-scoping)).
-  - **Design doc**: before building, to get feedback on methodology and system design while changes are still cheap ([2.1.6 Project Phases and Timeboxes](02-design.md#216-project-phases-and-timeboxes)).
-  - **After-action review**: after shipping, or after a production incident ([4. Deployment](04-deployment.md)).
+  - **One-pager**: during scoping, before any data work ([2.1 Scoping](design/scoping.md)).
+  - **Design doc**: before building, to get feedback on methodology and system design while changes are still cheap ([2.1.6 Project Phases and Timeboxes](design/scoping.md#216-project-phases-and-timeboxes)).
+  - **After-action review**: after shipping, or after a production incident ([4. Deployment](index.md#deployment)).

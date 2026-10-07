@@ -1,0 +1,33 @@
+# 3.4 Error Analysis
+
+Training a machine learning algorithm rarely yields perfect results on the first attempt. Error analysis is central to the development process, helping you identify and address model shortcomings systematically.
+
+To understand errors in a system, such as a speech recognition model, follow this process:
+
+![](../images/image1.png)
+
+  - **Examine Misclassified Examples**: Select a sample from your development set, such as 100 mislabeled audio clips. Listen to each clip and annotate relevant characteristics in a spreadsheet (e.g., Google Sheets, Excel, or Numbers). For instance, note if an audio clip contains background car noise.
+  - **Purpose**: This process reveals which categories or tags (e.g., car noise) contribute significantly to errors, helping you prioritize areas for improvement.
+
+Error analysis has traditionally been manual, often performed in tools like Jupyter Notebooks or spreadsheets. While this approach remains effective, emerging MLOps tools streamline the process.
+
+## i. Key Metrics for Error Analysis
+
+As you analyze tagged data, track these metrics to guide prioritization:
+
+1.  **Fraction of Errors with a Tag**: For example, if 12% of 100 audio clips have the "car noise" tag, addressing car noise could improve performance by up to 12%—a significant gain.
+2.  **Misclassification Rate for a Tag**: Calculate the fraction of data with a specific tag that is misclassified. For instance, if 18% of car noise clips are incorrectly transcribed, this indicates the difficulty of that category and its accuracy ceiling.
+3.  **Prevalence of a Tag**: Determine what fraction of the entire dataset has a specific tag. This shows the tag’s overall relevance.
+4.  **Room for Improvement**: Assess the potential for improvement by comparing your model’s performance to human-level performance (HLP) for a given tag. This helps estimate the achievable gains.
+
+## ii. Turn Error Patterns into Features
+
+Errors the model *knows* it got wrong (a false positive, or a positive ranked below a negative) are the ones it will fix if given a feature that helps. Features built around cases the model doesn't count as mistakes get ignored: if the objective is installs and users do install a gag app after searching "free games", a "gag app" feature won't demote it. Look for trends in the errors that fall outside the current feature set (e.g., the model demotes long posts), then add a family of related features (a dozen post-length buckets) and let the model sort out which ones matter. *(Rules of ML #26)*
+
+## iii. Quantify Undesirable Behavior
+
+When team members dislike behavior that the loss function doesn't capture, turn the complaint into a number: for example, have human raters label gag apps in top search results. Once measured, the issue can become a feature, an objective, or a metric. "Measure first, optimize second." *(Rules of ML #27)*
+
+## iv. You Are Not a Typical End User
+
+Dogfooding catches obviously bad changes, but engineers are too close to the code and too costly to act as the evaluation set. Test anything near production quality with crowdsourced raters or a live experiment. For qualitative feedback, use UX methods: personas early on, usability testing later. *(Rules of ML #23)*

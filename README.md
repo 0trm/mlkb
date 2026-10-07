@@ -1,57 +1,59 @@
 # Machine Learning Knowledge Base
 
-Study notes on designing, developing, and deploying ML systems, compiled from the courses, books, and essays listed under [Sources](#sources). Examples and case studies come from those sources; they are not my own projects.
+Study notes on designing, developing, and deploying ML systems, compiled from the courses, books, and essays listed under [Sources](docs/sources.md). Examples and case studies come from those sources; they are not my own projects.
 
-## Contents
+**Read them as a site: <https://0trm.github.io/mlkb/>**
 
-The process is split into three stages: **Design**, **Development**, and **Deployment**. The overview walks the whole lifecycle once; each stage then has its own chapter.
+The process is split into three stages: **Design**, **Development**, and **Deployment**. The overview walks the whole lifecycle once; each stage then has its own pages.
 
 *Scope: classic (predictive) ML systems. LLMs and foundation models are not covered.*
 
-### [1. Overview](01-overview.md)
+## Contents
 
-- [1.1. Introduction](01-overview.md#11-introduction)
-- [1.2. ML Project Lifecycle](01-overview.md#12-ml-project-lifecycle)
-- [1.3. ML Project Checklist](01-overview.md#13-ml-project-checklist)
-- [1.4. MLOps](01-overview.md#14-mlops)
-- [1.5. Case Study: Speech Recognition System](01-overview.md#15-case-study-speech-recognition-system)
+### Overview
 
-### [2. Design](02-design.md)
+- [1.1 Introduction](docs/overview/introduction.md)
+- [1.2 ML Project Lifecycle](docs/overview/lifecycle.md)
+- [1.3 ML Project Checklist](docs/overview/checklist.md)
+- [1.4 MLOps](docs/overview/mlops.md)
+- [1.5 Case Study: Speech Recognition System](docs/overview/case-study-speech-recognition.md)
 
-- [2.1. Scoping](02-design.md#21-scoping)
-- [2.2. Data](02-design.md#22-data)
+### Stage I · Design
 
-### [3. Development](03-development.md)
+- [2.1 Scoping](docs/design/scoping.md)
+- [2.2 Data](docs/design/data.md)
 
-- [3.1. Modeling Overview](03-development.md#31-modeling-overview)
-- [3.2. Validation and Hyperparameter Tuning](03-development.md#32-validation-and-hyperparameter-tuning)
-- [3.3. Model Baseline](03-development.md#33-model-baseline)
-- [3.4. Error Analysis](03-development.md#34-error-analysis)
-- [3.5. Prioritizing Improvements](03-development.md#35-prioritizing-improvements)
-- [3.6. Skewed Datasets](03-development.md#36-skewed-datasets)
-- [3.7. Performance Auditing](03-development.md#37-performance-auditing)
-- [3.8. Data-centric AI Development](03-development.md#38-data-centric-ai-development)
-- [3.9. Experiment Tracking](03-development.md#39-experiment-tracking)
+### Stage II · Development
 
-### [4. Deployment](04-deployment.md)
+- [3.1 Modeling Overview](docs/development/modeling-overview.md)
+- [3.2 Validation and Hyperparameter Tuning](docs/development/validation-and-tuning.md)
+- [3.3 Model Baseline](docs/development/model-baseline.md)
+- [3.4 Error Analysis](docs/development/error-analysis.md)
+- [3.5 Prioritizing Improvements](docs/development/prioritizing-improvements.md)
+- [3.6 Skewed Datasets](docs/development/skewed-datasets.md)
+- [3.7 Performance Auditing](docs/development/performance-auditing.md)
+- [3.8 Data-centric AI Development](docs/development/data-centric-development.md)
+- [3.9 Experiment Tracking](docs/development/experiment-tracking.md)
 
-- [4.1. Key Challenges in Deployment](04-deployment.md#41-key-challenges-in-deployment)
-- [4.2. Deployment Architecture](04-deployment.md#42-deployment-architecture)
-- [4.3. Common Deployment Patterns](04-deployment.md#43-common-deployment-patterns)
-- [4.4. Reproducibility and CI/CD](04-deployment.md#44-reproducibility-and-cicd)
-- [4.5. Monitoring](04-deployment.md#45-monitoring)
-- [4.6. Case Study: Defect Inspection in Manufacturing](04-deployment.md#46-case-study-defect-inspection-in-manufacturing)
+### Stage III · Deployment
 
-### [5. Templates](05-templates.md)
+- [4.1 Key Challenges in Deployment](docs/deployment/key-challenges.md)
+- [4.2 Deployment Architecture](docs/deployment/architecture.md)
+- [4.3 Common Deployment Patterns](docs/deployment/deployment-patterns.md)
+- [4.4 Reproducibility and CI/CD](docs/deployment/reproducibility-cicd.md)
+- [4.5 Monitoring](docs/deployment/monitoring.md)
+- [4.6 Case Study: Defect Inspection in Manufacturing](docs/deployment/case-study-defect-inspection.md)
 
-## Sources
+### Appendix
 
-This knowledge base was compiled from the following sources.
+- [Templates](docs/templates.md)
+- [Sources](docs/sources.md)
 
-- Andrew Ng / DeepLearning.AI, [*Machine Learning Engineering for Production (MLOps) Specialization*](https://www.coursera.org/specializations/machine-learning-engineering-for-production-mlops)
-- Aurélien Géron, [*Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow*](https://www.oreilly.com/library/view/hands-on-machine-learning/9781098125967/) (O'Reilly)
-- Eugene Yan, [*Writing Docs: Why, What, and How*](https://eugeneyan.com/writing/writing-docs-why-what-how/)
-- Eugene Yan, [*What I Love About Scrum for Data Science*](https://eugeneyan.com/writing/what-i-love-about-scrum-for-data-science/#retrospectives-feedback-loop-for-improvement)
-- Snoek, Larochelle & Adams, [*Practical Bayesian Optimization of Machine Learning Algorithms*](https://arxiv.org/abs/1206.2944)
-- Martin Zinkevich, [*Rules of Machine Learning: Best Practices for ML Engineering*](https://developers.google.com/machine-learning/guides/rules-of-ml) (Google for Developers), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); rules are paraphrased and adapted, cited inline as *(Rules of ML #n)*
-- AWS Well-Architected, [*Correction of Errors*](https://wa.aws.amazon.com/wat.concept.coe.en.html), and the [`JDHarris007/coe`](https://github.com/JDHarris007/coe/blob/master/CoE.md) example
+## Building the site locally
+
+```bash
+pip install -r docs/requirements.txt
+sphinx-build -b html docs docs/_build/html
+```
+
+Pushes to `main` rebuild and deploy the site through `.github/workflows/pages.yml`.
