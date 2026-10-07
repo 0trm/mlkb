@@ -1,5 +1,7 @@
 # 3. Development
 
+Development turns scoped data into a working model: set up validation, get a baseline fast, then iterate with error analysis, more often by improving the data than the model. It ends with an audit before anything reaches users.
+
 ## 3.1. Modeling Overview
 
 Machine learning development often revolves around two philosophies: model-centric and data-centric AI.
@@ -47,7 +49,7 @@ Goal is to enhance model performance. Tools and techniques help to process, sele
       - Correlation
       - Feature importances
       - Other methods: univariate selection, Principal Component Analysis (PCA), Recursive Feature Elimination (RFE)
-  - Feature store - only relevant for large teams working on multiple projects that use the same features
+  - Feature store: only relevant for large teams working on multiple projects that use the same features (see [4.4 Reproducibility and CI/CD](04-deployment.md#44-reproducibility-and-cicd))
 
 <img src="images/image102.png" alt="" width="620">
 
@@ -69,7 +71,53 @@ Goal is to enhance model performance. Tools and techniques help to process, sele
   - **Clean up unused features** (#22): Unused features are technical debt and slow down trying new ones. Check coverage: a personalization feature that only 8% of users have won't help much, but a feature on 1% of the data that is 90% positive can be great.
   - **Give feature columns owners and documentation** (#11): Know who created and maintains each feature, what it is, where it comes from, and how it is expected to help. Hand over that knowledge when the owner leaves.
 
-## 3.2. Model Baseline
+## 3.2. Validation and Hyperparameter Tuning
+
+Before training anything, decide how the data is split and how candidate models and hyperparameters will be compared, so every later result is measured the same way.
+
+### i. Testing and Validating
+
+Split the data into training set and test set (typically 80-20%; if it’s big data then 90-10%). The error rate on new cases is called the *generalization error.* If the training error is low but the generalization error is high, it means that your model is overfitting the training data.
+
+### ii. Hyperparameter Tuning and Model Selection
+
+Evaluating a model is simple enough but what if you are hesitating between two types of models? Train both and compare how well they generalize using the test set. Now suppose model A performs better and now you want to apply some regularization to avoid overfitting. How do you choose the value of the regularization hyperparameter? You can’t keep reusing the test set, or the model and its hyperparameters will end up fitted to it. A solution to this problem is creating a validation set (aka dev set): you hold out part of the training set to evaluate several candidate models and select the best one. More specifically, you train multiple models with various hyperparameters on the reduced training set (training set - dev set) and select the model that performs best on the dev set. After that, you train the best model on the full training set and this gives you the final model. Lastly, you evaluate this final model on the test set to get an estimate of the generalization error. When data is scarce, use cross-validation instead of a single dev set: evaluate each candidate on several small validation folds and average the results.
+
+<img src="images/image134.png" alt="" width="425">
+
+An important rule to remember is that both the validation set and the test set must be as representative as possible of the data you expect to use in production.
+
+### iii. Searching the Hyperparameter Space
+
+  - **Grid search** tries every combination of a few values per hyperparameter. It gets expensive quickly and spends many trials on hyperparameters that barely matter.
+  - **Random search** samples combinations at random. With the same budget it explores many more values of each hyperparameter, so prefer it unless there are very few values to explore (Géron).
+  - **Bayesian optimization** fits a probabilistic model (a Gaussian process) of validation performance as a function of the hyperparameters, and uses it to pick the next combination most likely to beat the best so far. It needs fewer training runs, which matters when each run is slow ([Snoek, Larochelle & Adams](https://arxiv.org/abs/1206.2944)).
+
+### iv. Choosing a Splitting Strategy
+
+  - **Is there a time component in my data where the future shouldn't influence the past?**
+
+      - **YES:** You **must** use a **Time-Based Split**. Stratification is secondary and can be more complex to implement with time splits, but the time-based separation is non-negotiable.
+      - **NO:** Proceed to the next question.
+  - **Is this a classification problem?**
+
+      - **YES:** You **should** use a **Stratified Split** (stratify=y). It prevents "bad luck" splits and is crucial for imbalanced datasets. It's good practice even for balanced datasets.
+      - **NO (e.g., a regression problem):** A standard **Random Split** is usually fine.
+
+For production systems, the time-based split should mirror how the model is used: if the model is trained on data up to January 5th, test it on data from January 6th onward. Expect it to do somewhat worse on the newer data, but not radically worse. Because of daily effects, absolute rates (click rate, conversion rate) may shift; a ranking metric like AUC should stay reasonably close. *(Rules of ML #33)*
+
+### v. Balanced Splits for Small Datasets
+
+For small datasets, balanced splits ensure representative train, development (dev), and test sets. In a visual inspection dataset with 100 images (30 defective, 70 non-defective), a 60/20/20 split might yield:
+
+  - **Unbalanced Split**: Train (21 defective, 35% defective), Dev (2 defective, 10% defective), Test (7 defective, 35% defective).
+  - **Balanced Split**: Train (18 defective, 30%), Dev (6 defective, 30%), Test (6 defective, 30%).
+
+Balanced splits maintain the dataset’s true distribution (30% defective), improving model evaluation. For large datasets, random splits are typically representative, making balancing less critical.
+
+<img src="images/image16.png" alt="" width="620">
+
+## 3.3. Model Baseline
 
 ### i. Getting Started
 
@@ -91,7 +139,7 @@ The problem often stems from skewed data or overlooking rare but vital cases. Av
 
 Every ML project needs a starting point, or baseline, to measure progress against. Here are a few ways to set one:
 
-  - **Human-Level Performance (HLP)**: How well do humans do? Great for tasks like image recognition.
+  - **Human-Level Performance (HLP)**: How well do humans do? Great for tasks like image recognition (see [2.2.5 Human-level Performance](02-design.md#225-human-level-performance-hlp)).
   - **Literature Search**: Check what others have achieved on similar problems.
   - **Quick Model**: Build a simple model fast to see what’s possible.
   - **Previous System Performance**: If you already have a machine learning system in place, its performance can serve as a baseline for improvement.
@@ -133,7 +181,7 @@ Prefer an interpretable, probabilistic model at first (linear, logistic, or Pois
 
 The current model won't be the last one; many teams launch a new model every quarter for years. New launches come from new features, retuned regularization and feature combinations, or a retuned objective. So ask of every change: does this complexity slow down future launches? Design the pipeline so features are easy to add, remove, or recombine, so a fresh copy can be built and verified, and so two or three copies can run in parallel. *(Rules of ML #16)*
 
-## 3.3. Error Analysis
+## 3.4. Error Analysis
 
 Training a machine learning algorithm rarely yields perfect results on the first attempt. Error analysis is central to the development process, helping you identify and address model shortcomings systematically.
 
@@ -167,7 +215,7 @@ When team members dislike behavior that the loss function doesn't capture, turn 
 
 Dogfooding catches obviously bad changes, but engineers are too close to the code and too costly to act as the evaluation set. Test anything near production quality with crowdsourced raters or a live experiment. For qualitative feedback, use UX methods: personas early on, usability testing later. *(Rules of ML #23)*
 
-## 3.4. Prioritizing Improvements
+## 3.5. Prioritizing Improvements
 
 Deciding where to focus your efforts in a machine learning project requires a strategic approach. Beyond assessing the gap to human-level performance (HLP), consider the prevalence of each data category and other practical factors to maximize impact.
 
@@ -217,7 +265,7 @@ Signs of a plateau: monthly gains shrink, and experiments start trading one metr
   - **Don't expect diversity, personalization, or relevance to track popularity** (#42): Clicks, watches, and shares measure popularity, and popularity is hard to beat. Features for personalization or diversity often get less weight than expected. Add them through post-processing, and keep them if long-term objectives improve.
   - **Reuse social signals, not interests, across products** (#43): Models of who your friends are often transfer between products; personalization features often don't. Raw data from one product, or simply knowing a user is active on another product, can still help.
 
-## 3.5. Skewed Datasets
+## 3.6. Skewed Datasets
 
 Skewed datasets, where one class significantly outnumbers another, pose challenges for evaluating machine learning models. Accuracy alone is often misleading in such cases, and alternative metrics like precision, recall, and the F1 score provide a clearer picture of performance.
 
@@ -265,18 +313,18 @@ While the F1 score is widely used, you may adjust the weighting of precision and
 
 ### v. Multi-class Classification with Skewed Data
 
-### Skewed datasets are also common in **multi-class classification** problems, such as detecting multiple rare defect types in smartphone manufacturing (e.g., scratches, dents, pit marks, or LCD discoloration). Since each defect type may be rare, accuracy is misleading, as a model could achieve high accuracy by ignoring all defects.
+Skewed datasets are also common in **multi-class classification** problems, such as detecting multiple rare defect types in smartphone manufacturing (e.g., scratches, dents, pit marks, or LCD discoloration). Since each defect type may be rare, accuracy is misleading, as a model could achieve high accuracy by ignoring all defects.
 
-### Instead, evaluate **precision and recall for each defect type** individually. For example:
+Instead, evaluate **precision and recall for each defect type** individually. For example:
 
-  - ### **High Recall Preference**: Manufacturing often prioritizes high recall to minimize defective phones reaching customers. Slightly lower precision is tolerable, as human inspectors can verify flagged phones to filter out false positives.
-  - ### **F1 Score for Comparison**: Compute the F1 score for each defect type to obtain a single metric for performance across all classes. This helps benchmark against human-level performance and prioritize which defect type to address next.
+  - **High Recall Preference**: Manufacturing often prioritizes high recall to minimize defective phones reaching customers. Slightly lower precision is tolerable, as human inspectors can verify flagged phones to filter out false positives.
+  - **F1 Score for Comparison**: Compute the F1 score for each defect type to obtain a single metric for performance across all classes. This helps benchmark against human-level performance and prioritize which defect type to address next.
 
 <img src="images/image111.png" alt="" width="620">
 
 Using the F1 score avoids the pitfalls of accuracy, which remains high even if the algorithm misses rare defects. It also guides prioritization by highlighting the most impactful defect types to improve.
 
-## 3.6. Performance Auditing
+## 3.7. Performance Auditing
 
 Even when a machine learning model performs well on metrics like accuracy or F1 score, conducting a final performance audit before deployment is critical. This step can prevent significant post-deployment issues by identifying potential problems in accuracy, fairness, bias, and other areas.
 
@@ -285,8 +333,6 @@ Even when a machine learning model performs well on metrics like accuracy or F1 
 After multiple iterations of model development, a performance audit serves as a final check to ensure the system is robust and equitable. It helps uncover issues that might not be evident from standard metrics, safeguarding against real-world failures.
 
 ### i. Auditing Framework
-
-In skewed datasets, the majority class dominates, making high accuracy achievable with simplistic models that fail to detect the minority class. Consider these examples:
 
 Follow this structured approach to audit your machine learning system:
 
@@ -302,7 +348,7 @@ Identify ways the system might fail by considering its performance across variou
       - Performance on various devices, as microphone quality can vary.
       - Mistranscriptions, especially those producing offensive or inappropriate outputs.
 
-**Example**: In[ DeepLearning.AI](http://deeplearning.ai)’s courses, an instructor discussing **GANs** (generative adversarial networks) was mistranscribed as referencing "guns" and "gangs" due to the rarity of the term in English. This highlights the need to monitor for problematic mistranscriptions, such as swear words or offensive terms, that could misrepresent the speaker’s intent.
+**Example**: In DeepLearning.AI’s courses, an instructor discussing **GANs** (generative adversarial networks) was mistranscribed as referencing "guns" and "gangs" due to the rarity of the term in English. This highlights the need to monitor for problematic mistranscriptions, such as swear words or offensive terms, that could misrepresent the speaker’s intent.
 
 #### Step 2: Establish Metrics for Evaluation
 
@@ -335,23 +381,15 @@ Before any user sees a new model, compare it with the one in production *(Rules 
   - **Judge models by what the prediction is used for** (#25): If predictions rank documents, final ranking quality matters more than the predicted probability; if they feed a spam cutoff, the precision of what gets through matters most. If a change improves log loss but hurts the system, look for another feature. If this keeps happening, revisit the objective.
   - **Identical short-term behavior doesn't mean identical long-term behavior** (#28): A model keyed only on document ID and exact query can match production in side-by-sides and A/B tests, yet never surface new apps, because it can only show documents that already have history for that query. The only real test is training on data collected while the model is live, which is hard.
 
-## 3.7. Data-centric AI Development
+## 3.8. Data-centric AI Development
 
 Traditional AI development often adopts a model-centric approach, focusing on optimizing models for fixed datasets. However, a data-centric approach, which prioritizes improving data quality, is increasingly valuable for many applications. This shift, combined with strategic feature engineering for structured data, can significantly enhance machine learning performance.
 
 ### i. Model-Centric vs. Data-Centric AI Development
 
-**Model-Centric Approach**
-
-In model-centric development, the dataset is fixed, and efforts focus on iteratively improving the model or code to maximize performance. This approach is common in academic research, where researchers download benchmark datasets and aim to achieve the best results on these fixed sets.
-
-**Data-Centric Approach**
-
-In contrast, data-centric development emphasizes data quality. Instead of refining the model while keeping the data constant, you maintain a relatively stable model and iteratively enhance the data using techniques like error analysis and data augmentation. For many applications, high-quality data enables multiple models to perform adequately, reducing the need for cutting-edge algorithms.
+The two philosophies are introduced in [3.1 i](#i-model-centric-and-data-centric-ai). In data-centric development you keep a relatively stable model and iteratively improve the data with error analysis and data augmentation. For many applications, high-quality data lets several different models perform adequately, which reduces the need for cutting-edge algorithms.
 
 <img src="images/image10.png" alt="" width="620">
-
-Both approaches are valuable, but if you’re accustomed to model-centric thinking, adopting a data-centric perspective can complement your workflow and accelerate performance improvements.
 
 ### ii. Data Augmentation
 
@@ -370,7 +408,7 @@ Data augmentation targets underperforming inputs (e.g., cafe noise). By adding a
 
 **Data Augmentation for Unstructured Data**
 
-Data augmentation efficiently generates additional training examples for unstructured data problems (e.g., images, audio, text). However, it requires careful designHannah design to ensure the augmented data is useful. Key decisions include selecting augmentation parameters, such as the type and intensity of background noise in audio.
+Data augmentation efficiently generates additional training examples for unstructured data problems (e.g., images, audio, text). However, it requires careful design to ensure the augmented data is useful. Key decisions include selecting augmentation parameters, such as the type and intensity of background noise in audio.
 
 **Example: Speech Recognition**
 
@@ -381,8 +419,7 @@ To augment an audio clip, you might add background cafe noise by summing the wav
 
 <img src="images/image18.png" alt="" width="620">
 
-**
-****Framework for Effective Data Augmentation**
+**Framework for Effective Data Augmentation**
 
 <img src="images/image4.png" alt="" width="620">
 
@@ -433,7 +470,7 @@ Data augmentation can alter the training set’s distribution. For example, if c
 
 <img src="images/image73.png" alt="" width="620">
 
-### Unstructured Data
+#### Unstructured Data
 
 For unstructured data problems, adding data rarely hurts performance if:
 
@@ -451,7 +488,7 @@ Performance may degrade in rare cases:
 
 This scenario is uncommon, especially in problems like speech recognition where mappings are typically clear. As long as the model is sufficiently large and labels are accurate, data augmentation is unlikely to harm performance.
 
-### Structured Data
+#### Structured Data
 
 For structured data problems (e.g., databases with user or product features), creating new training examples is challenging due to fixed datasets (e.g., a set number of users or products). Instead, feature engineering—adding or enriching features to existing examples—is a powerful strategy.
 
@@ -501,7 +538,7 @@ Unlike unstructured data, where human-level performance provides a clear baselin
 
 Before deep learning, feature engineering was essential for machine learning. While deep learning reduces the need for hand-crafted features in unstructured data problems—especially with large datasets—feature engineering remains vital for structured data, particularly when datasets are small or medium-sized. Thoughtfully designed features can significantly boost performance in these scenarios.
 
-## 3.8. Experiment Tracking
+## 3.9. Experiment Tracking
 
 Efficient machine learning development requires robust experiment tracking and a focus on high-quality data. These practices ensure systematic improvements and reliable model performance, especially in applications where massive datasets are unavailable.
 
@@ -543,8 +580,8 @@ The most important takeaway is to use *some* tracking system—whether a text fi
 1.  Formulate a hypothesis: "We expect that..."
 2.  Gather images and labels
 3.  Define experiments, e.g., types of models, hyperparameters, datasets
-4.  Setup experiment tracking
-    Train the machine learning model(s)
-5.  Test the models on a hold-out test set
-6.  Register the most suitable model
-7.  Visualize and report back to team and stakeholders, and determine next steps
+4.  Set up experiment tracking
+5.  Train the machine learning model(s)
+6.  Test the models on a hold-out test set
+7.  Register the most suitable model
+8.  Visualize and report back to team and stakeholders, and determine next steps
