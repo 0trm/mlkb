@@ -2,9 +2,28 @@
 
 These are study notes on building machine learning systems end to end. They compress the process into three stages, **design**, **development**, and **deployment**, and follow one idea through all of them: most of the work in production ML is engineering and data, not algorithms.
 
-The notes are compiled from Andrew Ng's MLOps specialization, Aurélien Géron's *Hands-On Machine Learning*, Martin Zinkevich's *Rules of Machine Learning*, and other [sources](sources.md). Examples and case studies come from those sources.
-
 *Scope: classic (predictive) ML systems. LLMs and foundation models are not covered.*
+
+```mermaid
+flowchart LR
+  subgraph design[2 · Design]
+    direction TB
+    A[Scope the<br>project] --> B[Define data and<br>a baseline] --> C[Label and<br>organize data]
+  end
+  subgraph development[3 · Development]
+    direction TB
+    D[Train a<br>model] --> E[Analyze<br>errors] --> F[Audit before<br>launch]
+  end
+  subgraph deployment[4 · Deployment]
+    direction TB
+    G[Deploy in<br>production] --> H[Monitor and<br>maintain]
+  end
+  design --> development --> deployment
+  design <-. iterate .-> development
+  development <-. iterate .-> deployment
+```
+
+*From a business problem to a model serving users. Each stage is a set of steps, and work moves back and forth between stages: error analysis can call for more data, and monitoring triggers retraining. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 ## 1 · Overview
 

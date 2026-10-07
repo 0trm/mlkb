@@ -32,7 +32,7 @@ html_theme_options = {
     "use_fullscreen_button": False,
     "navbar_persistent": [],
     "search_bar_text": "Search the notes...",
-    "home_page_in_toc": True,
+    "home_page_in_toc": False,
     "show_toc_level": 2,
     "footer_content_items": ["copyright.html", "extra-footer.html"],
     "extra_footer": (
