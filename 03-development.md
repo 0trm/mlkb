@@ -58,6 +58,17 @@ Goal is to enhance model performance. Tools and techniques help to process, sele
 
 <img src="images/image33.png" alt="" width="620">
 
+**Rules of thumb for features** *(Rules of ML)*
+
+  - **Mine existing heuristics** (#7): The problem usually had a rule-based solution before ML, and those rules carry intuition worth keeping. Four ways to reuse a heuristic: preprocess with it (e.g., block blacklisted senders outright), turn its score into a feature, feed its raw inputs to the model separately, or fold it into the label. Weigh each against the complexity it adds.
+  - **Start with observed features, not learned ones** (#17): Features from an external system (e.g., a clustering model) carry that system's objective, can go stale, or change meaning when updated. Deep or factored features are non-convex, so run-to-run variation hides whether a change helped. Get a baseline without them first.
+  - **Use content features that generalize across contexts** (#18): Signals from other surfaces (plus-ones and reshares before a post reaches What's Hot, co-watches from YouTube search for Watch Next) let the model promote new items it has no history for in the current context.
+  - **Use very specific features when you have the data** (#19): With lots of data, millions of simple features (document IDs, canonicalized queries) are easier to learn than a few complex ones. Groups of features that each cover a tiny slice are fine if together they cover more than 90% of examples; regularization removes the ones with too little support.
+  - **Combine features in human-understandable ways** (#20): The two standard transformations are **discretization** (turn age into buckets; basic quantiles are enough) and **crosses** (e.g., {gender} × {country}). Crosses of three or more columns need massive data and can overfit.
+  - **Scale feature count to data size** (#21): Roughly, a linear model can learn about as many weights as you have data for. 1,000 examples: a dozen hand-built features (dot products, TF-IDF). 10 million examples: around 100,000 features with regularization. Billions of examples: around 10 million features via crosses plus feature selection.
+  - **Clean up unused features** (#22): Unused features are technical debt and slow down trying new ones. Check coverage: a personalization feature that only 8% of users have won't help much, but a feature on 1% of the data that is 90% positive can be great.
+  - **Give feature columns owners and documentation** (#11): Know who created and maintains each feature, what it is, where it comes from, and how it is expected to help. Hand over that knowledge when the owner leaves.
+
 ## 3.2. Model Baseline
 
 ### i. Getting Started
@@ -112,6 +123,16 @@ For unstructured data, HLP can help estimate the **irreducible error** or **Baye
 
 Some business teams may pressure machine learning teams to guarantee high accuracy (e.g., 80% or 99%) before a baseline is established. This puts the team in a challenging position. If faced with such demands, consider pushing back and requesting time to establish a rough baseline. This allows for a more informed prediction of the system’s potential accuracy.
 
+### iv. Keep the First Model Simple
+
+The first model gives the biggest boost to the product, so it doesn't need to be fancy. Most of the work is infrastructure: how examples reach the learner, what "good" and "bad" mean for the system, and how the model plugs into the application (scored live, or precomputed offline and stored in a table). Simple features make it easy to verify that features reach the learner correctly, that the model learns sensible weights, and that features reach the model correctly at serving time. Some teams aim for a "neutral" first launch that explicitly deprioritizes ML gains so they don't get distracted. *(Rules of ML #4)*
+
+Prefer an interpretable, probabilistic model at first (linear, logistic, or Poisson regression). Its predictions read as probabilities or expected values, and it is approximately **calibrated** (the average prediction matches the average label on the subsets its features define). If predicted probabilities drift from what you see in production, that gap points to a bug. Simple models also make feedback loops easier to handle. *(Rules of ML #14)*
+
+### v. Plan to Launch and Iterate
+
+The current model won't be the last one; many teams launch a new model every quarter for years. New launches come from new features, retuned regularization and feature combinations, or a retuned objective. So ask of every change: does this complexity slow down future launches? Design the pipeline so features are easy to add, remove, or recombine, so a fresh copy can be built and verified, and so two or three copies can run in parallel. *(Rules of ML #16)*
+
 ## 3.3. Error Analysis
 
 Training a machine learning algorithm rarely yields perfect results on the first attempt. Error analysis is central to the development process, helping you identify and address model shortcomings systematically.
@@ -133,6 +154,18 @@ As you analyze tagged data, track these metrics to guide prioritization:
 2.  **Misclassification Rate for a Tag**: Calculate the fraction of data with a specific tag that is misclassified. For instance, if 18% of car noise clips are incorrectly transcribed, this indicates the difficulty of that category and its accuracy ceiling.
 3.  **Prevalence of a Tag**: Determine what fraction of the entire dataset has a specific tag. This shows the tag’s overall relevance.
 4.  **Room for Improvement**: Assess the potential for improvement by comparing your model’s performance to human-level performance (HLP) for a given tag. This helps estimate the achievable gains.
+
+### ii. Turn Error Patterns into Features
+
+Errors the model *knows* it got wrong (a false positive, or a positive ranked below a negative) are the ones it will fix if given a feature that helps. Features built around cases the model doesn't count as mistakes get ignored: if the objective is installs and users do install a gag app after searching "free games", a "gag app" feature won't demote it. Look for trends in the errors that fall outside the current feature set (e.g., the model demotes long posts), then add a family of related features (a dozen post-length buckets) and let the model sort out which ones matter. *(Rules of ML #26)*
+
+### iii. Quantify Undesirable Behavior
+
+When team members dislike behavior that the loss function doesn't capture, turn the complaint into a number: for example, have human raters label gag apps in top search results. Once measured, the issue can become a feature, an objective, or a metric. "Measure first, optimize second." *(Rules of ML #27)*
+
+### iv. You Are Not a Typical End User
+
+Dogfooding catches obviously bad changes, but engineers are too close to the code and too costly to act as the evaluation set. Test anything near production quality with crowdsourced raters or a live experiment. For qualitative feedback, use UX methods: personas early on, usability testing later. *(Rules of ML #23)*
 
 ## 3.4. Prioritizing Improvements
 
@@ -174,6 +207,15 @@ Once you identify priority categories, focus on improving performance by enhanci
 <img src="images/image3.png" alt="" width="620">
 
 For example, rather than broadly collecting data from low-bandwidth cell phone connections, focus on acquiring or augmenting data specifically for car noise or people noise. This precision ensures resources are used effectively to improve algorithm performance where it matters most.
+
+### iv. When Performance Plateaus
+
+Signs of a plateau: monthly gains shrink, and experiments start trading one metric against another. At that point *(Rules of ML)*:
+
+  - **Look for qualitatively new information** (#41): After a few quarters without a launch above 1%, stop refining existing signals. Build infrastructure for radically different features, such as the user's history over the last day, week, or year, data from another product, or knowledge-graph entities. Lower your expectations for return on investment accordingly.
+  - **Keep ensembles simple** (#40): Each model should be either a base model that takes features or an ensemble that takes only other models' outputs, never both. Use a simple ensembler, prefer calibrated base models, and enforce monotonicity: a higher base score should never lower the ensemble's score.
+  - **Don't expect diversity, personalization, or relevance to track popularity** (#42): Clicks, watches, and shares measure popularity, and popularity is hard to beat. Features for personalization or diversity often get less weight than expected. Add them through post-processing, and keep them if long-term objectives improve.
+  - **Reuse social signals, not interests, across products** (#43): Models of who your friends are often transfer between products; personalization features often don't. Raw data from one product, or simply knowing a user is active on another product, can still help.
 
 ## 3.5. Skewed Datasets
 
@@ -284,6 +326,14 @@ The ways a system might fail are highly **problem-dependent**, and standards for
 
   - **Research Industry Standards**: Investigate acceptable practices for your industry, keeping up with evolving guidelines on fairness and bias.
   - **Leverage Expertise**: Involve your team or external advisors to brainstorm potential issues, reducing the risk of overlooking critical failure modes.
+
+### iii. Comparing Against Production
+
+Before any user sees a new model, compare it with the one in production *(Rules of ML)*:
+
+  - **Measure the delta between models** (#24): Run both models on a sample of queries through the full system and measure how different the results are (for ranking, the symmetric difference weighted by position). A tiny difference means little change; a large one needs a closer look at the queries that changed most. Sanity-check stability first: a model compared with itself should show almost no difference.
+  - **Judge models by what the prediction is used for** (#25): If predictions rank documents, final ranking quality matters more than the predicted probability; if they feed a spam cutoff, the precision of what gets through matters most. If a change improves log loss but hurts the system, look for another feature. If this keeps happening, revisit the objective.
+  - **Identical short-term behavior doesn't mean identical long-term behavior** (#28): A model keyed only on document ID and exact query can match production in side-by-sides and A/B tests, yet never surface new apps, because it can only show documents that already have history for that query. The only real test is training on data collected while the model is live, which is hard.
 
 ## 3.7. Data-centric AI Development
 

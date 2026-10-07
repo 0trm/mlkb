@@ -113,6 +113,57 @@ This diagram illustrates the independent but often synchronized lifecycles of an
 
 <img src="images/image84.png" alt="" width="620">
 
+### 2.1.4. Before Machine Learning
+
+Most of the problems in an ML project are engineering problems, and most of the gains come from good features rather than clever algorithms. Zinkevich sums it up as: "do machine learning like the great engineer you are, not like the great machine learning expert you aren't." *(Rules of ML, Overview)*
+
+### i. Launch Without ML First
+
+ML needs data. If ML would give a 100% improvement, a simple heuristic often gets you 50% of the way there. Rank apps by install count, block senders who spammed before, rank contacts by most recent use. If the product does not strictly need ML, ship it without ML until you have data. *(Rules of ML #1)*
+
+### ii. Instrument Metrics Before Building the Model
+
+Track as much as possible in the current system before formalizing what the ML system will do:
+
+  - Permission to log is easier to get early on.
+  - Historical data for a future concern is only available if you started collecting it.
+  - Systems designed with instrumentation in mind are easier to evaluate later (no grepping logs to rebuild a metric).
+  - You learn which metrics move and which stay flat when the product changes.
+
+Pair this with an experiment framework that buckets users and aggregates statistics per experiment. Whenever you notice a problem or a change worth celebrating, add a metric for it. *(Rules of ML #2)*
+
+### iii. Replace Complex Heuristics with ML
+
+A simple heuristic gets the product out the door; a complex one becomes unmaintainable. Once you have data and a clear goal, move to ML: a learned model is easier to update and maintain than a growing pile of rules. *(Rules of ML #3)*
+
+### 2.1.5. Choosing the Objective
+
+A **metric** is any number the system reports. An **objective** is the one metric the algorithm directly optimizes. Measure many metrics; optimize one.
+
+### i. Don't Overthink the First Objective
+
+Early on, most metrics rise together, even the ones you don't optimize directly (optimizing clicks usually lifts time on site too). Don't spend effort balancing metrics while they are all still easy to improve. If the optimized metric goes up but the team decides not to launch, the objective needs revisiting. *(Rules of ML #12)*
+
+### ii. Pick a Simple, Observable, Attributable Objective
+
+The ML objective should be easy to measure and act as a proxy for the "true" goal, which is often unknown or disputed. The easiest things to model are user actions directly caused by the system:
+
+  - **Model directly**: Was the ranked link clicked, the object downloaded, forwarded, rated, or flagged as spam?
+  - **Use as metrics, not objectives**: Indirect effects such as next-day return, session length, or daily active users. These belong in A/B tests and launch decisions.
+  - **Leave to human judgment**: User happiness, satisfaction, well-being, and company health. Connect these to proxies rather than asking the model to learn them.
+
+*(Rules of ML #13)*
+
+### iii. Use a Policy Layer for Extra Logic
+
+Train on the simple objective and add a thin **policy layer** on top for final adjustments. Keep adversarial problems separate: quality ranking should assume good-faith content, while spam filtering is an arms race with fast-changing features, hard rules, and frequent retraining. Remove spam from the quality model's training data and merge the two systems' outputs in the policy layer. *(Rules of ML #13, #15)*
+
+### iv. Launch Decisions Are Proxies for Long-term Goals
+
+A model can lower log loss and raise installs in an A/B test, yet still be rejected because daily active users dropped 5%. Launch decisions weigh several metrics (engagement, DAU, revenue, partner ROI), and each of those is itself a proxy for long-term goals like a healthy product five years out. Only launches where all metrics improve (or none get worse) are easy. If a simple heuristic beats a sophisticated model on every metric, ship the heuristic. *(Rules of ML #39)*
+
+When metrics plateau and the team starts arguing about issues outside the current objective, stop adding features: either change the objective or change the product goals. *(Rules of ML #38)*
+
 ## 2.2. Data
 
 ### 2.2.1. Big Data vs. Good Data
@@ -400,6 +451,10 @@ Identifying the right labelers (e.g., SMEs for specialized tasks, fluent speaker
 
 When expanding a dataset (e.g., from 1,000 examples), avoid increasing by more than 10x at once (e.g., to 3,000–10,000 examples). Train a model on the expanded set, perform error analysis, and then decide if further increases are warranted. Large jumps (e.g., 100x) introduce unpredictability and risk over-investment.
 
+### vi. Clean Labels for Filtering Tasks
+
+In filtering tasks (spam, uninteresting emails), blocked examples never reach the user, so learning only from user feedback on what got through introduces sampling bias. Instead, mark a small slice of traffic (e.g., 1%) as **held out**, show all of it to users, and train on those examples. The filter then blocks slightly less (75% becomes at least 74%), in exchange for much cleaner data. If the filter blocks 95% or more, use an even smaller held-out slice (0.1% or less) just to measure performance: about ten thousand examples is enough for an accurate estimate. *(Rules of ML #34)*
+
 ### 2.2.7. Data Pipelines
 
 A data pipeline processes raw data into a format suitable for ML. For example, to predict if a user is job-hunting based on their data, preprocessing steps like spam cleanup and user ID merging are necessary. These steps can be scripted or use ML algorithms, though scripting is simpler to manage.
@@ -440,6 +495,20 @@ Storing metadata in MLOps frameworks (e.g., MLflow) facilitates analysis and imp
 
 <img src="images/image12.png" alt="" width="620">
 
+### iv. Dropped Data When Copying Pipelines
+
+New pipelines are often copied from existing ones, and the old pipeline may drop data the new one needs. Examples from Google:
+
+  - The Google Plus What's Hot pipeline dropped older posts (it ranks fresh content). Copied for Google Plus Stream, where older posts still matter, it kept dropping them.
+  - Logging only what the user saw makes it impossible to model why a post was *not* seen: all the negative examples are gone.
+  - A Play Apps Home pipeline mixed in examples from the Play Games landing page with no feature to tell them apart.
+
+Check what a copied pipeline filters out before reusing it. *(Rules of ML #6)*
+
+### v. Importance-weight Sampled Data
+
+When there is too much data, don't keep files 1–12 and ignore files 13–99. Data never shown to the user can be dropped, but sample the rest with **importance weighting**: if an example is kept with probability 30%, give it a weight of 10/3. This keeps the model's calibration intact. *(Rules of ML #30)*
+
 ### 2.2.8. Balanced T/D/T Splits
 
 For small datasets, balanced splits ensure representative train, development (dev), and test sets. In a visual inspection dataset with 100 images (30 defective, 70 non-defective), a 60/20/20 split might yield:
@@ -473,3 +542,5 @@ Which Splitting Strategy Should You Use?
 
       - **YES:** You **should** use a **Stratified Split** (stratify=y). It prevents "bad luck" splits and is crucial for imbalanced datasets. It's good practice even for balanced datasets.
       - **NO (e.g., a regression problem):** A standard **Random Split** is usually fine.
+
+For production systems, the time-based split should mirror how the model is used: if the model is trained on data up to January 5th, test it on data from January 6th onward. Expect it to do somewhat worse on the newer data, but not radically worse. Because of daily effects, absolute rates (click rate, conversion rate) may shift; a ranking metric like AUC should stay reasonably close. *(Rules of ML #33)*

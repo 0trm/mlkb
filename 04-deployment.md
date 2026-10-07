@@ -295,7 +295,7 @@ Tools like DVC (Data Version Control) extend Git's capabilities by providing a l
 
 #### Feature Stores
 
-A feature store in machine learning engineering is a centralized repository that standardizes the management, storage, and serving of features for both model training and real-time inference. It acts as a bridge between data engineering and data science, allowing for the consistent definition, computation, and reuse of features across different models and teams, thereby preventing training-serving skew (where features used for training differ from those used in production). Typically, a feature store includes an offline store for historical, large-volume data used in training and an online store optimized for low-latency, single-record retrieval during live predictions, significantly streamlining the MLOps lifecycle by improving efficiency, reproducibility, and model reliability.
+A feature store in machine learning engineering is a centralized repository that standardizes the management, storage, and serving of features for both model training and real-time inference. It acts as a bridge between data engineering and data science, allowing for the consistent definition, computation, and reuse of features across different models and teams, thereby preventing training-serving skew (where features used for training differ from those used in production; see [4.4 viii](#viii-training-serving-skew)). Typically, a feature store includes an offline store for historical, large-volume data used in training and an online store optimized for low-latency, single-record retrieval during live predictions, significantly streamlining the MLOps lifecycle by improving efficiency, reproducibility, and model reliability.
 
 <img src="images/image135.png" alt="" width="620">
 
@@ -329,6 +329,16 @@ This image provides a high-level overview of the inputs and outputs of a "model 
 
 <img src="images/image35.png" alt="" width="620">
 
+#### Testing and Pre-export Checks
+
+Keep the learning part of the system encapsulated so everything around it can be tested on its own *(Rules of ML #5)*:
+
+  - **Data into the algorithm**: Check that feature columns that should be populated are populated. Where privacy allows, inspect the training input by hand, and compare pipeline statistics against the same data processed elsewhere.
+  - **Models out of the algorithm**: The model must give the same score in the training environment and in the serving environment.
+  - **Code paths**: Test the code that creates examples in both training and serving, and make sure serving can load and use a fixed model.
+
+Run sanity checks right before exporting a model, since a bad exported model is a user-facing problem. Check performance on held-out data (many continuously deploying teams gate on AUC), and don't export if you still have doubts about the data. A problem caught before export costs an email alert; a problem in a live model may cost a page. *(Rules of ML #9)*
+
 #### APIs
 
 An API
@@ -344,6 +354,8 @@ To ensure a machine learning (ML) system meets performance expectations, continu
   - Is the model server running?
   - Are the model inputs and outputs as expected?
   - Also known as post-deployment monitoring
+
+Practice good alerting hygiene: make every alert actionable and give the system a dashboard page. *(Rules of ML, Monitoring)*
 
 ### i. Dashboard Monitoring
 
@@ -419,6 +431,7 @@ Like ML modeling, deployment is an iterative process. Initial dashboards and met
           - Business environment: how volatile is the data?
           - Cost: how much does it cost to retrain?
           - Business requirements: what is the required model performance?
+          - Freshness: how much does performance degrade when the model is a day, a week, or a quarter old? This sets monitoring priorities. Ad systems see new ads every day and must update daily; Google Play Search degrades within a month without updates. Freshness needs can change as feature columns are added or removed. *(Rules of ML #8)*
 
 <img src="images/image76.png" alt="" width="620">
 
@@ -468,6 +481,39 @@ The speed at which data changes varies by application:
       - **B2B/Enterprise Data**: Business data can shift quickly. For example, a factory adopting a new phone coating or a CEO changing operational strategies can abruptly alter the dataset.
 
 While these are general observations with exceptions, they provide a framework for anticipating the rate of data change in your application.
+
+### vii. Silent Failures
+
+ML systems fail in a way most software doesn't: they keep running and degrade gradually instead of crashing. If a joined table stops updating, the model adapts and stays "reasonably good" while getting worse. At Google Play, a table stale for 6 months was refreshed and install rate rose 2%, more than any other launch that quarter. Feature coverage can also shift with implementation changes, for example a column populated in 90% of examples that suddenly drops to 60%. Track data statistics (including per-feature coverage) and inspect the data by hand from time to time. *(Rules of ML #10)*
+
+### viii. Training-Serving Skew
+
+**Training-serving skew** is a gap between performance during training and performance during serving. It has three main causes *(Rules of ML)*:
+
+  - Training and serving pipelines handle data differently.
+  - The data changes between training time and serving time.
+  - A feedback loop between the model and the algorithm.
+
+The best defense is to monitor skew explicitly, so system and data changes don't introduce it unnoticed.
+
+**Preventing skew**
+
+  - **Log serving features and train on them** (#29): Save the features used at serving time and pipe them into training. Even logging a small fraction lets you verify consistency. When YouTube home page switched to logging features at serving time, quality improved and code got simpler.
+  - **Beware of tables that change between training and serving** (#31): If features come from a joined table (e.g., comment counts per document), the values at serving time may differ from those at training time. Logging features at serving time avoids this; hourly or daily table snapshots get close, but not all the way.
+  - **Share code between training and serving** (#32): Training is batch and serving is online, but both can build the same system-specific, human-readable object and then run one common function to convert it into model input. Avoid using two programming languages for the two pipelines, since that rules out sharing code.
+
+**Feedback loops in ranking**
+
+  - **Design for the skew ranking creates** (#35): A ranking change alters which results users see, and therefore the data the next model trains on. Ways to favor data the model has already seen: regularize broad features more than query-specific ones, allow only positive feature weights, and avoid document-only features (a popular app shouldn't appear for every query).
+  - **Isolate positional features** (#36): Items in the first slot get clicked more regardless of quality. Train with positional features so the model attributes that effect to position, then serve with no positional feature (or one default value for all candidates), since items are scored before their order is known. Keep positional features separate from the rest of the model; don't cross them with document features.
+
+**Measuring skew** (#37)
+
+Break the gap into three parts:
+
+1.  **Training vs. holdout**: Always present, and not necessarily bad.
+2.  **Holdout vs. next-day data**: Also always present. Tune regularization to maximize next-day performance. A large drop suggests time-sensitive features.
+3.  **Next-day vs. live data**: Should be zero. The same example must score the same in training and serving, so a gap here usually means an engineering bug.
 
 ## 4.5. Case Study: Defect Inspection in Manufacturing
 
