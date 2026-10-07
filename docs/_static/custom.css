@@ -49,3 +49,10 @@ pre.mermaid {
 .bd-article li {
   line-height: 1.7;
 }
+
+/* Room between the end of a page and the previous/next links. */
+.prev-next-area {
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--pst-color-border);
+}
