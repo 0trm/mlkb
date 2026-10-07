@@ -2,7 +2,7 @@
 
 Skewed datasets, where one class significantly outnumbers another, pose challenges for evaluating machine learning models. Accuracy alone is often misleading in such cases, and alternative metrics like precision, recall, and the F1 score provide a clearer picture of performance.
 
-## i. Challenges of Skewed Datasets
+## 3.6.1 Challenges of Skewed Datasets
 
 In skewed datasets, the majority class dominates, making high accuracy achievable with simplistic models that fail to detect the minority class. Consider these examples:
 
@@ -12,7 +12,7 @@ In skewed datasets, the majority class dominates, making high accuracy achievabl
 
 In such cases, always predicting the majority class produces high accuracy but misses critical minority class instances, rendering the model practically useless.
 
-## ii. Using a Confusion Matrix
+## 3.6.2 Using a Confusion Matrix
 
 For skewed datasets, a confusion matrix is a more effective evaluation tool. It organizes predictions against actual labels, with one axis representing ground truth (y=0 or y=1) and the other representing predictions. For a dataset with 1,000 examples (914 negative, 86 positive, i.e., 91.4% negative, 8.6% positive), a confusion matrix reveals how well the model handles both classes.
 
@@ -24,7 +24,7 @@ For skewed datasets, a confusion matrix is a more effective evaluation tool. It 
 
 *Confusion matrix for 1,000 examples: TN true negative, FN false negative, FP false positive, TP true positive. Adapted from DeepLearning.AI, MLOps Specialization.*
 
-## iii. Precision and Recall
+## 3.6.3 Precision and Recall
 
 **Precision** and **recall** are key metrics for skewed datasets, offering deeper insights than accuracy:
 
@@ -49,7 +49,7 @@ For the example dataset (914 negative, 86 positive), an algorithm that always pr
 
 Low recall flags the algorithm’s failure to identify the minority class, making precision and recall more informative than accuracy.
 
-## iv. Comparing Models with the F1 Score
+## 3.6.4 Comparing Models with the F1 Score
 
 When comparing models with different precision and recall values, the F1 score provides a single, balanced metric. The F1 score is the harmonic mean of precision and recall, emphasizing the lower of the two values to ensure both are reasonably high. Mathematically:
 
@@ -66,7 +66,7 @@ $$
 
 While the F1 score is widely used, you may adjust the weighting of precision and recall based on your application’s needs. For instance, some scenarios may prioritize recall over precision or vice versa.
 
-## v. Multi-class Classification with Skewed Data
+## 3.6.5 Multi-class Classification with Skewed Data
 
 Skewed datasets are also common in **multi-class classification** problems, such as detecting multiple rare defect types in smartphone manufacturing (e.g., scratches, dents, pit marks, or LCD discoloration). Since each defect type may be rare, accuracy is misleading, as a model could achieve high accuracy by ignoring all defects.
 

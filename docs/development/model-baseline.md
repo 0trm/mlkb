@@ -1,12 +1,12 @@
 # 3.3 Model Baseline
 
-## i. Getting Started
+## 3.3.1 Getting Started
 
 Launching an ML project can feel daunting, but you don’t need to nail everything on day one. Begin by spending a few hours researching—read a blog or paper to pick a reasonable algorithm, like a standard neural network, rather than chasing the latest cutting-edge option. Then, test your setup with a tiny dataset—say, five examples. Train the model and see if it can overfit, meaning it perfectly memorizes those few cases. If it can’t, something’s off with your code or configuration, and you’ve caught it early.
 
 This approach gets you moving fast. You’ll learn more from tweaking and testing than from agonizing over the “best” starting point. Speed matters more than perfection at the outset.
 
-## ii. Why Low Average Error Isn’t Always Enough
+## 3.3.2 Why Low Average Error Isn’t Always Enough
 
 A model with a low average error might seem like a winner, but that number can hide serious flaws. Imagine a web search model that’s 99% accurate but fails to rank "google.com" correctly for a search on "Google"—that’s a critical miss, even if rare. Or consider a medical diagnosis model trained on data where 99% of patients are healthy. It could predict "healthy" every time, scoring 99% accuracy, yet miss every sick patient. That’s not just misleading—it’s dangerous.
 
@@ -28,7 +28,7 @@ Rare classes show the same problem. With 99% negative and 1% positive examples, 
 
 *Per-condition performance of CheXNet: Hernia, with about 100 examples, trails Effusion, with about 10,000. Adapted from DeepLearning.AI, MLOps Specialization.*
 
-## iii. Setting a Baseline
+## 3.3.3 Setting a Baseline
 
 Every ML project needs a starting point, or baseline, to measure progress against. Here are a few ways to set one:
 
@@ -71,12 +71,12 @@ For unstructured data, HLP can help estimate the **irreducible error** or **Baye
 
 Some business teams may pressure machine learning teams to guarantee high accuracy (e.g., 80% or 99%) before a baseline is established. This puts the team in a challenging position. If faced with such demands, consider pushing back and requesting time to establish a rough baseline. This allows for a more informed prediction of the system’s potential accuracy.
 
-## iv. Keep the First Model Simple
+## 3.3.4 Keep the First Model Simple
 
 The first model gives the biggest boost to the product, so it doesn't need to be fancy. Most of the work is infrastructure: how examples reach the learner, what "good" and "bad" mean for the system, and how the model plugs into the application (scored live, or precomputed offline and stored in a table). Simple features make it easy to verify that features reach the learner correctly, that the model learns sensible weights, and that features reach the model correctly at serving time. Some teams aim for a "neutral" first launch that explicitly deprioritizes ML gains so they don't get distracted. *(Rules of ML #4)*
 
 Prefer an interpretable, probabilistic model at first (linear, logistic, or Poisson regression). Its predictions read as probabilities or expected values, and it is approximately **calibrated** (the average prediction matches the average label on the subsets its features define). If predicted probabilities drift from what you see in production, that gap points to a bug. Simple models also make feedback loops easier to handle. *(Rules of ML #14)*
 
-## v. Plan to Launch and Iterate
+## 3.3.5 Plan to Launch and Iterate
 
 The current model won't be the last one; many teams launch a new model every quarter for years. New launches come from new features, retuned regularization and feature combinations, or a retuned objective. So ask of every change: does this complexity slow down future launches? Design the pipeline so features are easy to add, remove, or recombine, so a fresh copy can be built and verified, and so two or three copies can run in parallel. *(Rules of ML #16)*

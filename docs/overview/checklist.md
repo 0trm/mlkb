@@ -4,12 +4,12 @@ This checklist, adapted from Géron's *Hands-On Machine Learning*, can guide you
 
 | Step | Stage |
 |---|---|
-| i–iii. Frame the problem, get the data, explore it | [Design](../index.md#design) |
-| iv. Prepare the data | [Design](../design/data.md) and [Development](../development/modeling-overview.md#iv-feature-engineering) |
-| v–vii. Model candidates, fine-tuning, presenting | [Development](../index.md#development) |
-| viii. Launch, monitor, and maintain | [Deployment](../index.md#deployment) |
+| 1.3.1–1.3.3 Frame the problem, get the data, explore it | [Design](../index.md#2--design) |
+| 1.3.4 Prepare the data | [Design](../design/data.md) and [Development](../development/modeling-overview.md#314-feature-engineering) |
+| 1.3.5–1.3.7 Model candidates, fine-tuning, presenting | [Development](../index.md#3--development) |
+| 1.3.8 Launch, monitor, and maintain | [Deployment](../index.md#4--deployment) |
 
-## i. Frame the problem and look at the big picture
+## 1.3.1 Frame the problem and look at the big picture
 
   -  Define the objective in business terms
   -  How will your solution be used?
@@ -24,7 +24,7 @@ This checklist, adapted from Géron's *Hands-On Machine Learning*, can guide you
   -  List the assumptions you (or others) have made so far
   -  Verify assumptions if possible
 
-## ii. Get the data
+## 1.3.2 Get the data
 
 *Note: automate as much as possible so you can easily get fresh data.*
 
@@ -40,7 +40,7 @@ This checklist, adapted from Géron's *Hands-On Machine Learning*, can guide you
   -  Check the size and type of data (time series, sample, geographical, etc.)
   -  Sample a test set, put it aside, and never look at it (no data snooping!)
 
-## iii. Explore the data
+## 1.3.3 Explore the data
 
 *Note: try to get insights from a field expert for these steps.*
 
@@ -62,7 +62,7 @@ This checklist, adapted from Géron's *Hands-On Machine Learning*, can guide you
   -  Identify extra data that would be useful (go back to “Get the data”)
   -  Document what you have learned
 
-## iv. Prepare the data
+## 1.3.4 Prepare the data
 
 … to better expose the underlying data patterns to machine learning algorithms.
 
@@ -103,7 +103,7 @@ This checklist, adapted from Géron's *Hands-On Machine Learning*, can guide you
 
       - Standardize or normalize features
 
-## v. Model candidates
+## 1.3.5 Model candidates
 
 *Notes:*
 
@@ -121,7 +121,7 @@ This checklist, adapted from Géron's *Hands-On Machine Learning*, can guide you
   -  Perform a quick round of feature selection and engineering
   -  Shortlist the top three to five most promising models, preferring models that make different types of errors
 
-## vi. Fine-tune models
+## 1.3.6 Fine-tune models
 
 *Notes:*
 
@@ -135,7 +135,7 @@ This checklist, adapted from Géron's *Hands-On Machine Learning*, can guide you
   -  Try ensemble methods. Combining your best models will often produce better performance than running them individually.
   -  Once you are confident about your final model, measure its performance on the test set to estimate the generalization error. Don’t tweak your model after measuring the generalization error; you would just start overfitting the test set.
 
-## vii. Present your solution
+## 1.3.7 Present your solution
 
   -  Document what you have done
   -  Create a nice presentation
@@ -148,7 +148,7 @@ This checklist, adapted from Géron's *Hands-On Machine Learning*, can guide you
       - List your assumptions and your system’s limitations
   -  Ensure your key findings are communicated through beautiful visualizations or easy-to-remember statements (e.g.: “The median income is the number-one predictor of housing prices.”)
 
-## viii. Launch, monitor, and maintain
+## 1.3.8 Launch, monitor, and maintain
 
   -  Get your solution ready for production (plug into production data inputs, write unit tests, etc.)
   -  Write monitoring code to check your system’s live performance at regular intervals and trigger alerts when it drops

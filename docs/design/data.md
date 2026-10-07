@@ -1,10 +1,10 @@
 # 2.2 Data
 
-## 2.2.1. Big Data vs. Good Data
+## 2.2.1 Big Data vs. Good Data
 
 Modern AI often leverages massive datasets from large internet companies with billions of users. While big data can significantly boost performance, many industries lack access to such volumes. In these cases, focusing on good data—high-quality, well-curated data—is critical.
 
-### i. Characteristics of Good Data
+### Characteristics of Good Data
 
 Good data exhibits the following qualities:
 
@@ -13,11 +13,11 @@ Good data exhibits the following qualities:
 3.  **Timely Feedback**: Incorporates monitoring systems to track concept drift and data drift in production, providing actionable feedback to maintain performance.
 4.  **Reasonable Size**: While not necessarily massive, the dataset should be sufficiently large to support effective training.
 
-### ii. Why Good Data Matters
+### Why Good Data Matters
 
 High-quality data is essential throughout the machine learning project lifecycle—from development to deployment. Consistent, well-defined, and diverse data ensures robust and reliable model performance, particularly in applications where collecting billions of data points isn’t feasible. By prioritizing good data, you can achieve high performance even with smaller datasets, using tools like data augmentation to address gaps in coverage.
 
-### iii. Data Quality
+### Data Quality
 
 Data quality can be thought of as having four dimensions:
 
@@ -35,9 +35,9 @@ Data quality can be thought of as having four dimensions:
 
 *The four dimensions of data quality, with a customer-data example for each.*
 
-## 2.2.2. Challenges in Data Definition
+## 2.2.2 Challenges in Data Definition
 
-### i. Why Data Definition Is Difficult
+### Why Data Definition Is Difficult
 
 Defining consistent data labels is challenging due to subjective interpretations, especially in ambiguous cases. For example, given a photo of two iguanas and the instruction "Use bounding boxes to indicate the position of iguanas", three labelers might use different conventions:
 
@@ -55,7 +55,7 @@ Similarly, in smartphone defect detection, labelers might identify “significan
 
 The second approach (marking multiple defects) is often most effective, but ambiguous instructions lead to inconsistent labeling, undermining the model. Clear, standardized instructions are essential to mitigate this issue.
 
-### ii. Label Ambiguity Examples
+### Label Ambiguity Examples
 
 Ambiguity in labeling extends to other domains, such as audio transcription. For an audio clip of someone saying, “Nearest gas station” on a busy roadside with a car passing by, labelers might transcribe it in various ways:
 
@@ -65,11 +65,11 @@ Ambiguity in labeling extends to other domains, such as audio transcription. For
 
 These variations—differing in punctuation, spelling, or annotations—introduce noise. Standardizing one convention enhances the consistency of speech recognition data.
 
-### iii. Impact of Data Preparation
+### Impact of Data Preparation
 
 Many ML practitioners initially use pre-prepared datasets from the internet, which is a valid starting point. However, for practical applications, how you prepare and define your dataset significantly impacts project success. Tailoring data to your specific problem, with clear inputs (x) and consistent labels (y), is crucial.
 
-### iv. Examples of Ambiguous Ground Truth
+### Examples of Ambiguous Ground Truth
 
 #### User ID Merging
 
@@ -99,9 +99,9 @@ Structured data problems often involve ambiguity in ground truth. Examples inclu
 
 In these tasks, ground truth can be unclear, and inconsistent labeling exacerbates noise. Clear labeling instructions that minimize randomness enhance model performance.
 
-## 2.2.3. Best Practices for Data Definition
+## 2.2.3 Best Practices for Data Definition
 
-### i. Defining Inputs (x)
+### Defining Inputs (x)
 
 The quality of input data (x) is critical. For example, in smartphone defect detection:
 
@@ -110,11 +110,11 @@ The quality of input data (x) is critical. For example, in smartphone defect det
 
 For structured data, selecting predictive features is key. In user ID merging, including rough GPS location (with user permission) can help determine if two accounts belong to the same person.
 
-### ii. Defining Labels (y)
+### Defining Labels (y)
 
 Consistent labels (y) are essential. Ambiguous labeling instructions lead to inconsistent data, as seen in the iguana and smartphone examples. Strategies to ensure consistency are discussed below.
 
-### iii. Data Types and Sizes
+### Data Types and Sizes
 
 Best practices vary based on data type (unstructured vs. structured) and dataset size (small vs. large, using a rough threshold of 10,000 examples):
 
@@ -133,7 +133,7 @@ Best practices vary based on data type (unstructured vs. structured) and dataset
 
 For unstructured data, abundant unlabeled data (e.g., thousands of unlabeled smartphone images) can be labeled by humans or augmented. Structured data is harder to expand, as user bases are finite, and human labeling is often ambiguous.
 
-### iv. Importance of Clean Labels
+### Importance of Clean Labels
 
 In small datasets, label consistency is paramount. For example, in a project to predict helicopter rotor speed from motor voltage, a small dataset of five noisy examples makes it difficult to determine the correct function (linear or curved). With clean, consistent labels, even five examples can yield a reliable model. Similarly, computer vision systems can perform well with just 30 consistently labeled images.
 
@@ -153,7 +153,7 @@ Large datasets can face small data challenges in the “long tail” of rare eve
 
 Consistent labeling of these rare cases improves model performance, even in large datasets.
 
-### v. Data Cleaning Questions
+### Data Cleaning Questions
 
 Before cleaning a dataset, work through these questions:
 
@@ -163,7 +163,7 @@ Before cleaning a dataset, work through these questions:
 4.  **Data types**: Are numbers stored as strings? Should some numbers actually be categories?
 5.  **Categorical data**: Do you have the categories you expect? Are there mistakes or inconsistencies?
 
-## 2.2.4. Improving Label Consistency
+## 2.2.4 Improving Label Consistency
 
 To enhance label consistency:
 
@@ -173,15 +173,15 @@ To enhance label consistency:
 4.  **Iterative Refinement**: Apply the new instructions to label more data. Repeat the comparison and discussion process if inconsistencies persist.
 5.  **Input Quality Check**: If labelers indicate that inputs (x) lack sufficient information (e.g., dark images), improve the data collection process (e.g., enhance lighting).
 
-### i. Standardizing Labels
+### Standardizing Labels
 
 Standardizing on a single convention (e.g., one transcription format for audio clips) reduces noise. For example, choosing “Um… nearest gas station” as the standard transcription ensures consistency.
 
-### ii. Merging Classes
+### Merging Classes
 
 When distinguishing between classes is ambiguous (e.g., deep vs. shallow scratches), merging them into a single class (e.g., “scratch”) eliminates inconsistencies, simplifying the task for the algorithm. This is effective when the distinction isn’t critical.
 
-### iii. Creating Uncertainty Classes
+### Creating Uncertainty Classes
 
 For ambiguous cases, introduce a new label to capture uncertainty:
 
@@ -190,18 +190,18 @@ For ambiguous cases, introduce a new label to capture uncertainty:
 
 This approach improves consistency by allowing labelers to flag ambiguity explicitly.
 
-### iv. Small vs. Large Datasets
+### Small vs. Large Datasets
 
   - **Small Datasets**: With few labelers, convene them to discuss and agree on conventions for specific examples. This is feasible due to the small team size.
   - **Large Datasets**: Establish consistent definitions with a small group, then distribute detailed instructions to a larger labeling team. Coordination is harder with many labelers.
 
-### v. Avoid Over-reliance on Voting
+### Avoid Over-reliance on Voting
 
 Consensus labeling (voting by multiple labelers) can improve accuracy but is overused. Instead of relying on voting to resolve inconsistent labels, prioritize clear labeling instructions to reduce noise initially. Voting should be a last resort, as it’s less efficient than standardizing conventions upfront.
 
-## 2.2.5. Human-level Performance (HLP)
+## 2.2.5 Human-level Performance (HLP)
 
-### i. Role of HLP
+### Role of HLP
 
 HLP is a valuable benchmark for unstructured data tasks, estimating Bayes error (irreducible error) and aiding in error analysis and prioritization. For example, in visual inspection, if a business demands 99% accuracy but human inspectors achieve only 66.7% on a dataset (e.g., correctly labeling 4/6 examples), HLP sets a realistic baseline, showing that 99% may be unattainable.
 
@@ -222,14 +222,14 @@ Other uses of HLP:
   - **Setting targets**: When a business or product owner asks for 99% accuracy, HLP helps establish a more reasonable target.
   - **"Proving" ML superiority**: Showing that the ML system beats humans at the job, so the business should adopt it. Use with caution (see Limitations of HLP below).
 
-### ii. Defining Ground Truth
+### Defining Ground Truth
 
 HLP’s interpretation depends on the ground truth:
 
   - **External Ground Truth**: In medical imaging, if ground truth comes from a biopsy, HLP measures how well a doctor predicts the biopsy outcome, providing a clear baseline for algorithm performance.
   - **Human-Defined Ground Truth**: In visual inspection, where ground truth is another human’s label, HLP measures agreement between humans, not absolute accuracy.
 
-### iii. Limitations of HLP
+### Limitations of HLP
 
 HLP can be misleading due to inconsistent labeling. For example, in speech recognition, if 70% of labelers transcribe “Um… nearest gas station” (ellipsis) and 30% use “Um, nearest gas station” (comma), the chance of two labelers agreeing is:
 
@@ -249,11 +249,11 @@ $$
 
 Thus, HLP is calculated as 58%, reflecting labeler agreement rather than true performance. An algorithm consistently choosing the ellipsis convention achieves 70% agreement with humans, appearing to “outperform” HLP by 12%. However, this improvement is trivial, as both conventions are equally valid, and it may mask significant errors in other areas, creating a false impression of superiority.
 
-### iv. Raising HLP
+### Raising HLP
 
 Improving label consistency can raise HLP, benefiting the model. In the visual inspection example above, suppose the two disagreements came from an unclear definition of a defect. If inspectors agree on a rule (for example, a scratch longer than 0.3mm is a defect) and relabel the six examples by it, inspector and ground truth now agree on all six, raising HLP from 66.7% to 100%. While this makes beating HLP impossible, it provides cleaner data, ultimately improving model performance.
 
-### v. Structured Data and HLP
+### Structured Data and HLP
 
 HLP is less common in structured data due to the difficulty of human labeling. Exceptions include:
 
@@ -265,9 +265,9 @@ HLP is less common in structured data due to the difficulty of human labeling. E
 
 In these cases, low HLP often indicates inconsistent labeling. Improving labeling standards raises HLP and provides cleaner data, enhancing model performance.
 
-## 2.2.6. Obtaining Data
+## 2.2.6 Obtaining Data
 
-### i. Balancing Data Collection Time
+### Balancing Data Collection Time
 
 ML development is iterative, involving model selection, hyperparameter tuning, training, and error analysis. If training and error analysis each take a few days, spending 30 days collecting data delays iteration unnecessarily. Instead:
 
@@ -285,7 +285,7 @@ flowchart LR
 
 Exception: If prior experience indicates a minimum dataset size (e.g., hours of speech data for recognition), invest upfront to meet that threshold. For new problems, start small, train, and use error analysis to guide further collection.
 
-### ii. Data Source Inventory
+### Data Source Inventory
 
 Brainstorm potential data sources and evaluate their costs and timelines. For speech recognition:
 
@@ -300,7 +300,7 @@ Brainstorm potential data sources and evaluate their costs and timelines. For sp
 
 Consider data quality, privacy, and regulatory constraints alongside financial and time costs. This inventory ensures informed decisions.
 
-### iii. Labeling Methods
+### Labeling Methods
 
 Common labeling approaches include:
 
@@ -310,25 +310,25 @@ Common labeling approaches include:
 
 For specialized tasks (e.g., medical imaging, factory inspection), subject matter experts (SMEs) are often required, as typical labelers lack the expertise to diagnose X-rays or identify defects accurately.
 
-### iv. Challenges in Labeling
+### Challenges in Labeling
 
 Some tasks are inherently difficult for humans to label. In product recommendations, even close friends struggle to recommend products as well as algorithms do, so purchase data may serve as labels instead of human judgments.
 
 Identifying the right labelers (e.g., SMEs for specialized tasks, fluent speakers for transcription) ensures high-quality labels.
 
-### v. Dataset Size Scaling
+### Dataset Size Scaling
 
 When expanding a dataset (e.g., from 1,000 examples), avoid increasing by more than 10x at once (e.g., to 3,000–10,000 examples). Train a model on the expanded set, perform error analysis, and then decide if further increases are warranted. Large jumps (e.g., 100x) introduce unpredictability and risk over-investment.
 
-### vi. Clean Labels for Filtering Tasks
+### Clean Labels for Filtering Tasks
 
 In filtering tasks (spam, uninteresting emails), blocked examples never reach the user, so learning only from user feedback on what got through introduces sampling bias. Instead, mark a small slice of traffic (e.g., 1%) as **held out**, show all of it to users, and train on those examples. The filter then blocks slightly less (a filter that blocked 75% of negative examples still blocks at least 74%), in exchange for much cleaner data. If the filter blocks 95% or more, use an even smaller held-out slice (0.1% or less) just to measure performance: about ten thousand examples is enough for an accurate estimate. *(Rules of ML #34)*
 
-## 2.2.7. Data Pipelines
+## 2.2.7 Data Pipelines
 
 A data pipeline processes raw data into a format suitable for ML. For example, to predict if a user is job-hunting based on their data, preprocessing steps like spam cleanup and user ID merging are necessary. These steps can be scripted or use ML algorithms, though scripting is simpler to manage.
 
-### i. Replicability Challenges
+### Replicability Challenges
 
 During development, preprocessing scripts can be ad hoc, involving manual steps or files shared across team members’ computers. This creates replicability issues in production, where the input distribution must match the development data. The effort to ensure replicability depends on the project phase:
 
@@ -353,7 +353,7 @@ flowchart LR
 
 *The same model sits behind two pipelines: in development, pre-processing scripts feed it and the output is test set performance; in production, new data must go through scripts that replicate those steps before the output reaches the product. Adapted from DeepLearning.AI, MLOps Specialization.*
 
-### ii. Complex Pipelines
+### Complex Pipelines
 
 Consider a pipeline for job-hunting prediction:
 
@@ -380,7 +380,7 @@ flowchart TB
 
 *A pipeline to predict whether someone is looking for a job (x = user data, y = looking for a job?). Every model depends on upstream data and code, so keep track of data provenance (where it comes from) and lineage (the sequence of steps). Adapted from DeepLearning.AI, MLOps Specialization.*
 
-### iii. Metadata
+### Metadata
 
 **Metadata** (data about data) enhances error analysis and helps keep track of data provenance. For example:
 
@@ -389,7 +389,7 @@ flowchart TB
 
 Storing metadata in MLOps frameworks (e.g., MLflow) facilitates analysis and improves algorithm performance, similar to commenting code.
 
-### iv. Dropped Data When Copying Pipelines
+### Dropped Data When Copying Pipelines
 
 New pipelines are often copied from existing ones, and the old pipeline may drop data the new one needs. Examples from Google:
 
@@ -399,7 +399,7 @@ New pipelines are often copied from existing ones, and the old pipeline may drop
 
 Check what a copied pipeline filters out before reusing it. *(Rules of ML #6)*
 
-### v. Importance-weight Sampled Data
+### Importance-weight Sampled Data
 
 When there is too much data, don't keep files 1–12 and ignore files 13–99. Data never shown to the user can be dropped, but sample the rest with **importance weighting**: if an example is kept with probability 30%, give it a weight of 10/3. This keeps the model's calibration intact. *(Rules of ML #30)*
 

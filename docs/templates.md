@@ -27,4 +27,4 @@ An error review (e.g., the system goes down) diagnoses the root cause and identi
 
   - **One-pager**: during scoping, before any data work ([2.1 Scoping](design/scoping.md)).
   - **Design doc**: before building, to get feedback on methodology and system design while changes are still cheap ([2.1.6 Project Phases and Timeboxes](design/scoping.md#216-project-phases-and-timeboxes)).
-  - **After-action review**: after shipping, or after a production incident ([4. Deployment](index.md#deployment)).
+  - **After-action review**: after shipping, or after a production incident ([4 · Deployment](index.md#4--deployment)).

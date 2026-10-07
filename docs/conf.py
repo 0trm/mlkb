@@ -17,7 +17,7 @@ mermaid_height = "auto"
 exclude_patterns = ["_build", "requirements.txt"]
 
 html_theme = "sphinx_book_theme"
-html_title = "ML Knowledge Base"
+html_title = "MLKB"
 html_show_sphinx = False
 html_static_path = ["_static"]
 html_css_files = ["custom.css"]
@@ -34,8 +34,8 @@ html_theme_options = {
     "search_bar_text": "Search the notes...",
     "home_page_in_toc": True,
     "show_toc_level": 2,
+    "footer_content_items": ["copyright.html", "extra-footer.html"],
     "extra_footer": (
-        "Study notes; examples come from the listed sources. "
         "<em>Rules of Machine Learning</em> by Martin Zinkevich is paraphrased under "
         '<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.'
     ),

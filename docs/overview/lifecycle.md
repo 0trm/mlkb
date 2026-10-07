@@ -25,7 +25,7 @@ flowchart LR
 
 The iterative nature of this lifecycle means feedback from later stages often informs adjustments to earlier ones. ML projects are often highly iterative. During error analysis, you may need to refine the model or revisit earlier steps to collect additional data. Before deployment, you typically perform a final check or audit to verify that the system’s performance is adequate and reliable for its intended application. Deploying a system for the first time means you’re only about halfway to completion. Live traffic often reveals critical insights needed to optimize performance.
 
-## 1.2.1. Design
+## 1.2.1 Design
 
 **Scoping**
 
@@ -43,9 +43,9 @@ After selecting the project, gather the required data for your algorithm. This i
   - Address issues such as inconsistent labeling or missing values.
   - Establish a performance baseline (covered in [3.3 Model Baseline](../development/model-baseline.md)).
 
-Covered in depth in [2. Design](../index.md#design), starting with [2.1 Scoping](../design/scoping.md).
+Covered in depth in [2 · Design](../index.md#2--design), starting with [2.1 Scoping](../design/scoping.md).
 
-## 1.2.2. Development
+## 1.2.2 Development
 
 With data in hand, proceed to train the model. This phase includes selecting and training the model and conducting error analysis.
 
@@ -53,9 +53,9 @@ With data in hand, proceed to train the model. This phase includes selecting and
   - Conduct error analysis to identify improvement areas.
   - Iterate on model architecture, hyperparameters, or data as needed.
 
-Covered in depth in [3. Development](../index.md#development), starting with [3.1 Modeling Overview](../development/modeling-overview.md).
+Covered in depth in [3 · Development](../index.md#3--development), starting with [3.1 Modeling Overview](../development/modeling-overview.md).
 
-## 1.2.3. Deployment
+## 1.2.3 Deployment
 
 To deploy the system, integrate it into production, develop the necessary software, and monitor the system. Continuously track incoming data and maintain the system’s performance. For instance, if the data distribution shifts, you may need to update the model.
 
@@ -71,9 +71,9 @@ Post-deployment maintenance often involves further error analysis, retraining th
   - Update the model with new data or retraining as required.
   - Refine the system based on real-world feedback.
 
-Covered in depth in [4. Deployment](../index.md#deployment), starting with [4.1 Key Challenges](../deployment/key-challenges.md).
+Covered in depth in [4 · Deployment](../index.md#4--deployment), starting with [4.1 Key Challenges](../deployment/key-challenges.md).
 
-## 1.2.4. Roles
+## 1.2.4 Roles
 
 An ML project needs both business and technical people. Business roles define the problem and judge whether the result is useful; technical roles build the data pipelines, the model, and the system around it.
 

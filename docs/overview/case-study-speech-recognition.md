@@ -2,7 +2,7 @@
 
 This example illustrates the steps required to build and deploy a speech recognition system using the machine learning (ML) project lifecycle.
 
-## Scoping
+## 1.5.1 Scoping
 
 Begin by defining the project, such as developing a speech recognition system for voice search. This involves identifying key metrics, which vary by application. For speech recognition, critical metrics include:
 
@@ -11,7 +11,7 @@ Begin by defining the project, such as developing a speech recognition system fo
   - **Throughput**: How many queries per second can the system handle?
   - Additionally, estimate the resources needed, such as time, computational power, budget, and project timeline.
 
-## Data
+## 1.5.2 Data
 
 In this phase, define the data, establish a baseline, and label and organize it. A key challenge in speech recognition is ensuring consistent data labeling. For example, consider an audio clip for voice search with the phrase “Um, today’s weather.” Possible transcriptions include:
 
@@ -30,7 +30,7 @@ Addressing these questions ensures high-quality data.
 
 In production systems, datasets are not static. You may need to edit the training or test sets to improve data quality and enhance system performance.
 
-## Modeling
+## 1.5.3 Modeling
 
 Training an ML model requires three key inputs:
 
@@ -42,7 +42,7 @@ In academic research, the focus is often on varying the code or hyperparameters 
 
 Rather than collecting more data indiscriminately, which can be costly, error analysis helps target specific data needs, making the process more efficient and leading to a high-accuracy model.
 
-## Deployment
+## 1.5.4 Deployment
 
 Once the model is trained and error analysis indicates satisfactory performance, the system is ready for deployment. A typical speech recognition deployment for voice search might involve:
 
@@ -69,7 +69,7 @@ flowchart LR
 
 Deploying the system requires integrating it into production, developing supporting software, and implementing monitoring to track performance and incoming data.
 
-## Maintenance
+## 1.5.5 Maintenance
 
 Post-deployment, continuous monitoring and maintenance are essential. Andrew Ng's course gives an example: a speech recognition system trained mostly on adult voices was deployed, and an increasing number of younger users (teenagers and children), whose voices differed significantly, degraded its performance. The team collected additional data from younger speakers to retrain the model.
 

@@ -2,7 +2,7 @@
 
 A model that works in a notebook still has to be rebuilt, validated, and shipped the same way every time. This section covers what makes that possible: tracking where a model came from, validating its data, versioning everything, and automating the build.
 
-## i. Transparency and Reproducibility
+## 4.4.1 Transparency and Reproducibility
 
 A model handed over for deployment raises questions the person who trained it may not have answered: will it run on the production infrastructure, can anyone see how it was built, can it be reproduced, are its inputs validated, and how will it be monitored and debugged? Answering these early is cheaper than answering them at deployment time.
 
@@ -34,7 +34,7 @@ flowchart TB
 
 *Input data validation at prediction time; the prediction or the error message goes back to the user. The data profile is created in the model build pipeline and saved with the metadata. Logging the input data, error messages and predictions is what makes the service debuggable.*
 
-## ii. Profiling, Versioning, and Feature Stores
+## 4.4.2 Profiling, Versioning, and Feature Stores
 
 ### Data Profiling
 
@@ -66,7 +66,7 @@ Tools like DVC (Data Version Control) extend Git's capabilities by providing a l
 
 ### Feature Stores
 
-A feature store in machine learning engineering is a centralized repository that standardizes the management, storage, and serving of features for both model training and real-time inference. It acts as a bridge between data engineering and data science, allowing for the consistent definition, computation, and reuse of features across different models and teams, thereby preventing training-serving skew (where features used for training differ from those used in production; see [4.5 viii](monitoring.md#viii-training-serving-skew)). Typically, a feature store includes an offline store for historical, large-volume data used in training and an online store optimized for low-latency, single-record retrieval during live predictions, significantly streamlining the MLOps lifecycle by improving efficiency, reproducibility, and model reliability.
+A feature store in machine learning engineering is a centralized repository that standardizes the management, storage, and serving of features for both model training and real-time inference. It acts as a bridge between data engineering and data science, allowing for the consistent definition, computation, and reuse of features across different models and teams, thereby preventing training-serving skew (where features used for training differ from those used in production; see [4.5.8](monitoring.md#458-training-serving-skew)). Typically, a feature store includes an offline store for historical, large-volume data used in training and an online store optimized for low-latency, single-record retrieval during live predictions, significantly streamlining the MLOps lifecycle by improving efficiency, reproducibility, and model reliability.
 
 ```mermaid
 flowchart LR
@@ -109,7 +109,7 @@ flowchart LR
 
 Its main benefits are reusability (features are built once and shared across models) and consistency (training and serving use the same feature values, so a model trained on emails as plain text is not served the same emails as raw HTML).
 
-## iii. CI/CD
+## 4.4.3 CI/CD
 
 ```mermaid
 flowchart TB

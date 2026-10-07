@@ -10,3 +10,42 @@ div.mermaid {
 pre.mermaid {
   text-align: center;
 }
+
+/* A wider page with more room between the columns. */
+@media (min-width: 960px) {
+  .bd-page-width {
+    max-width: 100rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .bd-sidebar-primary {
+    flex-basis: clamp(16rem, 20%, 19rem);
+    padding: 1.5rem;
+  }
+
+  .bd-sidebar-primary.pst-sidebar-hidden {
+    margin-left: calc(-1 * clamp(16rem, 20%, 19rem));
+  }
+}
+
+@media (min-width: 1200px) {
+  .bd-main .bd-content .bd-article-container .bd-article {
+    padding: 2rem 2.5rem 0;
+  }
+}
+
+@media (min-width: 1400px) {
+  :root {
+    --pst-sidebar-secondary: 19rem;
+  }
+
+  .bd-main .bd-content .bd-article-container .bd-article {
+    padding: 2.5rem 4rem 0;
+  }
+}
+
+.bd-article p,
+.bd-article li {
+  line-height: 1.7;
+}
