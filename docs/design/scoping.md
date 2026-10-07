@@ -4,13 +4,21 @@
 
 Choosing the right ML project is a rare and valuable skill. Careful scoping—evaluating options and selecting high-impact projects—maximizes success.
 
-![](../images/image130.png)
+Take an e-commerce retailer looking to increase sales. Candidate projects include a better recommender system, better search, improved catalog data, inventory management, and price optimization. Scoping answers three questions:
+
+  - What project should we work on?
+  - What are the metrics for success?
+  - What resources (data, time, people) are needed?
 
 ## 2.1.2. Scoping Process
 
 Scoping involves identifying business problems, brainstorming AI solutions, and assessing feasibility and value.
 
-![](../images/image43.png)
+1.  Brainstorm business problems (not AI problems).
+2.  Brainstorm AI solutions.
+3.  Assess the feasibility and value of potential solutions.
+4.  Determine milestones.
+5.  Budget for resources.
 
 For an e-commerce retailer aiming to increase sales (as an example), follow these steps:
 
@@ -18,8 +26,6 @@ For an e-commerce retailer aiming to increase sales (as an example), follow thes
 
   - Collaborate with business owners to brainstorm problems (e.g., low conversions, excess inventory, low profit margins).
   - Focus on business objectives, not AI solutions. Ask, “What are the top three things you wish worked better?” Avoid AI-specific discussions initially.
-
-![](../images/image91.png)
 
 ### ii. Brainstorm AI Solutions
 
@@ -34,7 +40,12 @@ For an e-commerce retailer aiming to increase sales (as an example), follow thes
 
   - **Feasibility**: Evaluate technical viability using benchmarks (e.g., literature, competitor solutions) and a 2x2 matrix of new vs. existing projects and unstructured vs. structured data:
 
-![](../images/image47.png)
+| | Unstructured (e.g., speech, images) | Structured (e.g., transaction records) |
+|---|---|---|
+| **New** | HLP | Predictive features available? |
+| **Existing** | HLP, history of project | New predictive features? History of project |
+
+*What to check for feasibility, by project age and data type. HLP asks: can a human, given the same data, perform the task? Adapted from DeepLearning.AI, MLOps Specialization.*
 
   - **Unstructured Data**:
 
@@ -44,13 +55,10 @@ For an e-commerce retailer aiming to increase sales (as an example), follow thes
 
       - **New Projects**: Ensure predictive features exist (e.g., past purchases predict future ones).
       - **Existing Projects**: Identify new predictive features to improve performance.
+  - **History of Project**: For an existing project, plot error over time. If error started at 10% and fell every quarter by a smaller amount, flattening toward HLP, extrapolate that curve to estimate how much further work can still gain.
   - **HLP for Unstructured Data**: Ensure humans receive the same data as the algorithm (e.g., only camera images for traffic light detection, not in-car views). If humans can’t perform the task, improve inputs (e.g., better cameras) before proceeding.
 
-![](../images/image15.png)
-
   - **Structured Data Feasibility**: Verify that input features (x) predict outputs (y).
-
-![](../images/image94.png)
 
 Examples:
 
@@ -60,19 +68,27 @@ Examples:
   - **Fashion Trends from Social Media**: Predicting future trends is difficult (iffy).
   - **Stock Prices**: Historical prices are not predictive (infeasible).
 
-![](../images/image104.png)
-
   - **Value**: Estimate business impact, bridging ML and business metrics:
 
       - ML teams optimize metrics like word-level accuracy (e.g., in speech recognition), while businesses prioritize user engagement or revenue.
       - Use Fermi estimates to relate ML improvements (e.g., 1% word accuracy increase) to business outcomes (e.g., 0.7% query accuracy increase, improving user engagement and revenue).
       - Compromise on metrics that both teams accept, requiring ML teams to stretch toward business goals and business teams to accept technical constraints.
 
-![](../images/image96.png)
+```mermaid
+flowchart TB
+  subgraph mle[MLE metrics]
+    W[Word-level accuracy] --> Q[Query-level accuracy]
+  end
+  S[Search result quality]
+  subgraph biz[Business metrics]
+    U[User engagement] --> R[Revenue]
+  end
+  mle --> S --> biz
+```
 
-  - **Ethical Considerations**: Ensure the project creates positive societal value and is fair and unbiased. Consult industry-specific ethical frameworks (e.g., for lending, healthcare, or retail). If a project lacks societal benefit, consider abandoning it, even if economically viable.
+*From the metrics ML engineers optimize to the ones the business cares about. Each team stretches toward the other until both are comfortable with the agreed metrics. Adapted from DeepLearning.AI, MLOps Specialization.*
 
-![](../images/image9.png)
+  - **Ethical Considerations**: Ensure the project creates positive societal value and is fair and unbiased, and that any ethical concerns have been openly aired and debated. Consult industry-specific ethical frameworks (e.g., for lending, healthcare, or retail). If a project lacks societal benefit, consider abandoning it, even if economically viable.
 
 ### iv. Define Milestones and Resources
 
@@ -80,13 +96,9 @@ Examples:
   - Estimate **resources**: Data volume, team involvement, cross-functional support, and timelines.
   - If specifications are unclear, conduct **benchmarking** (compare to similar projects) or build a **proof of concept** to refine estimates.
 
-![](../images/image7.png)
-
 ### v. Define Key Metrics
 
 Successful data-driven initiatives require collaboration between technical experts (data scientists), domain specialists (SMEs), and business leaders (stakeholders) to achieve measurable business benefits like increased accuracy, customer satisfaction, and revenue generation.
-
-![](../images/image124.png)
 
 ## 2.1.3. Workflows
 
@@ -94,21 +106,48 @@ Successful data-driven initiatives require collaboration between technical exper
 
 An ML project moves from defining the problem to analysis (exploring the data, considering candidate models) to development, and ends in an ML application that may hold several models. What the application reveals in use feeds back into analysis and development, so the loop repeats.
 
-![](../images/image62.png)
+```mermaid
+flowchart LR
+  P[Problem] --> A[Analysis] --> D[Development]
+  D --> app
+  subgraph app[ML application]
+    MA([ML model A])
+    MB([ML model B])
+  end
+  app --> A
+```
+
+*An ML project: development produces an application that can hold several models, and what the application shows in use feeds back into analysis.*
 
 ### ii. Modeling Workflow
 
 At its core, a model is a function: it takes input data and returns predictions.
 
-![](../images/image26.png)
-
 In an application, the model sits behind an API: it receives input data and returns predictions, and business rules turn those predictions into decisions or actions, usually shown to users through a GUI. A database stores the model's inputs and outputs.
 
-![](../images/image37.png)
+```mermaid
+flowchart TB
+  IN([Input data]) --> API
+  subgraph app[ML application]
+    API[API] --> M[ML model]
+    API --> BR[Business rules]
+    M --> C[Combine]
+    BR --> C
+    C --> DB[Database] --> GUI[GUI]
+  end
+  C --> OUT([Predictions])
+```
+
+*Inside an ML application: the API passes input data to the model (a classifier, regressor, or any other kind) and to business rules. Their outputs are combined into predictions, which the API returns to the caller and a database stores for a GUI to read.*
 
 The application and the model have separate lifecycles. The model can be retrained and updated without a new application release, and the application can ship changes without touching the model.
 
-![](../images/image84.png)
+| Lifecycle | Earlier | | | | Later |
+|---|---|---|---|---|---|
+| Application | | App v1.2.0 | | App v2.0.0 | |
+| Model | Model v1 | | Model v2 | | Model v3 |
+
+*Application and model releases on one timeline: each version history advances on its own schedule.*
 
 ## 2.1.4. Before Machine Learning
 
@@ -165,7 +204,12 @@ When metrics plateau and the team starts arguing about issues outside the curren
 
 *Adapted from Eugene Yan, [Writing Docs: Why, What, and How](https://eugeneyan.com/writing/writing-docs-why-what-how/).*
 
-![](../images/image85.png)
+```mermaid
+flowchart LR
+  F[Feasibility<br>assessment<br>1-2 weeks] --> P[Proof of<br>concept<br>1-2 months] --> D[Deploy to<br>production<br>3-6 months] --> M[Operational<br>maintenance]
+```
+
+*Project phases with their timeboxes. Once in production, the system moves to operational maintenance: fix critical issues as necessary and update it if stakeholders prioritize it. Adapted from Eugene Yan, Writing Docs: Why, What, and How.*
 
 A project usually starts with a **feasibility assessment**. With the existing data and technology, can the problem be solved? If so, to what extent? This stage is a quick and dirty investigation, typically time-boxed at 1-2 weeks.
 

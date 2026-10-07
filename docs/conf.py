@@ -3,14 +3,25 @@ project = "Machine Learning Knowledge Base"
 author = "Tomás Ravalli"
 copyright = "2026, Tomás Ravalli"
 
-extensions = ["myst_parser"]
+extensions = ["myst_parser", "sphinxcontrib.mermaid"]
 myst_heading_anchors = 4
+myst_enable_extensions = ["dollarmath"]
+# Plain ```mermaid fences render on GitHub and on the site alike.
+myst_fence_as_directive = ["mermaid"]
+
+mermaid_version = "12.1.0"
+mermaid_light_theme = "neutral"
+mermaid_fullscreen = False
+mermaid_height = "auto"
 
 exclude_patterns = ["_build", "requirements.txt"]
 
 html_theme = "sphinx_book_theme"
 html_title = "ML Knowledge Base"
 html_show_sphinx = False
+html_static_path = ["_static"]
+html_css_files = ["custom.css"]
+html_js_files = ["mermaid-size.js"]
 html_context = {"default_mode": "light"}
 html_theme_options = {
     "repository_url": "https://github.com/0trm/mlkb",

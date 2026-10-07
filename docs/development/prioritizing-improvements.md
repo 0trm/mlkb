@@ -11,7 +11,14 @@ The distribution of data across categories significantly influences prioritizati
   - People noise: 30%
   - Low-bandwidth audio: 6%
 
-![](../images/image40.png)
+| Type | Accuracy | HLP | Gap to HLP | % of data | Max overall gain |
+|---|---|---|---|---|---|
+| Clean speech | 94% | 95% | 1% | 60% | 0.6% |
+| Car noise | 89% | 93% | 4% | 4% | 0.16% |
+| People noise | 87% | 89% | 2% | 30% | 0.6% |
+| Low bandwidth | 70% | 70% | 0% | 6% | ~0% |
+
+*Maximum overall gain is the gap to HLP times the category's share of the data. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 Improving accuracy on clean speech from 94% to 95% (a 1% gain) across 60% of the data would increase overall system accuracy by 0.6% (1% × 60%). In contrast, improving car noise performance by 4% across 4% of the data yields only a 0.16% overall improvement (4% × 4%).
 
@@ -34,8 +41,7 @@ Once you identify priority categories, focus on improving performance by enhanci
 
   - **Collect More Data**: If car noise is a priority, gather additional audio samples with car noise. Targeted data collection is more efficient than collecting generic data, which can be time-consuming and costly.
   - **Use Data Augmentation**: Apply techniques to generate synthetic data for the target category, such as simulating car noise in existing audio samples. This can boost performance without extensive data collection.
-
-![](../images/image3.png)
+  - **Improve Label Accuracy and Data Quality**: Clean up the labels and the examples you already have for the target category.
 
 For example, rather than broadly collecting data from low-bandwidth cell phone connections, focus on acquiring or augmenting data specifically for car noise or people noise. This precision ensures resources are used effectively to improve algorithm performance where it matters most.
 

@@ -2,8 +2,6 @@
 
 Efficient machine learning development requires robust experiment tracking and a focus on high-quality data. These practices ensure systematic improvements and reliable model performance, especially in applications where massive datasets are unavailable.
 
-![](../images/image51.png)
-
 ## i. What to Track
 
 Record the following for each experiment:
@@ -12,8 +10,7 @@ Record the following for each experiment:
 2.  **Dataset**: Document the dataset used, including any preprocessing steps.
 3.  **Hyperparameters**: Log all hyperparameter settings.
 4.  **Results**: Save high-level metrics (e.g., accuracy, F1 score) and, if possible, a copy of the trained model.
-
-![](../images/image118.png)
+5.  **Execution Scripts and Environment Configuration**: Keep the scripts that ran the experiment and the environment they ran in (dependencies, hardware).
 
 ## ii. Tracking Tools
 
@@ -23,7 +20,13 @@ Choose a tracking method based on your needs and scale:
   - **Spreadsheets**: Shared spreadsheets (e.g., Google Sheets) support collaboration and scale better, allowing multiple team members to review and update experiment records.
   - **Formal Experiment Tracking Systems**: Tools like Weights & Biases, Comet, MLflow, SageMaker Studio, or LandingAI’s computer vision-focused tool offer advanced features. These systems are evolving rapidly and cater to larger teams or complex projects.
 
-![](../images/image99.png)
+| Tool | Pro | Con |
+|---|---|---|
+| Spreadsheet | Straightforward, easy to use | Requires a lot of manual work |
+| Proprietary platform | Custom solution specific to your process | Requires time and effort to build |
+| Experiment tracking tool | Specifically designed for experiments | Requires getting familiar with the tool |
+
+*Pros and cons of three ways to track experiments.*
 
 ## iii. Key Features
 

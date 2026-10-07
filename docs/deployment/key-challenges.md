@@ -2,7 +2,21 @@
 
 Development environment is different from Production environment, and this poses a few challenges.
 
-![](../images/image5.png)
+```mermaid
+flowchart LR
+  subgraph dev[Development environment]
+    direction TB
+    A[Data scientist] --> M([Developed<br>ML model])
+    T([Training data]) --> M
+  end
+  subgraph prod[Production environment]
+    direction TB
+    R([Real data]) --> P([ML model<br>in production]) --> O([98% probability<br>that customer X<br>churns])
+  end
+  dev --> prod
+```
+
+*A data scientist builds the model from training data; in production the same model runs on real data and returns predictions.*
 
 The trained model plus everything it needs to run (code, dependencies, configuration) makes up the **deployment package**; putting that package to use is **deployment**.
 
@@ -10,14 +24,12 @@ Deployment involves two primary challenge categories:
 
 ## i. Machine Learning Challenges
 
-![](../images/image93.png)
-
 In this scenario, a machine learning model is trained to detect defects in smartphone images. The training data includes:
 
-  - Images of defect-free phones (e.g., a "good phone" on the left).
+  - Images of defect-free phones.
   - Images of phones with defects, such as a big scratch across the middle, with bounding boxes drawn around the defects.
 
-The model is designed to classify images like the defect-free phone as "okay" while identifying and localizing defects in images with scratches or other imperfections. However, when deployed in a factory setting, the model encounters images that are significantly darker (e.g., an image on the right) due to changes in lighting conditions compared to when the training set was collected. This discrepancy between the training and deployment environments poses a challenge to the model's performance.
+The model is designed to classify images like the defect-free phone as "okay" while identifying and localizing defects in images with scratches or other imperfections. However, when deployed in a factory setting, the model encounters images that are significantly darker due to changes in lighting conditions compared to when the training set was collected. This discrepancy between the training and deployment environments poses a challenge to the model's performance.
 
 The issue described is an example of **concept drift** or **data drift**:
 
@@ -76,6 +88,25 @@ Deploying an ML system involves two key sets of tasks:
 1.  **Software Development**: Writing software to deploy the system in production.
 2.  **Monitoring and Maintenance**: Continuously tracking system performance and addressing issues like concept and data drift.
 
-![](../images/image131.png)
+```mermaid
+flowchart LR
+  subgraph design[Design]
+    direction TB
+    A[Define project] --> B[Define data and<br>establish baseline] --> C[Label and<br>organize data]
+  end
+  subgraph development[Development]
+    direction TB
+    D[Select and<br>train model] --> E[Perform<br>error analysis]
+  end
+  subgraph deployment[Deployment]
+    direction TB
+    F[Deploy in<br>production] --> G[Monitor and<br>maintain system]
+  end
+  design --> development --> deployment
+  classDef hl stroke-width:2.5px
+  class deployment hl
+```
+
+*Deployment within the ML project lifecycle (see [1.2](../overview/lifecycle.md)). Deploying in production is mostly software work; monitoring and maintenance deal with concept and data drift, and send you back to the data and modeling stages. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 The practices for initial deployments differ significantly from those for updating or maintaining an already-deployed system. While some engineers view deployment as the finish line, it often marks only the halfway point. Post-deployment work—such as feeding new data back into the system, updating the model, and maintaining performance amid changing data—is equally critical to ensuring long-term success.

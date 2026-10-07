@@ -2,8 +2,6 @@
 
 To ensure a machine learning (ML) system meets performance expectations, continuous monitoring is essential. The most common approach is to use dashboards to track key metrics over time, providing insights into system health and performance.
 
-![](../images/image70.png)
-
   - Is the model server running?
   - Are the model inputs and outputs as expected?
   - Also known as post-deployment monitoring
@@ -18,7 +16,13 @@ Dashboards should be tailored to the specific application, tracking metrics rele
   - **Fraction of Non-Null Outputs**: For a speech recognition system, a null output occurs when no speech is detected. A significant change in the frequency of null outputs may signal an issue.
   - **Fraction of Missing Inputs**: Common in structured data tasks, this metric tracks incomplete or missing input data, which could indicate data quality issues.
 
-![](../images/image44.png)
+| Metric | Trend in the example (time 0 to 100) | Alarm threshold |
+|---|---|---|
+| Server load | Rises from about 0.86 and levels off near 0.90 | Above 0.91 |
+| Fraction of non-null outputs | Climbs from about 0.86 to about 0.96 | Outside 0.89 to 0.96 |
+| Fraction of missing input values | Dips to about 0.33, then climbs to about 0.6 | Outside 0.2 to 0.6 |
+
+*Three example dashboard metrics and the thresholds set on them; the last two reach their upper threshold by the end of the period. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 To determine what to monitor, follow these steps:
 
@@ -29,15 +33,18 @@ To determine what to monitor, follow these steps:
 
 A. **Statistical Monitoring:** focuses on the input and output data, including predictions. Examples: customer X has a 72% probability of churning, customer Y has a 31% probability of not churning.
 
-![](../images/image88.png)
-
 B. **Computational Monitoring:** Focuses on technical metrics. Examples: server CPU usage, number of incoming requests, number of predictions, downtime of server.
-
-![](../images/image54.png)
 
 **Feedback Loop:** The process through which the ground truth is used to improve the machine learning model.
 
-![](../images/image90.png)
+```mermaid
+flowchart LR
+  N([New data:<br>customer records]) -->|data flow| M[ML model<br>in production<br>on a server]
+  M -->|data flow| P([Churn probability:<br>189283: 0.98<br>785469: 0.21])
+  G([Ground truth:<br>189283:#nbsp;no#nbsp;churn<br>785469: churned]) -.->|compare| P
+```
+
+*What each type of monitoring watches: statistical monitoring covers the new data and the predictions, computational monitoring covers the data flow and the server, and the feedback loop compares predictions with the ground truth.*
 
 ## iii. Types of Metrics
 
@@ -88,11 +95,22 @@ Like ML modeling, deployment is an iterative process. Initial dashboards and met
           - Business requirements: what is the required model performance?
           - Freshness: how much does performance degrade when the model is a day, a week, or a quarter old? This sets monitoring priorities. Ad systems see new ads every day and must update daily; Google Play Search degrades within a month without updates. Freshness needs can change as feature columns are added or removed. *(Rules of ML #8)*
 
-![](../images/image76.png)
+```mermaid
+flowchart LR
+  subgraph modeling[ML modeling]
+    direction TB
+    A[ML model/<br>data] --> B[Experiment] --> C[Error<br>analysis] --> A
+  end
+  subgraph deploy[Deployment]
+    direction TB
+    D[Deployment/<br>monitoring] --> E[Traffic] --> F[Performance<br>analysis] --> D
+  end
+  modeling ~~~ deploy
+```
+
+*Just as ML modeling is iterative, so is deployment: an iterative process to choose the right set of metrics to monitor. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 Monitoring enables early detection of issues, prompting deeper error analysis or data collection to update the model and maintain or improve performance.
-
-![](../images/image127.png)
 
 ## v. Pipeline Monitoring
 
@@ -103,7 +121,13 @@ Many AI systems involve complex pipelines with multiple components, not just a s
 
 Changes in one component can impact downstream performance. For instance, if a new smartphone microphone alters audio characteristics, the VAD module might clip audio differently (e.g., including more or less silence). This changes the input to the speech recognition module, potentially degrading its performance.
 
-![](../images/image110.png)
+```mermaid
+flowchart LR
+  A1([Audio]) --> S1[Speech<br>recognition] --> T1([Transcript])
+  A2([Audio]) --> V[VAD: voice<br>activity detection] --> S2[Speech<br>recognition] --> T2([Transcript])
+```
+
+*A speech pipeline without and with a voice activity detection (VAD) module. Some phones might have VAD clip audio differently, which degrades speech recognition downstream. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 Another example involves user profiles:
 
@@ -111,7 +135,14 @@ Another example involves user profiles:
   - These profiles feed into a recommender system that generates product recommendations.
   - If the clickstream data changes (e.g., due to shifts in user behavior), the user profile’s accuracy may decline, increasing “unknown” labels for attributes like car ownership. This altered input can degrade the recommender system’s performance.
 
-![](../images/image30.png)
+```mermaid
+flowchart LR
+  U([User data<br>e.g. clickstream]) --> P[User profile<br>e.g. own car?<br>y / n / unknown] --> R[Recommender<br>system] --> O([Product<br>recommendations])
+  classDef hl stroke-width:2.5px
+  class P hl
+```
+
+*Every stage can be monitored. A change in the clickstream data shows up first as more "unknown" values in the user profile, then as worse recommendations. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 **Monitoring Complex Pipelines**
 

@@ -8,8 +8,6 @@ A runtime environment refers to the specific configuration of software and hardw
 
 Containerization is a lightweight, portable, and self-sufficient software package that bundles an application and all its dependencies (libraries, configuration files, and other required assets) into a single, isolated unit.
 
-![](../images/image34.png)
-
 There are many benefits of containerization:
 
   - **Easier to Maintain:**
@@ -35,9 +33,30 @@ There are many benefits of containerization:
 
 **Microservices architecture** is an architectural style that structures an application as a collection of loosely coupled, independently deployable services. Each service represents a specific business capability and can be developed, deployed, and scaled independently.
 
-Monolithic vs. Microservices architecture
+```mermaid
+flowchart LR
+  subgraph mono[Monolithic architecture]
+    direction TB
+    U1[UI] --> app
+    subgraph app[" "]
+      direction LR
+      P1[Payment]
+      C1[Shopping cart]
+      I1[Inventory]
+    end
+    app --> S1[Single instance]
+  end
+  subgraph micro[Microservices architecture]
+    direction TB
+    U2[UI] --> MU[Microservice UI]
+    MU --> P2[Payment] --> S2[Single instance]
+    MU --> C2[Shopping cart] --> S3[Single instance]
+    MU --> I2[Inventory] --> S4[Single instance]
+  end
+  mono ~~~ micro
+```
 
-![](../images/image38.png)
+*Monolithic vs. microservices architecture: in a monolith every service runs on one shared instance; with microservices each service runs on its own instance.*
 
 ### Inferencing
 
@@ -46,8 +65,6 @@ Monolithic vs. Microservices architecture
   - **Input Data:** Can be diverse, e.g., an image for an object detection model, text for a sentiment analysis model, or tabular data for a fraud detection model.
   - **Model Execution:** The trained model's internal logic and parameters are applied to the input data.
   - **Output:** The model generates a prediction, classification, regression value, or other relevant output based on its training.
-
-![](../images/image72.png)
 
 **Example:**
 
@@ -58,7 +75,26 @@ Monolithic vs. Microservices architecture
 
 An API (Application Programming Interface) is a set of rules and protocols that allows different software applications to communicate and interact with each other. In the context of machine learning in production, APIs are crucial for exposing trained models so that other applications or services can consume their predictions.
 
-![](../images/image29.png)
+```mermaid
+flowchart LR
+  I([Input data]) --> API[API]
+  API --> M[Machine<br>learning model]
+  M --> API
+  API --> P([Prediction])
+```
+
+*The API sits between the client and the model: it receives the input data, passes it to the model and returns the prediction.*
+
+For a churn model, the request body carries one record per customer and the response returns one probability per customer (first record shown):
+
+```json
+[{"id": 189283, "customer_sex": "male", "bought_last_item": 182,
+  "items_bought": 22, "total_charges": 979, "newsletter": 1}]
+```
+
+```json
+[{"id": 189283, "churn_probability": 0.98}]
+```
 
 **Key Aspects of APIs for ML Models:**
 

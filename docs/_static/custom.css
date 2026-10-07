@@ -1,0 +1,12 @@
+/* Diagrams sit on the page like figures, not in a code box. */
+pre.mermaid,
+div.mermaid {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 1.5rem 0 0.5rem;
+}
+
+pre.mermaid {
+  text-align: center;
+}
