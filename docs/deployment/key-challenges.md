@@ -22,7 +22,7 @@ The trained model plus everything it needs to run (code, dependencies, configura
 
 Deployment involves two primary challenge categories:
 
-## i. Machine Learning Challenges
+## 4.1.1 Machine Learning Challenges
 
 In this scenario, a machine learning model is trained to detect defects in smartphone images. The training data includes:
 
@@ -50,7 +50,7 @@ This scenario highlights a common challenge in machine learning deployment: the 
       - Implementing mechanisms to monitor and adapt to changes over time.
   - Many projects achieve success in development but require months of additional effort (e.g., six months) to ensure practical deployment success.
 
-## ii. Software Engineering Challenges
+## 4.1.2 Software Engineering Challenges
 
 When implementing a prediction service that takes queries (X) and outputs predictions (Y), several software engineering decisions must be made. Below is a checklist to guide these choices:
 

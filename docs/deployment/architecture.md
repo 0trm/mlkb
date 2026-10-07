@@ -1,6 +1,6 @@
 # 4.2 Deployment Architecture
 
-## i. Runtime Environment
+## 4.2.1 Runtime Environment
 
 A runtime environment refers to the specific configuration of software and hardware where an application, particularly a machine learning model, executes. It encompasses the operating system, libraries, dependencies, and execution engine necessary for the application to function correctly.
 
@@ -29,7 +29,7 @@ There are many benefits of containerization:
   - **Docker:** The most popular platform for building, sharing, and running containers.
   - **Kubernetes (K8s):** An open-source system for automating deployment, scaling, and management of containerized applications. It orchestrates containers across a cluster of machines.
 
-## ii. Microservices Architecture
+## 4.2.2 Microservices Architecture
 
 **Microservices architecture** is an architectural style that structures an application as a collection of loosely coupled, independently deployable services. Each service represents a specific business capability and can be developed, deployed, and scaled independently.
 

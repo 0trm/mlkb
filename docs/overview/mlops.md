@@ -35,7 +35,9 @@ flowchart TB
 
 *DevOps builds, deploys and monitors an app from code. MLOps adds data as a second input to build a model, and monitors the data as well as the model.*
 
-Regarding **maturity levels**, a usual starting point is:
+## 1.4.1 Maturity Levels
+
+A usual starting point is:
 
   - Manual ML workflows
   - Manual deployment
@@ -65,7 +67,7 @@ As companies progress through the maturity levels, the level of automation, coll
 
 The more of this workflow is automated, the higher the MLOps maturity.
 
-## Level 1: Manual processes
+### Level 1: Manual Processes
 
   - Manual process for development
   - Manual process for deployment
@@ -74,7 +76,7 @@ The more of this workflow is automated, the higher the MLOps maturity.
   - No tracking of development
   - No monitoring after deployment
 
-## Level 2: Automated development
+### Level 2: Automated Development
 
   - Automated development pipeline (Continuous integration)
   - Manual process for deployment
@@ -82,7 +84,7 @@ The more of this workflow is automated, the higher the MLOps maturity.
   - Tracking of ML experiments and features
   - Little monitoring after deployment
 
-## Level 3: Automated development and deployment
+### Level 3: Automated Development and Deployment
 
   - Automated development pipeline (CI)
   - Automated deployment pipeline (CD)
@@ -90,7 +92,7 @@ The more of this workflow is automated, the higher the MLOps maturity.
   - Monitoring of development and deployment
   - Potentially automatically triggering retraining
 
-## Automation by stage
+## 1.4.2 Automation by Stage
 
 Which parts of each stage can be automated, and what that buys:
 

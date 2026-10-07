@@ -2,7 +2,7 @@
 
 When deploying a machine learning (ML) model, several common patterns emerge based on the context and goals of the project. These patterns often incorporate gradual rollouts, monitoring, and rollback mechanisms to ensure reliability.
 
-## i. Deployment Cases
+## 4.3.1 Deployment Cases
 
 There are 3 common deployment cases overall:
 
@@ -23,7 +23,7 @@ At the same time, there are two recurring themes in these deployment cases:
   - **Gradual Ramp-Up with Monitoring**: Instead of directing all traffic to an unproven algorithm, start with a small percentage of traffic, monitor performance, and incrementally increase the load as confidence grows.
   - **Rollback Capability**: If the new system underperforms, the ability to revert to the previous system ensures minimal disruption.
 
-## ii. Deployment Types
+## 4.3.2 Deployment Types
 
 There are 3 common deployment types overall:
 
@@ -60,7 +60,7 @@ flowchart LR
 
 *The router sends traffic to the new (green) version; switching it back to the old (blue) version is an easy rollback. Adapted from DeepLearning.AI, MLOps Specialization.*
 
-## iii. Degree of Automation Framework
+## 4.3.3 Degree of Automation Framework
 
 Rather than viewing deployment as a binary choice (deploy or not), consider it as a spectrum of automation levels, tailored to the system’s performance and application needs. For example, in smartphone visual inspection:
 
@@ -88,11 +88,11 @@ Both AI assistance and partial automation are examples of **human-in-the-loop de
 
 This framework of deployment patterns and automation levels provides a structured approach to designing and implementing ML systems, ensuring they are robust, adaptable, and aligned with operational goals.
 
-## iv. Launch Decisions
+## 4.3.4 Launch Decisions
 
 A gradual rollout limits the damage while you check the new system. Whether to keep it is a separate decision, usually made with an A/B test against the current system:
 
-  - Before the test, measure how different the new model's outputs are from production's ([3.7 iii](../development/performance-auditing.md#iii-comparing-against-production)).
-  - During the test, compare the metrics you instrumented before building the model ([2.1.4 ii](../design/scoping.md#ii-instrument-metrics-before-building-the-model)), not only the objective the model optimizes.
-  - The decision weighs several metrics at once, each a proxy for long-term goals. If a simple heuristic beats the model on every metric, ship the heuristic ([2.1.5 iv](../design/scoping.md#iv-launch-decisions-are-proxies-for-long-term-goals)).
+  - Before the test, measure how different the new model's outputs are from production's ([3.7.3](../development/performance-auditing.md#373-comparing-against-production)).
+  - During the test, compare the metrics you instrumented before building the model ([2.1.4](../design/scoping.md#instrument-metrics-before-building-the-model)), not only the objective the model optimizes.
+  - The decision weighs several metrics at once, each a proxy for long-term goals. If a simple heuristic beats the model on every metric, ship the heuristic ([2.1.5](../design/scoping.md#launch-decisions-are-proxies-for-long-term-goals)).
   - Keep rollback ready until the decision is made.

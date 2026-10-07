@@ -6,21 +6,21 @@ The notes are compiled from Andrew Ng's MLOps specialization, Aurélien Géron's
 
 *Scope: classic (predictive) ML systems. LLMs and foundation models are not covered.*
 
-## Overview
+## 1 · Overview
 
 New here? Start with the [lifecycle](overview/lifecycle.md), which walks all three stages once, then use the [project checklist](overview/checklist.md) as a step-by-step guide. The [speech recognition case study](overview/case-study-speech-recognition.md) shows the stages applied to one system.
 
 - [1.1 Introduction](overview/introduction.md): why ML, types of ML systems, and the main challenges
 - [1.4 MLOps](overview/mlops.md): maturity levels and what to automate at each stage
 
-## Design
+## 2 · Design
 
 Design decides what to build before anything is trained: which business problem is worth solving, whether ML is the right tool, which single objective the model should optimize, and what data it needs, defined consistently enough that a model can learn from it.
 
 - [2.1 Scoping](design/scoping.md)
 - [2.2 Data](design/data.md)
 
-## Development
+## 3 · Development
 
 Development turns scoped data into a working model: set up validation, get a baseline fast, then iterate with error analysis, more often by improving the data than the model. It ends with an audit before anything reaches users.
 
@@ -34,7 +34,7 @@ Development turns scoped data into a working model: set up validation, get a bas
 - [3.8 Data-centric AI Development](development/data-centric-development.md)
 - [3.9 Experiment Tracking](development/experiment-tracking.md)
 
-## Deployment
+## 4 · Deployment
 
 Deployment puts the model in front of real data: choosing an architecture, rolling out gradually with a way back, making builds reproducible, and monitoring the system once it is live. A first deployment is only about halfway through the project, since live traffic reveals what development could not.
 
@@ -45,9 +45,10 @@ Deployment puts the model in front of real data: choosing an architecture, rolli
 - [4.5 Monitoring](deployment/monitoring.md)
 - [4.6 Case Study: Defect Inspection in Manufacturing](deployment/case-study-defect-inspection.md)
 
-## Templates
+## Appendix
 
-[Templates](templates.md) describes the three documents worth writing along the way: one-pagers, design docs, and after-action reviews.
+- [Templates](templates.md): the three documents worth writing along the way: one-pagers, design docs, and after-action reviews
+- [Sources](sources.md): the courses, books, and articles these notes draw on
 
 ```{toctree}
 :hidden:

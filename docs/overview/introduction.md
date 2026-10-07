@@ -1,6 +1,6 @@
 # 1.1 Introduction
 
-## 1.1.1. Why ML
+## 1.1.1 Why ML
 
 Machine Learning is the science and art of programming computers so they can learn from data.
 
@@ -66,7 +66,7 @@ To summarize, ML is great for:
   - Fluctuating environments
   - Getting insights about complex problems and large amounts of data
 
-## 1.1.2. Types of ML Systems
+## 1.1.2 Types of ML Systems
 
 There are many different types of ML systems so it’s useful to classify them in broad categories, based on the following criteria:
 
@@ -93,7 +93,7 @@ A big challenge of online learning is that if bad data is fed to the system, per
 
 **Instance-based** systems learn the training examples by heart and generalize to new cases by comparing them to the stored examples with a similarity measure (e.g., k-nearest neighbors). **Model-based** systems build a model from the examples (e.g., a linear regression) and use the model to make predictions.
 
-## 1.1.3. Main Challenges of ML
+## 1.1.3 Main Challenges of ML
 
 The two things that can go wrong are “bad model” and “bad data”.
 
@@ -117,7 +117,7 @@ Bad model:
       - Feed better features to the learning algorithm (feature engineering)
       - Reduce the constraints on the model (for example by reducing the regularization hyperparameter)
 
-## 1.1.4. ML in Production
+## 1.1.4 ML in Production
 
 Deploying machine learning (ML) models into production environments involves challenges that extend beyond model development. Effective deployment integrates machine learning expertise with software engineering practices to ensure continuous and reliable operation within a larger system.
 

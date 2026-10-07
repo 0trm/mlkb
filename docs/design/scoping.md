@@ -1,6 +1,6 @@
 # 2.1 Scoping
 
-## 2.1.1. Scoping Overview
+## 2.1.1 Scoping Overview
 
 Choosing the right ML project is a rare and valuable skill. Careful scoping—evaluating options and selecting high-impact projects—maximizes success.
 
@@ -10,7 +10,7 @@ Take an e-commerce retailer looking to increase sales. Candidate projects includ
   - What are the metrics for success?
   - What resources (data, time, people) are needed?
 
-## 2.1.2. Scoping Process
+## 2.1.2 Scoping Process
 
 Scoping involves identifying business problems, brainstorming AI solutions, and assessing feasibility and value.
 
@@ -21,12 +21,12 @@ Scoping involves identifying business problems, brainstorming AI solutions, and 
 
 Using the e-commerce retailer from 2.1.1 as the example:
 
-### i. Identify Business Problems
+### Identify Business Problems
 
   - Collaborate with business owners to brainstorm problems (e.g., low conversions, excess inventory, low profit margins).
   - Focus on business objectives, not AI solutions. Ask, “What are the top three things you wish worked better?” Avoid AI-specific discussions initially.
 
-### ii. Brainstorm AI Solutions
+### Brainstorm AI Solutions
 
   - Once problems are clear, explore AI solutions. Not all problems require AI, and that’s acceptable.
   - Example problems and solutions:
@@ -35,7 +35,7 @@ Using the e-commerce retailer from 2.1.1 as the example:
       - **Reduce Inventory**: Predict demand to optimize stock, launch marketing campaigns to sell overstocked items.
       - **Increase Margins**: Optimize product selection (merchandising), recommend product bundles (e.g., camera with case).
 
-### iii. Assess Feasibility and Value
+### Assess Feasibility and Value
 
   - **Feasibility**: Evaluate technical viability using benchmarks (e.g., literature, competitor solutions) and a 2x2 matrix of new vs. existing projects and unstructured vs. structured data:
 
@@ -89,16 +89,16 @@ flowchart TB
 
   - **Ethical Considerations**: Ensure the project creates positive societal value and is fair and unbiased, and that any ethical concerns have been openly aired and debated. Consult industry-specific ethical frameworks (e.g., for lending, healthcare, or retail). If a project lacks societal benefit, consider abandoning it, even if economically viable.
 
-### iv. Define Milestones, Metrics, and Resources
+### Define Milestones, Metrics, and Resources
 
   - Specify **ML metrics** (e.g., accuracy, precision-recall, fairness), **software metrics** (e.g., latency, throughput), and **business metrics** (e.g., revenue increase).
   - Estimate **resources**: Data volume, team involvement, cross-functional support, and timelines.
   - If specifications are unclear, conduct **benchmarking** (compare to similar projects) or build a **proof of concept** to refine estimates.
   - Agree on these with everyone involved: data scientists, subject matter experts, and business stakeholders.
 
-## 2.1.3. Workflows
+## 2.1.3 Workflows
 
-### i. Project Workflow
+### Project Workflow
 
 An ML project moves from defining the problem to analysis (exploring the data, considering candidate models) to development, and ends in an ML application that may hold several models. What the application reveals in use feeds back into analysis and development, so the loop repeats.
 
@@ -115,7 +115,7 @@ flowchart LR
 
 *An ML project: development produces an application that can hold several models, and what the application shows in use feeds back into analysis.*
 
-### ii. The Model Inside an Application
+### The Model Inside an Application
 
 At its core, a model is a function: it takes input data and returns predictions.
 
@@ -145,15 +145,15 @@ The application and the model have separate lifecycles. The model can be retrain
 
 *Application and model releases on one timeline: each version history advances on its own schedule.*
 
-## 2.1.4. Before Machine Learning
+## 2.1.4 Before Machine Learning
 
 Most of the problems in an ML project are engineering problems, and most of the gains come from good features rather than clever algorithms. Zinkevich sums it up as: "do machine learning like the great engineer you are, not like the great machine learning expert you aren't." *(Rules of ML, Overview)*
 
-### i. Launch Without ML First
+### Launch Without ML First
 
 ML needs data. If ML would give a 100% improvement, a simple heuristic often gets you 50% of the way there. Rank apps by install count, block senders who spammed before, rank contacts by most recent use. If the product does not strictly need ML, ship it without ML until you have data. *(Rules of ML #1)*
 
-### ii. Instrument Metrics Before Building the Model
+### Instrument Metrics Before Building the Model
 
 Track as much as possible in the current system before formalizing what the ML system will do:
 
@@ -164,19 +164,19 @@ Track as much as possible in the current system before formalizing what the ML s
 
 Pair this with an experiment framework that buckets users and aggregates statistics per experiment. Whenever you notice a problem or a change worth celebrating, add a metric for it. *(Rules of ML #2)*
 
-### iii. Replace Complex Heuristics with ML
+### Replace Complex Heuristics with ML
 
 A simple heuristic gets the product out the door; a complex one becomes unmaintainable. Once you have data and a clear goal, move to ML: a learned model is easier to update and maintain than a growing pile of rules. *(Rules of ML #3)*
 
-## 2.1.5. Choosing the Objective
+## 2.1.5 Choosing the Objective
 
 A **metric** is any number the system reports. An **objective** is the one metric the algorithm directly optimizes. Measure many metrics; optimize one.
 
-### i. Don't Overthink the First Objective
+### Don't Overthink the First Objective
 
 Early on, most metrics rise together, even the ones you don't optimize directly (optimizing clicks usually lifts time on site too). Don't spend effort balancing metrics while they are all still easy to improve. If the optimized metric goes up but the team decides not to launch, the objective needs revisiting. *(Rules of ML #12)*
 
-### ii. Pick a Simple, Observable, Attributable Objective
+### Pick a Simple, Observable, Attributable Objective
 
 The ML objective should be easy to measure and act as a proxy for the "true" goal, which is often unknown or disputed. The easiest things to model are user actions directly caused by the system:
 
@@ -186,17 +186,17 @@ The ML objective should be easy to measure and act as a proxy for the "true" goa
 
 *(Rules of ML #13)*
 
-### iii. Use a Policy Layer for Extra Logic
+### Use a Policy Layer for Extra Logic
 
 Train on the simple objective and add a thin **policy layer** on top for final adjustments. Keep adversarial problems separate: quality ranking should assume good-faith content, while spam filtering is an arms race with fast-changing features, hard rules, and frequent retraining. Remove spam from the quality model's training data and merge the two systems' outputs in the policy layer. *(Rules of ML #13, #15)*
 
-### iv. Launch Decisions Are Proxies for Long-term Goals
+### Launch Decisions Are Proxies for Long-term Goals
 
 A model can lower log loss and raise installs in an A/B test, yet still be rejected because daily active users dropped 5%. Launch decisions weigh several metrics (engagement, DAU, revenue, partner ROI), and each of those is itself a proxy for long-term goals like a healthy product five years out. Only launches where all metrics improve (or none get worse) are easy. If a simple heuristic beats a sophisticated model on every metric, ship the heuristic. *(Rules of ML #39)*
 
 When metrics plateau and the team starts arguing about issues outside the current objective, stop adding features: either change the objective or change the product goals. *(Rules of ML #38)*
 
-## 2.1.6. Project Phases and Timeboxes
+## 2.1.6 Project Phases and Timeboxes
 
 ```mermaid
 flowchart LR

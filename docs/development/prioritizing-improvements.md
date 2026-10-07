@@ -2,7 +2,7 @@
 
 Deciding where to focus your efforts in a machine learning project requires a strategic approach. Beyond assessing the gap to human-level performance (HLP), consider the prevalence of each data category and other practical factors to maximize impact.
 
-## i. Analyzing Data Distributions
+## 3.5.1 Analyzing Data Distributions
 
 The distribution of data across categories significantly influences prioritization. For example, suppose your speech recognition dataset is distributed as follows:
 
@@ -24,7 +24,7 @@ Improving accuracy on clean speech from 94% to 95% (a 1% gain) across 60% of the
 
 This analysis highlights that clean speech and people noise, due to their larger share of the dataset, offer greater potential for overall performance gains compared to car noise, despite the latter’s larger gap to HLP.
 
-## ii. Factors for Prioritization
+## 3.5.2 Factors for Prioritization
 
 When deciding which categories to prioritize, evaluate the following:
 
@@ -35,7 +35,7 @@ When deciding which categories to prioritize, evaluate the following:
 
 No mathematical formula dictates the optimal choice, but weighing these factors enables informed, impactful decisions.
 
-## iii. Targeted Data Collection and Augmentation
+## 3.5.3 Targeted Data Collection and Augmentation
 
 Once you identify priority categories, focus on improving performance by enhancing the data for those categories:
 
@@ -45,7 +45,7 @@ Once you identify priority categories, focus on improving performance by enhanci
 
 For example, rather than broadly collecting data from low-bandwidth cell phone connections, focus on acquiring or augmenting data specifically for car noise or people noise. This precision ensures resources are used effectively to improve algorithm performance where it matters most.
 
-## iv. When Performance Plateaus
+## 3.5.4 When Performance Plateaus
 
 Signs of a plateau: monthly gains shrink, and experiments start trading one metric against another. At that point *(Rules of ML)*:
 

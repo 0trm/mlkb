@@ -2,7 +2,7 @@
 
 Machine learning development often revolves around two philosophies: model-centric and data-centric AI.
 
-## i. Model-centric and Data-centric AI
+## 3.1.1 Model-centric and Data-centric AI
 
 ```mermaid
 flowchart LR
@@ -32,7 +32,7 @@ flowchart LR
 1.  In a **model-centric** approach, the emphasis is on crafting the perfect algorithm. Imagine you’re tuning a car’s engine—researchers might spend months designing a sophisticated neural network, tweaking its layers and connections, all while using a fixed dataset like a standard image collection. Historically, this has been the dominant method in AI research, with the focus on building ever-better models to outshine competitors on the same data.
 2.  By contrast, a **data-centric** approach shifts the spotlight to the data itself. Here, the idea is to feed a solid but simpler model with high-quality, carefully curated data. It’s like ensuring the car runs on premium fuel rather than tinkering endlessly with the engine. In practice, this might mean cleaning up messy data, adding new examples, or enhancing what you already have. For many real-world projects, this method proves more efficient—great data can lift a basic model to impressive heights, often faster than perfecting a complex algorithm. For example, improving a dataset of customer reviews by removing duplicates and clarifying labels might boost a sentiment analysis model more than redesigning its architecture.
 
-## ii. Key Challenges
+## 3.1.2 Key Challenges
 
 Building a machine learning system is a balancing act between three core elements:
 
@@ -59,7 +59,7 @@ flowchart LR
 
 A key part of this process is figuring out *why* the model fails, which is where error analysis comes in. Suppose you’re building a speech recognition system, and it stumbles on clips with background noise. By studying those failures, you might realize the data lacks enough noisy examples, prompting you to add more. This interplay between code, data, and settings is what drives progress, making patience and curiosity essential traits for an ML developer.
 
-## iii. Milestones in Training a Model
+## 3.1.3 Milestones in Training a Model
 
 To gauge whether your model is on the right track, you need to measure its performance at three distinct stages:
 
@@ -69,7 +69,7 @@ To gauge whether your model is on the right track, you need to measure its perfo
 
 But numbers alone don’t tell the whole story. A model might ace these metrics yet still fall short of your project’s needs. Take a loan approval system: even with high accuracy, it could unfairly reject certain applicants due to biased data. Success isn’t just about hitting a target score—it’s about meeting practical goals like fairness or reliability.
 
-## iv. Feature Engineering
+## 3.1.4 Feature Engineering
 
 Goal is to enhance model performance. Tools and techniques help to process, select, and maintain features:
 

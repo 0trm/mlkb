@@ -2,7 +2,7 @@
 
 Efficient machine learning development requires robust experiment tracking and a focus on high-quality data. These practices ensure systematic improvements and reliable model performance, especially in applications where massive datasets are unavailable.
 
-## i. What to Track
+## 3.9.1 What to Track
 
 Record the following for each experiment:
 
@@ -12,7 +12,7 @@ Record the following for each experiment:
 4.  **Results**: Save high-level metrics (e.g., accuracy, F1 score) and, if possible, a copy of the trained model.
 5.  **Execution Scripts and Environment Configuration**: Keep the scripts that ran the experiment and the environment they ran in (dependencies, hardware).
 
-## ii. Tracking Tools
+## 3.9.2 Tracking Tools
 
 Choose a tracking method based on your needs and scale:
 
@@ -28,7 +28,7 @@ Choose a tracking method based on your needs and scale:
 
 *Pros and cons of three ways to track experiments.*
 
-## iii. Key Features
+## 3.9.3 Key Features
 
 When selecting a tracking tool, prioritize:
 

@@ -4,7 +4,7 @@ Even when a machine learning model performs well on metrics like accuracy or F1 
 
 After multiple iterations of model development, a performance audit serves as a final check to ensure the system is robust and equitable. It helps uncover issues that might not be evident from standard metrics, safeguarding against real-world failures.
 
-## i. Auditing Framework
+## 3.7.1 Auditing Framework
 
 Follow this structured approach to audit your machine learning system:
 
@@ -36,14 +36,14 @@ Define metrics to assess performance against identified risks, focusing on **dat
 
 Engage business or product owners to validate the identified risks and metrics. Ensure they agree that these are the most relevant issues to address and that the chosen metrics effectively evaluate potential problems. This alignment fosters trust and ensures the audit addresses business priorities.
 
-## ii. Industry-specific Considerations
+## 3.7.2 Industry-specific Considerations
 
 The ways a system might fail are highly **problem-dependent**, and standards for fairness and bias vary across industries. These standards are still evolving in AI and specific sectors. To stay compliant and ethical:
 
   - **Research Industry Standards**: Investigate acceptable practices for your industry, keeping up with evolving guidelines on fairness and bias.
   - **Leverage Expertise**: Involve your team or external advisors to brainstorm potential issues, reducing the risk of overlooking critical failure modes.
 
-## iii. Comparing Against Production
+## 3.7.3 Comparing Against Production
 
 Before any user sees a new model, compare it with the one in production *(Rules of ML)*:
 
@@ -51,6 +51,6 @@ Before any user sees a new model, compare it with the one in production *(Rules 
   - **Judge models by what the prediction is used for** (#25): If predictions rank documents, final ranking quality matters more than the predicted probability; if they feed a spam cutoff, the precision of what gets through matters most. If a change improves log loss but hurts the system, look for another feature. If this keeps happening, revisit the objective.
   - **Identical short-term behavior doesn't mean identical long-term behavior** (#28): A model keyed only on document ID and exact query can match production in side-by-sides and A/B tests, yet never surface new apps, because it can only show documents that already have history for that query. The only real test is training on data collected while the model is live, which is hard.
 
-## iv. You Are Not a Typical End User
+## 3.7.4 You Are Not a Typical End User
 
 Dogfooding catches obviously bad changes, but engineers are too close to the code and too costly to act as the evaluation set. Test anything near production quality with crowdsourced raters or a live experiment. For qualitative feedback, use UX methods: personas early on, usability testing later. *(Rules of ML #23)*

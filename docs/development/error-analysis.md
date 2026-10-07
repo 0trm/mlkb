@@ -14,7 +14,7 @@ The process is iterative: examining and tagging examples suggests new tags, and 
 
 Error analysis has traditionally been manual, often performed in tools like Jupyter Notebooks or spreadsheets.
 
-## i. Key Metrics for Error Analysis
+## 3.4.1 Key Metrics for Error Analysis
 
 As you analyze tagged data, track these metrics to guide prioritization:
 
@@ -23,10 +23,10 @@ As you analyze tagged data, track these metrics to guide prioritization:
 3.  **Prevalence of a Tag**: Determine what fraction of the entire dataset has a specific tag. This shows the tag’s overall relevance.
 4.  **Room for Improvement**: Assess the potential for improvement by comparing your model’s performance to human-level performance (HLP) for a given tag. This helps estimate the achievable gains.
 
-## ii. Turn Error Patterns into Features
+## 3.4.2 Turn Error Patterns into Features
 
 Errors the model *knows* it got wrong (a false positive, or a positive ranked below a negative) are the ones it will fix if given a feature that helps. Features built around cases the model doesn't count as mistakes get ignored: if the objective is installs and users do install a gag app after searching "free games", a "gag app" feature won't demote it. Look for trends in the errors that fall outside the current feature set (e.g., the model demotes long posts), then add a family of related features (a dozen post-length buckets) and let the model sort out which ones matter. *(Rules of ML #26)*
 
-## iii. Quantify Undesirable Behavior
+## 3.4.3 Quantify Undesirable Behavior
 
 When team members dislike behavior that the loss function doesn't capture, turn the complaint into a number: for example, have human raters label gag apps in top search results. Once measured, the issue can become a feature, an objective, or a metric. "Measure first, optimize second." *(Rules of ML #27)*

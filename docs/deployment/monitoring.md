@@ -8,7 +8,7 @@ To ensure a machine learning (ML) system meets performance expectations, continu
 
 Practice good alerting hygiene: make every alert actionable and give the system a dashboard page. *(Rules of ML, Monitoring)*
 
-## i. Dashboard Monitoring
+## 4.5.1 Dashboard Monitoring
 
 Dashboards should be tailored to the specific application, tracking metrics relevant to its operation. Examples include:
 
@@ -29,7 +29,7 @@ To determine what to monitor, follow these steps:
 1.  **Brainstorm Potential Issues**: Collaborate with your team to identify everything that could go wrong with the system.
 2.  **Design Metrics**: For each potential issue, define statistics or metrics to detect it. For example, if you’re concerned about traffic spikes overloading the service, track server load as a key metric.
 
-## ii. Types of Monitoring
+## 4.5.2 Types of Monitoring
 
 A. **Statistical Monitoring:** focuses on the input and output data, including predictions. Examples: customer X has a 72% probability of churning, customer Y has a 31% probability of not churning.
 
@@ -46,7 +46,7 @@ flowchart LR
 
 *What each type of monitoring watches: statistical monitoring covers the new data and the predictions, computational monitoring covers the data flow and the server, and the feedback loop compares predictions with the ground truth.*
 
-## iii. Types of Metrics
+## 4.5.3 Types of Metrics
 
 Metrics fall into two broad categories:
 
@@ -74,7 +74,7 @@ Metrics fall into two broad categories:
 
 Since input and output metrics are application-specific, MLOps tools typically require custom configuration to track them effectively.
 
-## iv. Iterative Monitoring Process
+## 4.5.4 Iterative Monitoring Process
 
 Like ML modeling, deployment is an iterative process. Initial dashboards and metrics are a starting point, but real-world data from live traffic enables performance analysis and system refinement. Key considerations:
 
@@ -112,7 +112,7 @@ flowchart LR
 
 Monitoring enables early detection of issues, prompting deeper error analysis or data collection to update the model and maintain or improve performance.
 
-## v. Pipeline Monitoring
+## 4.5.5 Pipeline Monitoring
 
 Many AI systems involve complex pipelines with multiple components, not just a single ML model. For example, a speech recognition system typically includes:
 
@@ -155,7 +155,7 @@ To monitor pipelines with two or more components effectively:
       - Track input and output metrics for each component to detect changes in data or performance.
   - **Apply the Brainstorming Principle**: As with single-model systems, brainstorm everything that could go wrong across the pipeline and design metrics to track those risks.
 
-## vi. Rate of Data Change
+## 4.5.6 Rate of Data Change
 
 The speed at which data changes varies by application:
 
@@ -168,11 +168,11 @@ The speed at which data changes varies by application:
 
 While these are general observations with exceptions, they provide a framework for anticipating the rate of data change in your application.
 
-## vii. Silent Failures
+## 4.5.7 Silent Failures
 
 ML systems fail in a way most software doesn't: they keep running and degrade gradually instead of crashing. If a joined table stops updating, the model adapts and stays "reasonably good" while getting worse. At Google Play, a table stale for 6 months was refreshed and install rate rose 2%, more than any other launch that quarter. Feature coverage can also shift with implementation changes, for example a column populated in 90% of examples that suddenly drops to 60%. Track data statistics (including per-feature coverage) and inspect the data by hand from time to time. *(Rules of ML #10)*
 
-## viii. Training-Serving Skew
+## 4.5.8 Training-Serving Skew
 
 **Training-serving skew** is a gap between performance during training and performance during serving. It has three main causes *(Rules of ML)*:
 
