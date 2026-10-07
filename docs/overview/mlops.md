@@ -96,7 +96,7 @@ Which parts of each stage can be automated, and what that buys:
 
 **Design**
 
-  - Project design remains a manual process; templates help it scale (see [5. Templates](../templates.md)).
+  - Project design remains a manual process; templates help it scale (see [Templates](../templates.md)).
   - Data acquisition can be automated, which helps keep data quality high.
 
       - For example, an ETL pipeline extracts order data and weather data, combines them, and loads the result into a database, followed by automated data quality checks.

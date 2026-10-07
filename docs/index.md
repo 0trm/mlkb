@@ -2,7 +2,7 @@
 
 These are study notes on building machine learning systems end to end. They compress the process into three stages, **design**, **development**, and **deployment**, and follow one idea through all of them: most of the work in production ML is engineering and data, not algorithms.
 
-The notes are compiled from Andrew Ng's MLOps specialization, Aurélien Géron's *Hands-On Machine Learning*, Martin Zinkevich's *Rules of Machine Learning*, and the other [sources](sources.md). Examples and case studies come from those sources.
+The notes are compiled from Andrew Ng's MLOps specialization, Aurélien Géron's *Hands-On Machine Learning*, Martin Zinkevich's *Rules of Machine Learning*, and other [sources](sources.md). Examples and case studies come from those sources.
 
 *Scope: classic (predictive) ML systems. LLMs and foundation models are not covered.*
 
@@ -47,11 +47,11 @@ Deployment puts the model in front of real data: choosing an architecture, rolli
 
 ## Templates
 
-The [templates](templates.md) cover the documents worth writing along the way: one-pagers, design docs, and after-action reviews.
+[Templates](templates.md) describes the three documents worth writing along the way: one-pagers, design docs, and after-action reviews.
 
 ```{toctree}
 :hidden:
-:caption: Overview
+:caption: 1 · Overview
 
 overview/introduction
 overview/lifecycle
@@ -62,7 +62,7 @@ overview/case-study-speech-recognition
 
 ```{toctree}
 :hidden:
-:caption: Stage I · Design
+:caption: 2 · Design
 
 design/scoping
 design/data
@@ -70,7 +70,7 @@ design/data
 
 ```{toctree}
 :hidden:
-:caption: Stage II · Development
+:caption: 3 · Development
 
 development/modeling-overview
 development/validation-and-tuning
@@ -85,7 +85,7 @@ development/experiment-tracking
 
 ```{toctree}
 :hidden:
-:caption: Stage III · Deployment
+:caption: 4 · Deployment
 
 deployment/key-challenges
 deployment/architecture

@@ -10,7 +10,7 @@ The process is split into three stages: **Design**, **Development**, and **Deplo
 
 ## Contents
 
-### Overview
+### 1 · Overview
 
 - [1.1 Introduction](docs/overview/introduction.md)
 - [1.2 ML Project Lifecycle](docs/overview/lifecycle.md)
@@ -18,12 +18,12 @@ The process is split into three stages: **Design**, **Development**, and **Deplo
 - [1.4 MLOps](docs/overview/mlops.md)
 - [1.5 Case Study: Speech Recognition System](docs/overview/case-study-speech-recognition.md)
 
-### Stage I · Design
+### 2 · Design
 
 - [2.1 Scoping](docs/design/scoping.md)
 - [2.2 Data](docs/design/data.md)
 
-### Stage II · Development
+### 3 · Development
 
 - [3.1 Modeling Overview](docs/development/modeling-overview.md)
 - [3.2 Validation and Hyperparameter Tuning](docs/development/validation-and-tuning.md)
@@ -35,7 +35,7 @@ The process is split into three stages: **Design**, **Development**, and **Deplo
 - [3.8 Data-centric AI Development](docs/development/data-centric-development.md)
 - [3.9 Experiment Tracking](docs/development/experiment-tracking.md)
 
-### Stage III · Deployment
+### 4 · Deployment
 
 - [4.1 Key Challenges in Deployment](docs/deployment/key-challenges.md)
 - [4.2 Deployment Architecture](docs/deployment/architecture.md)

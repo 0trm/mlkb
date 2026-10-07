@@ -21,7 +21,7 @@ Design docs are more commonly seen in engineering projects; not so much for data
 
 **After-action reviews:** Used to reflect after shipping a project, or after a major error. A project review covers what went well (and not so well), follow-up actions, and how to do better next time. It’s like a [scrum retrospective](https://eugeneyan.com/writing/what-i-love-about-scrum-for-data-science/#retrospectives-feedback-loop-for-improvement), except with more time to think and written as a document. The knowledge can then be shared with other teams.
 
-An error review (e.g., the system goes down) diagnoses the root cause and identifies follow-up actions to prevent reoccurrence. Nobody is blamed. The intent is to discuss what the team can do better and share the (sometimes painful) lessons with the greater organization. Amazon calls these [Correction of Errors](https://wa.aws.amazon.com/wat.concept.coe.en.html); here’s [what one looks like](https://github.com/JDHarris007/coe/blob/master/CoE.md).
+An error review (e.g., the system goes down) diagnoses the root cause and identifies follow-up actions to prevent reoccurrence. Nobody is blamed. The intent is to discuss what the team can do better and share the (sometimes painful) lessons with the greater organization. Amazon calls these [Correction of Errors](https://aws.amazon.com/blogs/mt/why-you-should-develop-a-correction-of-error-coe/); here’s [what one looks like](https://github.com/JDHarris007/coe/blob/master/CoE.md).
 
 **Where each fits in the lifecycle**
 

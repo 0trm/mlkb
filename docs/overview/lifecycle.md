@@ -41,9 +41,9 @@ After selecting the project, gather the required data for your algorithm. This i
 
   - Collect, label, and organize data, ensuring quality and consistency.
   - Address issues such as inconsistent labeling or missing values.
-  - Establish a performance baseline.
+  - Establish a performance baseline (covered in [3.3 Model Baseline](../development/model-baseline.md)).
 
-Covered in depth in [2. Design](../index.md#design).
+Covered in depth in [2. Design](../index.md#design), starting with [2.1 Scoping](../design/scoping.md).
 
 ## 1.2.2. Development
 
@@ -53,7 +53,7 @@ With data in hand, proceed to train the model. This phase includes selecting and
   - Conduct error analysis to identify improvement areas.
   - Iterate on model architecture, hyperparameters, or data as needed.
 
-Covered in depth in [3. Development](../index.md#development).
+Covered in depth in [3. Development](../index.md#development), starting with [3.1 Modeling Overview](../development/modeling-overview.md).
 
 ## 1.2.3. Deployment
 
@@ -71,9 +71,11 @@ Post-deployment maintenance often involves further error analysis, retraining th
   - Update the model with new data or retraining as required.
   - Refine the system based on real-world feedback.
 
-Covered in depth in [4. Deployment](../index.md#deployment).
+Covered in depth in [4. Deployment](../index.md#deployment), starting with [4.1 Key Challenges](../deployment/key-challenges.md).
 
 ## 1.2.4. Roles
+
+An ML project needs both business and technical people. Business roles define the problem and judge whether the result is useful; technical roles build the data pipelines, the model, and the system around it.
 
   - Business roles
 
