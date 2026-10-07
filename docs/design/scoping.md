@@ -14,13 +14,12 @@ Take an e-commerce retailer looking to increase sales. Candidate projects includ
 
 Scoping involves identifying business problems, brainstorming AI solutions, and assessing feasibility and value.
 
-1.  Brainstorm business problems (not AI problems).
+1.  Identify business problems (not AI problems).
 2.  Brainstorm AI solutions.
 3.  Assess the feasibility and value of potential solutions.
-4.  Determine milestones.
-5.  Budget for resources.
+4.  Define milestones, metrics, and resources.
 
-For an e-commerce retailer aiming to increase sales (as an example), follow these steps:
+Using the e-commerce retailer from 2.1.1 as the example:
 
 ### i. Identify Business Problems
 
@@ -90,15 +89,12 @@ flowchart TB
 
   - **Ethical Considerations**: Ensure the project creates positive societal value and is fair and unbiased, and that any ethical concerns have been openly aired and debated. Consult industry-specific ethical frameworks (e.g., for lending, healthcare, or retail). If a project lacks societal benefit, consider abandoning it, even if economically viable.
 
-### iv. Define Milestones and Resources
+### iv. Define Milestones, Metrics, and Resources
 
   - Specify **ML metrics** (e.g., accuracy, precision-recall, fairness), **software metrics** (e.g., latency, throughput), and **business metrics** (e.g., revenue increase).
   - Estimate **resources**: Data volume, team involvement, cross-functional support, and timelines.
   - If specifications are unclear, conduct **benchmarking** (compare to similar projects) or build a **proof of concept** to refine estimates.
-
-### v. Define Key Metrics
-
-Successful data-driven initiatives require collaboration between technical experts (data scientists), domain specialists (SMEs), and business leaders (stakeholders) to achieve measurable business benefits like increased accuracy, customer satisfaction, and revenue generation.
+  - Agree on these with everyone involved: data scientists, subject matter experts, and business stakeholders.
 
 ## 2.1.3. Workflows
 
@@ -119,11 +115,11 @@ flowchart LR
 
 *An ML project: development produces an application that can hold several models, and what the application shows in use feeds back into analysis.*
 
-### ii. Modeling Workflow
+### ii. The Model Inside an Application
 
 At its core, a model is a function: it takes input data and returns predictions.
 
-In an application, the model sits behind an API: it receives input data and returns predictions, and business rules turn those predictions into decisions or actions, usually shown to users through a GUI. A database stores the model's inputs and outputs.
+In an application, the model sits behind an API. The API passes the input data both to the model and to business rules, their outputs are combined into the final predictions, and those are returned and stored in a database that a GUI reads from. Deployment architecture is covered in [4.2](../deployment/architecture.md).
 
 ```mermaid
 flowchart TB
@@ -138,7 +134,7 @@ flowchart TB
   C --> OUT([Predictions])
 ```
 
-*Inside an ML application: the API passes input data to the model (a classifier, regressor, or any other kind) and to business rules. Their outputs are combined into predictions, which the API returns to the caller and a database stores for a GUI to read.*
+*Inside an ML application: the API passes input data to the model (a classifier, regressor, or any other kind) and to business rules. Their outputs are combined into predictions, which are returned and stored in a database for a GUI to read.*
 
 The application and the model have separate lifecycles. The model can be retrained and updated without a new application release, and the application can ship changes without touching the model.
 
@@ -202,19 +198,17 @@ When metrics plateau and the team starts arguing about issues outside the curren
 
 ## 2.1.6. Project Phases and Timeboxes
 
-*Adapted from Eugene Yan, [Writing Docs: Why, What, and How](https://eugeneyan.com/writing/writing-docs-why-what-how/).*
-
 ```mermaid
 flowchart LR
   F[Feasibility<br>assessment<br>1-2 weeks] --> P[Proof of<br>concept<br>1-2 months] --> D[Deploy to<br>production<br>3-6 months] --> M[Operational<br>maintenance]
 ```
 
-*Project phases with their timeboxes. Once in production, the system moves to operational maintenance: fix critical issues as necessary and update it if stakeholders prioritize it. Adapted from Eugene Yan, Writing Docs: Why, What, and How.*
+*Project phases with their timeboxes. Once in production, the system moves to operational maintenance: fix critical issues as necessary and update it if stakeholders prioritize it. Adapted from Eugene Yan, [Writing Docs: Why, What, and How](https://eugeneyan.com/writing/writing-docs-why-what-how/).*
 
 A project usually starts with a **feasibility assessment**. With the existing data and technology, can the problem be solved? If so, to what extent? This stage is a quick and dirty investigation, typically time-boxed at 1-2 weeks.
 
 After feasibility comes a **proof of concept** (POC): a prototype *hacked* together to assess whether the solution is technically achievable. Ideally, it also tests the integration points with upstream data providers and downstream consumers. Can we meet the technical constraints (e.g., latency, throughput)? Is model performance satisfactory? This usually takes a month or two.
 
-If all goes well, the next stage is to **develop for production**, also time-boxed. An overly generous timeline can lead to non-essential features being squeezed in and never-ending development, and without deploying it, no one benefits from it. This usually takes 3-6 months, including infra, job orchestration, testing, monitoring, documentation, etc.
+If all goes well, the next stage is to **develop for production**, also time-boxed. An overly generous timeline can lead to non-essential features being squeezed in and never-ending development, and until the system is deployed, no one benefits from it. This usually takes 3-6 months, including infra, job orchestration, testing, monitoring, documentation, etc.
 
-Each phase is a natural point to write one of the documents in [5. Templates](../templates.md).
+Each phase is a natural point to write one of the documents in [Templates](../templates.md).

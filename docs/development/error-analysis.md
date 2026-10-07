@@ -4,7 +4,7 @@ Training a machine learning algorithm rarely yields perfect results on the first
 
 To understand errors in a system, such as a speech recognition model, follow this process:
 
-  - **Examine Misclassified Examples**: Select a sample from your development set, such as 100 mislabeled audio clips. Listen to each clip and annotate relevant characteristics in a spreadsheet (e.g., Google Sheets, Excel, or Numbers). For instance, note if an audio clip contains background car noise.
+  - **Examine Misclassified Examples**: Select a sample from your development set, such as 100 audio clips the model got wrong. Listen to each clip and annotate relevant characteristics in a spreadsheet (e.g., Google Sheets, Excel, or Numbers). For instance, note if an audio clip contains background car noise.
   - **Purpose**: This process reveals which categories or tags (e.g., car noise) contribute significantly to errors, helping you prioritize areas for improvement.
 
 The process is iterative: examining and tagging examples suggests new tags, and each new tag sends you back to the examples. Tags that work in other applications:
@@ -12,13 +12,13 @@ The process is iterative: examining and tagging examples suggests new tags, and 
   - **Visual inspection**: specific class labels (scratch, dent), image properties (blurry, dark or light background, reflection), other metadata (phone model, factory).
   - **Product recommendations**: user demographics, product features or category.
 
-Error analysis has traditionally been manual, often performed in tools like Jupyter Notebooks or spreadsheets. While this approach remains effective, emerging MLOps tools streamline the process.
+Error analysis has traditionally been manual, often performed in tools like Jupyter Notebooks or spreadsheets.
 
 ## i. Key Metrics for Error Analysis
 
 As you analyze tagged data, track these metrics to guide prioritization:
 
-1.  **Fraction of Errors with a Tag**: For example, if 12% of 100 audio clips have the "car noise" tag, addressing car noise could improve performance by up to 12%—a significant gain.
+1.  **Fraction of Errors with a Tag**: For example, if 12 of the 100 misrecognized clips have the "car noise" tag, fixing car noise completely would remove at most 12% of the errors. That ceiling tells you how much the category is worth.
 2.  **Misclassification Rate for a Tag**: Calculate the fraction of data with a specific tag that is misclassified. For instance, if 18% of car noise clips are incorrectly transcribed, this indicates the difficulty of that category and its accuracy ceiling.
 3.  **Prevalence of a Tag**: Determine what fraction of the entire dataset has a specific tag. This shows the tag’s overall relevance.
 4.  **Room for Improvement**: Assess the potential for improvement by comparing your model’s performance to human-level performance (HLP) for a given tag. This helps estimate the achievable gains.
@@ -30,7 +30,3 @@ Errors the model *knows* it got wrong (a false positive, or a positive ranked be
 ## iii. Quantify Undesirable Behavior
 
 When team members dislike behavior that the loss function doesn't capture, turn the complaint into a number: for example, have human raters label gag apps in top search results. Once measured, the issue can become a feature, an objective, or a metric. "Measure first, optimize second." *(Rules of ML #27)*
-
-## iv. You Are Not a Typical End User
-
-Dogfooding catches obviously bad changes, but engineers are too close to the code and too costly to act as the evaluation set. Test anything near production quality with crowdsourced raters or a live experiment. For qualitative feedback, use UX methods: personas early on, usability testing later. *(Rules of ML #23)*

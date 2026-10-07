@@ -19,7 +19,7 @@ High-quality data is essential throughout the machine learning project lifecycle
 
 ### iii. Data Quality
 
-Data Quality can be thought of having 4 dimensions:
+Data quality can be thought of as having four dimensions:
 
   - Accuracy
   - Completeness
@@ -34,8 +34,6 @@ Data Quality can be thought of having 4 dimensions:
 | Timeliness | When is the customer ordering data available? | Orders are synchronized at the end of the day, not in real time. |
 
 *The four dimensions of data quality, with a customer-data example for each.*
-
-Low data quality is not the end of the project.
 
 ## 2.2.2. Challenges in Data Definition
 
@@ -71,7 +69,7 @@ These variations—differing in punctuation, spelling, or annotations—introduc
 
 Many ML practitioners initially use pre-prepared datasets from the internet, which is a valid starting point. However, for practical applications, how you prepare and define your dataset significantly impacts project success. Tailoring data to your specific problem, with clear inputs (x) and consistent labels (y), is crucial.
 
-### iv. Major Types of Data Problems
+### iv. Examples of Ambiguous Ground Truth
 
 #### User ID Merging
 
@@ -122,14 +120,14 @@ Best practices vary based on data type (unstructured vs. structured) and dataset
 
   - **Unstructured Data**: Includes images, audio, and text. Humans excel at processing these, making human-level performance (HLP) a useful baseline. Data augmentation (e.g., generating synthetic images or audio) is effective.
   - **Structured Data**: Includes database records (e.g., user profiles). Humans are less adept at these tasks, and HLP is less relevant. Data augmentation is challenging, as synthesizing new users is impractical.
-  - **Small Datasets (\<10,000 examples)**: Clean, consistent labels are critical, as a single mislabeled example can significantly impact performance (e.g., 1% of a 100-example dataset). Manual review is feasible.
+  - **Small Datasets (≤10,000 examples)**: Clean, consistent labels are critical, as a single mislabeled example can significantly impact performance (e.g., 1% of a 100-example dataset). Manual review is feasible.
   - **Large Datasets (\>10,000 examples)**: Manual review is impractical, so focus on robust data processes, clear labeling instructions, and scalable labeling teams.
 
 | | Unstructured | Structured | Focus |
 |---|---|---|---|
 | **Small data** (≤10,000) | Manufacturing visual inspection from 100 training examples | Housing price prediction based on square footage, etc. from 50 training examples | Clean labels are critical |
 | **Big data** (>10,000) | Speech recognition from 50 million training examples | Online shopping recommendations for 1 million users | Emphasis on data process |
-| **What helps** | Humans can label data; data augmentation | Harder to obtain more data | |
+| **Getting more data** | Humans can label data; data augmentation works | Harder: new examples are hard to create | |
 
 *Major types of data problems, by data type and dataset size. Adapted from DeepLearning.AI, MLOps Specialization.*
 
@@ -253,7 +251,7 @@ Thus, HLP is calculated as 58%, reflecting labeler agreement rather than true pe
 
 ### iv. Raising HLP
 
-Improving label consistency can raise HLP, benefiting the model. In the visual inspection example, if inspectors agree on a 0.3mm threshold for defects, re-evaluating a dataset might correct mislabels (e.g., a 0.2mm scratch labeled as non-defective), raising HLP from 66.7% to 100%. While this makes beating HLP impossible, it provides cleaner data, ultimately improving model performance.
+Improving label consistency can raise HLP, benefiting the model. In the visual inspection example above, suppose the two disagreements came from an unclear definition of a defect. If inspectors agree on a rule (for example, a scratch longer than 0.3mm is a defect) and relabel the six examples by it, inspector and ground truth now agree on all six, raising HLP from 66.7% to 100%. While this makes beating HLP impossible, it provides cleaner data, ultimately improving model performance.
 
 ### v. Structured Data and HLP
 
@@ -314,9 +312,7 @@ For specialized tasks (e.g., medical imaging, factory inspection), subject matte
 
 ### iv. Challenges in Labeling
 
-Some tasks are inherently difficult to label:
-
-**Product Recommendations**: Even close friends struggle to recommend products as well as algorithms. Purchase data may serve as labels instead of human judgments.
+Some tasks are inherently difficult for humans to label. In product recommendations, even close friends struggle to recommend products as well as algorithms do, so purchase data may serve as labels instead of human judgments.
 
 Identifying the right labelers (e.g., SMEs for specialized tasks, fluent speakers for transcription) ensures high-quality labels.
 
@@ -326,7 +322,7 @@ When expanding a dataset (e.g., from 1,000 examples), avoid increasing by more t
 
 ### vi. Clean Labels for Filtering Tasks
 
-In filtering tasks (spam, uninteresting emails), blocked examples never reach the user, so learning only from user feedback on what got through introduces sampling bias. Instead, mark a small slice of traffic (e.g., 1%) as **held out**, show all of it to users, and train on those examples. The filter then blocks slightly less (75% becomes at least 74%), in exchange for much cleaner data. If the filter blocks 95% or more, use an even smaller held-out slice (0.1% or less) just to measure performance: about ten thousand examples is enough for an accurate estimate. *(Rules of ML #34)*
+In filtering tasks (spam, uninteresting emails), blocked examples never reach the user, so learning only from user feedback on what got through introduces sampling bias. Instead, mark a small slice of traffic (e.g., 1%) as **held out**, show all of it to users, and train on those examples. The filter then blocks slightly less (a filter that blocked 75% of negative examples still blocks at least 74%), in exchange for much cleaner data. If the filter blocks 95% or more, use an even smaller held-out slice (0.1% or less) just to measure performance: about ten thousand examples is enough for an accurate estimate. *(Rules of ML #34)*
 
 ## 2.2.7. Data Pipelines
 
@@ -365,7 +361,7 @@ Consider a pipeline for job-hunting prediction:
 2.  **User ID Merging**: Use labeled data (e.g., confirmed same-person accounts) to train an ID merge model. Apply it to de-spammed data to produce cleaned user data.
 3.  **Job-Hunting Prediction**: Train a model on cleaned data to predict job-hunting behavior.
 
-If errors are found (e.g., incorrect IP blacklists), updating the pipeline is challenging, especially if scripts are scattered across team members’ systems. **Data provenance** (data source) and **lineage** (processing steps) are critical for maintenance. Extensive documentation or tools like TensorFlow Transform help, though ML tools for provenance and lineage remain immature (TensorFlow, 2021).
+If errors are found (e.g., incorrect IP blacklists), updating the pipeline is challenging, especially if scripts are scattered across team members’ systems. **Data provenance** (data source) and **lineage** (processing steps) are critical for maintenance. Extensive documentation or tools like TensorFlow Transform help, though when the source course was recorded (2021), tools for provenance and lineage were still immature.
 
 ```mermaid
 flowchart TB
@@ -391,7 +387,7 @@ flowchart TB
   - **Visual Inspection**: Metadata includes photo timestamp, factory, line number, camera settings (e.g., exposure, aperture), phone model, and inspector ID. If certain samples produce errors, metadata helps identify patterns (e.g., specific factory lines).
   - **Speech Recognition**: Metadata like smartphone brand, labeler ID, or voice activity detection model can reveal error sources.
 
-Storing metadata in MLOps frameworks (e.g., MLflow) facilitates analysis and improves algorithm performance, similar to commenting code (TensorFlow, 2021).
+Storing metadata in MLOps frameworks (e.g., MLflow) facilitates analysis and improves algorithm performance, similar to commenting code.
 
 ### iv. Dropped Data When Copying Pipelines
 
