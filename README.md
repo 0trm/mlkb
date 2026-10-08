@@ -57,3 +57,5 @@ sphinx-build -b html docs docs/_build/html
 ```
 
 Pushes to `main` rebuild and deploy the site through `.github/workflows/pages.yml`.
+
+The favicon is the card file box emoji from [Noto Emoji](https://github.com/googlefonts/noto-emoji) (Apache 2.0).

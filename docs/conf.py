@@ -20,6 +20,8 @@ html_theme = "sphinx_book_theme"
 html_title = "MLKB"
 html_show_sphinx = False
 html_static_path = ["_static"]
+# The 🗃️ from the repo description, from Noto Emoji (Apache 2.0).
+html_favicon = "_static/favicon.ico"
 html_css_files = ["custom.css"]
 html_js_files = ["mermaid-size.js"]
 html_context = {"default_mode": "light"}
