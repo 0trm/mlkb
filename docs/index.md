@@ -6,15 +6,15 @@ These are study notes on building machine learning systems end to end. They comp
 
 ```mermaid
 flowchart LR
-  subgraph design[2 · Design]
+  subgraph design[<b>Design</b>]
     direction TB
     A[Scope the<br>project] --> B[Define data and<br>a baseline] --> C[Label and<br>organize data]
   end
-  subgraph development[3 · Development]
+  subgraph development[<b>Development</b>]
     direction TB
     D[Train a<br>model] --> E[Analyze<br>errors] --> F[Audit before<br>launch]
   end
-  subgraph deployment[4 · Deployment]
+  subgraph deployment[<b>Deployment</b>]
     direction TB
     G[Deploy in<br>production] --> H[Monitor and<br>maintain]
   end
