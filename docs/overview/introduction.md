@@ -143,8 +143,8 @@ flowchart TB
   end
   M[Metadata management]
   r1 ~~~ r2 ~~~ r3 ~~~ M
-  classDef hl fill:#24292f,color:#ffffff,stroke:#24292f
-  class F hl
+  classDef solid font-weight:600
+  class F solid
   style r1 fill:none,stroke:none
   style r2 fill:none,stroke:none
   style r3 fill:none,stroke:none

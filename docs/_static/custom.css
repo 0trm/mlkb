@@ -56,3 +56,63 @@ pre.mermaid {
   padding-top: 1.5rem;
   border-top: 1px solid var(--pst-color-border);
 }
+
+/* Ink diagrams: outlined boxes on the page background, stages as a flat tint.
+   :is(#ink, ...) lends these rules an id's weight so they beat Mermaid's own
+   #diagram-id rules, while classDef and style lines in a diagram (inline) still win. */
+html[data-theme="dark"] .bd-content pre.mermaid > svg {
+  /* The colors below already follow dark mode, so drop the theme's invert filter. */
+  filter: none;
+}
+
+:is(#ink, pre.mermaid) svg .node .label-container {
+  fill: var(--pst-color-background);
+  stroke: var(--pst-color-text-base);
+  stroke-width: 1.4px;
+}
+
+:is(#ink, pre.mermaid) svg .cluster rect {
+  fill: var(--pst-color-surface);
+  stroke: none;
+}
+
+:is(#ink, pre.mermaid) svg .nodeLabel {
+  color: var(--pst-color-text-base);
+}
+
+:is(#ink, pre.mermaid) svg .cluster-label .nodeLabel {
+  color: var(--pst-color-text-muted);
+  font-weight: 600;
+}
+
+:is(#ink, pre.mermaid) svg .flowchart-link {
+  stroke: var(--pst-color-text-base);
+  stroke-width: 1.3px;
+}
+
+:is(#ink, pre.mermaid) svg .marker {
+  fill: var(--pst-color-text-base);
+  stroke: var(--pst-color-text-base);
+}
+
+:is(#ink, pre.mermaid) svg :is(.edgeLabel, .edgeLabel p, .labelBkg) {
+  background-color: var(--pst-color-background);
+  color: var(--pst-color-text-muted);
+  font-style: italic;
+}
+
+:is(#ink, pre.mermaid) svg .edgeLabel rect {
+  fill: var(--pst-color-background);
+}
+
+/* A filled box marks the one node a diagram is about (class solid). Mermaid
+   writes classDef colors inline with !important, so they can't follow dark mode;
+   the fill lives here instead. */
+:is(#ink, pre.mermaid) svg .node.solid .label-container {
+  fill: var(--pst-color-text-base);
+  stroke: var(--pst-color-text-base);
+}
+
+:is(#ink, pre.mermaid) svg .node.solid .nodeLabel {
+  color: var(--pst-color-background);
+}

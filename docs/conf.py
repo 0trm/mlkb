@@ -10,7 +10,15 @@ myst_enable_extensions = ["dollarmath"]
 myst_fence_as_directive = ["mermaid"]
 
 mermaid_version = "12.1.0"
-mermaid_light_theme = "neutral"
+# Ink style: outlined boxes, straight edges, no shadows. Colors live in custom.css so they follow light and dark mode.
+mermaid_light_theme = "base"
+mermaid_dark_theme = "base"
+mermaid_init_config = {
+    "startOnLoad": False,
+    "look": "classic",
+    "flowchart": {"curve": "linear", "nodeSpacing": 40, "rankSpacing": 48, "padding": 14},
+    "themeVariables": {"fontSize": "14px"},
+}
 mermaid_fullscreen = False
 mermaid_height = "auto"
 
