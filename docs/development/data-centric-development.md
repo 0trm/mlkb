@@ -2,7 +2,7 @@
 
 Traditional AI development often adopts a model-centric approach, focusing on optimizing models for fixed datasets. However, a data-centric approach, which prioritizes improving data quality, is increasingly valuable for many applications. This shift, combined with strategic feature engineering for structured data, can significantly enhance machine learning performance.
 
-## 3.8.1 Model-Centric vs. Data-Centric AI Development
+## 3.8.1 Model-centric vs. Data-centric AI Development
 
 The two philosophies are introduced in [3.1.1](modeling-overview.md#311-model-centric-and-data-centric-ai). In data-centric development you keep a relatively stable model and iteratively improve the data with error analysis and data augmentation. For many applications, high-quality data lets several different models perform adequately, which reduces the need for cutting-edge algorithms.
 

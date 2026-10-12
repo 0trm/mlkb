@@ -65,7 +65,9 @@ html[data-theme="dark"] .bd-content pre.mermaid > svg {
   filter: none;
 }
 
-:is(#ink, pre.mermaid) svg .node .label-container {
+/* Rounded and cylinder shapes draw their outline as paths inside the container,
+   which Mermaid's own .node path rule would otherwise color. */
+:is(#ink, pre.mermaid) svg .node :is(.label-container, .label-container path) {
   fill: var(--pst-color-background);
   stroke: var(--pst-color-text-base);
   stroke-width: 1.4px;
@@ -74,6 +76,12 @@ html[data-theme="dark"] .bd-content pre.mermaid > svg {
 :is(#ink, pre.mermaid) svg .cluster rect {
   fill: var(--pst-color-surface);
   stroke: none;
+}
+
+/* A highlighted stage (class hl on a subgraph) gets an outline; the diagram's
+   classDef sets its width inline, this rule supplies the color. */
+:is(#ink, pre.mermaid) svg .cluster.hl rect {
+  stroke: var(--pst-color-text-base);
 }
 
 :is(#ink, pre.mermaid) svg .nodeLabel {
@@ -108,7 +116,7 @@ html[data-theme="dark"] .bd-content pre.mermaid > svg {
 /* A filled box marks the one node a diagram is about (class solid). Mermaid
    writes classDef colors inline with !important, so they can't follow dark mode;
    the fill lives here instead. */
-:is(#ink, pre.mermaid) svg .node.solid .label-container {
+:is(#ink, pre.mermaid) svg .node.solid :is(.label-container, .label-container path) {
   fill: var(--pst-color-text-base);
   stroke: var(--pst-color-text-base);
 }
