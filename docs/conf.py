@@ -6,6 +6,8 @@ copyright = "2026, Tomás Ravalli"
 extensions = ["myst_parser", "sphinxcontrib.mermaid"]
 myst_heading_anchors = 4
 myst_enable_extensions = ["dollarmath"]
+# External links open in a new tab with rel="noopener".
+myst_links_external_new_tab = True
 # Plain ```mermaid fences render on GitHub and on the site alike.
 myst_fence_as_directive = ["mermaid"]
 
@@ -47,6 +49,6 @@ html_theme_options = {
     "footer_content_items": ["copyright.html", "extra-footer.html"],
     "extra_footer": (
         "<em>Rules of Machine Learning</em> by Martin Zinkevich is paraphrased under "
-        '<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.'
+        '<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.'
     ),
 }
