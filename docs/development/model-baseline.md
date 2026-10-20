@@ -6,6 +6,14 @@ Launching an ML project can feel daunting, but you don’t need to nail everythi
 
 This approach gets you moving fast. You’ll learn more from tweaking and testing than from agonizing over the “best” starting point. Speed matters more than perfection at the outset.
 
+### What to Read For in a Literature Review
+
+The research step pays off most when it targets how others framed and evaluated the problem, not which architecture they used. Yan learned this in early projects where he went straight to the data and headed the wrong way for a week or two, until a senior colleague handed him a paper that would have saved the detour. He leans toward papers on solutions deployed in industry and reads them for *(Yan, [Mechanisms for Effective ML Projects](https://eugeneyan.com/writing/mechanisms-for-projects/))*:
+
+  - **Problem framing**: is fraud detection set up as classification (fraud or not), regression (how much fraud), or unsupervised anomaly detection?
+  - **Data and labels**: what was excluded, how the data was preprocessed and rebalanced, how labels were defined, whether a neutral third class was added, and whether labels were augmented (for example, through hard mining).
+  - **Offline evaluation**: how the training and validation sets were built, which metrics were used, and how the team got offline metrics to track online results.
+
 ## 3.3.2 Why Low Average Error Isn’t Always Enough
 
 A model with a low average error might seem like a winner, but that number can hide serious flaws. Imagine a web search model that’s 99% accurate but fails to rank "google.com" correctly for a search on "Google"—that’s a critical miss, even if rare. Or consider a medical diagnosis model trained on data where 99% of patients are healthy. It could predict "healthy" every time, scoring 99% accuracy, yet miss every sick patient. That’s not just misleading—it’s dangerous.
@@ -71,11 +79,24 @@ For unstructured data, HLP can help estimate the **irreducible error** or **Baye
 
 Some business teams may pressure machine learning teams to guarantee high accuracy (e.g., 80% or 99%) before a baseline is established. This puts the team in a challenging position. If faced with such demands, consider pushing back and requesting time to establish a rough baseline. This allows for a more informed prediction of the system’s potential accuracy.
 
+A rough baseline also points to the ceiling. Most problems have one, and it is especially limiting when the system predicts what people will do, as in search, recommendations or fraud. Outside core research meant to push that limit, a target above the ceiling rarely makes sense. *(Yan, [39 Lessons on Building ML Systems](https://eugeneyan.com/writing/conf-lessons/))*
+
+Two quick checks give an upper bound before committing to a target: train and score the model on the same data to see the best result the approach could reach, and plot a learning curve to see how much more data would still help. *(Yan, [Mechanisms for Effective ML Projects](https://eugeneyan.com/writing/mechanisms-for-projects/))*
+
 ## 3.3.4 Keep the First Model Simple
 
 The first model gives the biggest boost to the product, so it doesn't need to be fancy. Most of the work is infrastructure: how examples reach the learner, what "good" and "bad" mean for the system, and how the model plugs into the application (scored live, or precomputed offline and stored in a table). Simple features make it easy to verify that features reach the learner correctly, that the model learns sensible weights, and that features reach the model correctly at serving time. Some teams aim for a "neutral" first launch that explicitly deprioritizes ML gains so they don't get distracted. *(Rules of ML #4)*
 
 Prefer an interpretable, probabilistic model at first (linear, logistic, or Poisson regression). Its predictions read as probabilities or expected values, and it is approximately **calibrated** (the average prediction matches the average label on the subsets its features define). If predicted probabilities drift from what you see in production, that gap points to a bug. Simple models also make feedback loops easier to handle. *(Rules of ML #14)*
+
+### Resist Complexity Bias
+
+Complex work tends to earn more credit than simple work: more components, denser math and new architectures read as more effort, expertise and novelty. This **complexity bias** pushes teams toward solutions harder than the problem requires. Aim for the opposite, the simplest solution that solves a hard problem, and add complexity only when the gain is worth its cost. Simple systems pay off in four ways *(Yan, [Simplicity Is an Advantage](https://eugeneyan.com/writing/simplicity/))*:
+
+  - **They are cheaper to build and scale.** Fewer components mean less code and fewer interactions to test, and standard technology makes it easier to hire people who can maintain it. At its acquisition in 2012, Instagram served tens of millions of users with a team of 13, helped by sticking to proven tools like PostgreSQL and Redis.
+  - **They are cheaper to operate.** Most of a system's cost comes after launch, often paid by people who didn't build it. Fewer moving parts break less often and are easier to fix or swap out.
+  - **They often perform as well.** Among the studies Yan cites, a plain dot product beat neural collaborative filtering for item recommendation, simple averaging matched or beat complex optimizers for multi-task learning, and simple forecasting methods were more accurate than complex ones across 32 papers.
+  - **Focused systems beat catch-all ones.** A single system built for every use case ends up tightly coupled, so each plan or migration needs coordination across its stakeholders. Several single-purpose systems are easier to run and, in time, to retire.
 
 ## 3.3.5 Plan to Launch and Iterate
 

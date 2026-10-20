@@ -168,3 +168,30 @@ Unlike unstructured data, where human-level performance provides a clear baselin
 **Role of Feature Engineering in Deep Learning**
 
 Before deep learning, feature engineering was essential for machine learning. While deep learning reduces the need for hand-crafted features in unstructured data problems—especially with large datasets—feature engineering remains vital for structured data, particularly when datasets are small or medium-sized. Thoughtfully designed features can significantly boost performance in these scenarios.
+
+### Synthetic Data and Similar Examples
+
+Augmentation pays off most when ground truth is scarce, imbalanced or not diverse enough, and it reaches beyond images and audio *(Yan, [More Design Patterns for ML Systems](https://eugeneyan.com/writing/more-patterns/))*:
+
+  - **Text**: DoorDash shuffled the sentence order of menu item descriptions and randomly dropped fields such as the menu category, to mimic merchants whose menus are sparse. It trained with 100 synthetic labels for every real one.
+  - **Synthetic negatives**: for its classifier of malicious HTTP requests, Cloudflare generated pseudo-random strings as negatives, made harder with realistic pieces (valid URIs, user agents, XML, and n-grams that are common in attacks). Seeing "dangerous" tokens inside harmless requests pushed the model to judge structure and semantics instead of reacting to keywords, which cut the false positive rate by about 80%.
+  - **Synthetic records**: Meta generated fake sensitive data (social security numbers, credit card numbers, addresses) for its data classifier, and Uber generated fraud data from what it knew about attacks to validate its anomaly detection in automated pipeline tests.
+
+The catch is making sure synthetic data matches the distribution of real data. Another way to grow a labeled set is to look for examples similar to the ones already labeled. After a reviewer confirmed a listing's category, Airbnb used listing embeddings to find its 10 nearest neighbors and sent those for review too; DoorDash scored similarity by edit distance and by the cosine similarity of embeddings, and put similar items directly into the training data. *(Yan, [Content Moderation & Fraud Detection](https://eugeneyan.com/writing/content-moderation/))*
+
+### Hard Negative Mining
+
+Hard negative mining extends augmentation: find or generate difficult examples and train the model on more of them. One way is to collect misclassified or low-confidence predictions, find look-alike examples (for instance with a nearest-neighbor search), and give them more weight when retraining. It usually improves the model, and at the least it shows how the model handles hard cases. Meta's embedding-based retrieval for Facebook search adds two cautions *(Yan, [More Design Patterns for ML Systems](https://eugeneyan.com/writing/more-patterns/))*:
+
+  - **Hardest is not best**: random (easy) negatives left the model weak on hard cases, but training on hard negatives alone did no better, because most documents in real searches are easy. Hard negatives sampled from ranks 101–500 of the results worked best.
+  - **Blend easy and hard**: mixing random and hard negatives improved recall, with gains leveling off once easy negatives outnumbered hard ones 100 to 1.
+
+**Curriculum learning** orders the training data from easy to hard. Cloudflare trained its payload classifier on easy synthetic data, then on harder synthetic data, and fine-tuned on real data last; noise of varying complexity, appended to both malicious and benign samples, made it more robust to padding attacks. Its true positive rate on fuzzed content rose from 91% to 97.5%. *(Yan, [More Design Patterns for ML Systems](https://eugeneyan.com/writing/more-patterns/))*
+
+Which examples count as negatives is a design choice with no universal answer. Facebook's search model had 55% less recall when results that were shown but not clicked served as negatives instead of random samples, while Amazon got better results from non-click impressions once its loss function accounted for them, and JD found that a 1:1 mix of random and batch negatives worked best. *(Yan, [The Metagame of Applying ML](https://eugeneyan.com/writing/machine-learning-metagame/))*
+
+## 3.8.3 Data Flywheel
+
+The data iteration loop above runs inside the team. A **data flywheel** runs through the product: usage generates data, the data improves the model, a better model improves the experience, and a better experience brings more usage. Recommendations at Netflix and Amazon work this way: clicks, searches, previews, ratings and watch time train models that personalize what each user sees, so users spend more time and generate more data. Tesla's Autopilot is another example: cars send back driving footage, the team finds errors, pulls similar cases (nearest neighbors), labels them, retrains, and ships the new model to the cars, which then collect more data. *(Yan, [More Design Patterns for ML Systems](https://eugeneyan.com/writing/more-patterns/))*
+
+Yan argues that the advantage lies in the flywheel, not in the data alone: competitors can copy an architecture or a system design, but without the data it is worth little, and the team that turns its flywheel faster wins. So design for it from the start by deciding how user feedback will flow back into the model, system or product. The risk is a feedback loop that entrenches bias, such as popularity bias in recommendations; data augmentation can offset some of it (see also feedback loops in [4.5.8](../deployment/monitoring.md#458-training-serving-skew)). *(Yan, [39 Lessons on Building ML Systems](https://eugeneyan.com/writing/conf-lessons/); Yan, [More Design Patterns for ML Systems](https://eugeneyan.com/writing/more-patterns/))*

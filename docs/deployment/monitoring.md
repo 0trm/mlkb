@@ -172,6 +172,17 @@ While these are general observations with exceptions, they provide a framework f
 
 ML systems fail in a way most software doesn't: they keep running and degrade gradually instead of crashing. If a joined table stops updating, the model adapts and stays "reasonably good" while getting worse. At Google Play, a table stale for 6 months was refreshed and install rate rose 2%, more than any other launch that quarter. Feature coverage can also shift with implementation changes, for example a column populated in 90% of examples that suddenly drops to 60%. Track data statistics (including per-feature coverage) and inspect the data by hand from time to time. *(Rules of ML #10)*
 
+### Input Data Checks
+
+Validate incoming data before it reaches training or serving: a bad batch caught early costs far less than repairing the pipeline or cleaning a contaminated feature store afterward. From the most basic checks up *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/))*:
+
+| Level | Checks |
+|---|---|
+| Incoming files | All expected columns present; the file parses in the expected format and encoding; volume close to earlier deliveries; no sign of tampering if the file is encrypted. Don't assume the format stays fixed: a manual job may be producing it |
+| Whole table | Row counts steady from day to day; no nulls where none belong and no sudden change in a column's share of nulls; no duplicate primary keys, which can multiply rows in a join |
+| Each feature | Numeric minimums and maximums within sensible bounds (no negative ages), and medians, means and interquartile ranges that don't swing from day to day; the same set of categorical values in similar proportions; timestamps in one format (dd-mm-yyyy shouldn't turn into mm-dd-yyyy) and within plausible dates |
+| Statistics | Stable correlations between features and the target (a sudden rise suggests a leak, a slow decline suggests drift); homogeneity tests such as chi-squared to flag shifted distributions, though on large data almost any difference is significant |
+
 ## 4.5.8 Training-Serving Skew
 
 **Training-serving skew** is a gap between performance during training and performance during serving. It has three main causes *(Rules of ML)*:
@@ -187,11 +198,15 @@ The best defense is to monitor skew explicitly, so system and data changes don't
   - **Log serving features and train on them** (#29): Save the features used at serving time and pipe them into training. Even logging a small fraction lets you verify consistency. When YouTube home page switched to logging features at serving time, quality improved and code got simpler.
   - **Beware of tables that change between training and serving** (#31): If features come from a joined table (e.g., comment counts per document), the values at serving time may differ from those at training time. Logging features at serving time avoids this; hourly or daily table snapshots get close, but not all the way.
   - **Share code between training and serving** (#32): Training is batch and serving is online, but both can build the same system-specific, human-readable object and then run one common function to convert it into model input. Avoid using two programming languages for the two pipelines, since that rules out sharing code.
+  - **Compare serving inputs with training data**: Log the inputs at serving time both before and after processing, and check that they resemble the training data. If serving data is sparser, the training data may have been enriched upstream, for example with missing customer demographics imputed for daily reports. Training on the logged serving features also shrinks the training pipeline: the jobs that stitched clickstreams into training examples are no longer needed. *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/))*
 
 **Feedback loops in ranking**
 
   - **Design for the skew ranking creates** (#35): A ranking change alters which results users see, and therefore the data the next model trains on. Ways to favor data the model has already seen: regularize broad features more than query-specific ones, allow only positive feature weights, and avoid document-only features (a popular app shouldn't appear for every query).
   - **Isolate positional features** (#36): Items in the first slot get clicked more regardless of quality. Train with positional features so the model attributes that effect to position, then serve with no positional feature (or one default value for all candidates), since items are scored before their order is known. Keep positional features separate from the rest of the model; don't cross them with document features.
+  - **Explore on purpose**: A recommender that only exploits keeps promoting what earned engagement before, and items it never shows never get a chance to earn any. Bandits break the loop by modeling how uncertain each estimate is and spending some traffic to reduce that uncertainty, which matters most when items turn over fast (news, ads) or traffic is low. Exploration can be heavy for a few users or light for everyone: Yahoo shows uniformly random articles to a randomly chosen bucket of users and Twitter runs a random ad policy on 1% of traffic, while Netflix tries new artwork on every member and Schibsted mixes 5% random items into every list it reranks. *(Yan, [Bandits for Recommender Systems](https://eugeneyan.com/writing/bandits/))*
+  - **Guide the exploration**: Epsilon-greedy explores uniformly at random; upper confidence bound (UCB) and Thompson sampling aim at the items they are least sure about, so they lose less to poor recommendations. Feedback usually arrives late in production, and there Thompson sampling holds up better: UCB is deterministic and repeats the same choice until new rewards come in, while sampling keeps varying it. In Yahoo's simulation, UCB led at a 10-minute delay but fell behind at 30 and 60 minutes. Warm-start the policy from logged interactions so early users don't see random results; Deezer got better results from a pessimistic prior, closer to real reward rates, than from a naive one. *(Yan, [Bandits for Recommender Systems](https://eugeneyan.com/writing/bandits/))*
+  - **Check offline metrics against online results**: Metrics computed on data logged by the existing policy can mislead. In Twitter's comparison, a greedy policy scored best on PR-AUC over a standard test set but lagged on CTR, while UCB and Thompson sampling did the opposite *(Yan, [Bandits for Recommender Systems](https://eugeneyan.com/writing/bandits/))*. Check from time to time whether offline gains (AUC, NDCG) turn into online gains (clicks, conversions); offline metrics that predict online results pay off in every experiment and release decision *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/))*.
 
 **Measuring skew** (#37)
 
@@ -200,3 +215,31 @@ Break the gap into three parts:
 1.  **Training vs. holdout**: Always present, and not necessarily bad.
 2.  **Holdout vs. next-day data**: Also always present. Tune regularization to maximize next-day performance. A large drop suggests time-sensitive features.
 3.  **Next-day vs. live data**: Should be zero. The same example must score the same in training and serving, so a gap here usually means an engineering bug.
+
+## 4.5.9 Maintaining Models in Production
+
+Yan's three must-haves for most teams, drawn from start-up experience *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/))*:
+
+1.  **Validate the model before deploying it** (see [4.4.3](reproducibility-cicd.md#validating-a-model-before-release)): a single check that stops most model misbehavior before users see it.
+2.  **Validate the input data** (see [Input Data Checks](#input-data-checks)): row counts, duplicates and null rates first, then numeric and date ranges and the values allowed in categorical columns.
+3.  **Make rollback easy** (see [Rollback Readiness](deployment-patterns.md#rollback-readiness)): it lets the team deploy often, because a release that breaks at night can be rolled back at once and fixed in the morning.
+
+### Fast Detection and Recovery
+
+No system catches everything before release, so balance what goes into preventing failures against what goes into recovering from them; monitoring, alerting, rollback and an Andon cord (a way for anyone to stop the line) go a long way. Expect every tenfold increase in traffic to surface new bugs and operational problems, and prepare for them early. *(Yan, [39 Lessons on Building ML Systems](https://eugeneyan.com/writing/conf-lessons/))*
+
+Keep alerts precise. A team that gets too many alerts starts ignoring them, so favor the ones that are both likely to be real and costly to miss, such as those that affect the customer experience. *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/))*
+
+### Ongoing Model Checks
+
+Alongside the input checks, watch the model itself *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/))*:
+
+  - **Model health**: How long since the production model was refreshed; whether it treats groups such as genders or age groups unfairly; and how its most important features shift from day to day, since a feature that suddenly jumps in importance may point to a leak.
+  - **Decision thresholds**: A fixed threshold for turning probabilities into decisions goes stale as the data drifts. Choose it again at each refresh: state the production requirement (95% recall, as few false positives as possible, or a balance), evaluate a range of thresholds and ship the one that meets it.
+  - **Output audits**: When predictions feed the next training set, errors compound; a classifier that flags spam or offensive reviews trains tomorrow on today's mistakes. Each week or month, have people review a small sample of outputs (1–5%), look for error patterns and new kinds of fraud, fix the matching cases with rules or regular expressions, and relabel the rest through active learning.
+
+### Interfaces and Operational Tooling
+
+When the system is split across teams, agree on deliverables instead of throwing work over the wall. For example, data engineers deliver timely table updates (the data scientists' input), and data scientists deliver a container that exposes a prediction API (their output). *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/))*
+
+Build simple tools so the people around the model can act without asking the team: a form where customer service agents or account managers enter a product or customer ID to block an inappropriate product, honor a privacy request, or give a new product a temporary boost (which also helps with cold start). Give frontline staff explanations of individual predictions so they can answer customers. Both cut ad hoc requests and firefighting. *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/))*

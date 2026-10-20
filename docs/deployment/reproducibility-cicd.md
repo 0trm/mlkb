@@ -109,6 +109,22 @@ flowchart LR
 
 Its main benefits are reusability (features are built once and shared across models) and consistency (training and serving use the same feature values, so a model trained on emails as plain text is not served the same emails as raw HTML).
 
+### Feature Store Hierarchy of Needs
+
+What a feature store has to do depends on what the team needs, and those needs stack like a pyramid: the lower levels have to be in place before the higher ones are worth attention *(Yan, [Feature Stores: A Hierarchy of Needs](https://eugeneyan.com/writing/feature-stores/))*.
+
+| Level | Need | What it covers |
+|---|---|---|
+| 1 | Access | Finding and reusing features: seeing the code behind each one (transparency) and tracing it back to its upstream sources (lineage), so teams stop building their own versions of the same feature |
+| 2 | Serving | Getting features to models in production with low latency and high throughput, usually by syncing the offline store into the online one |
+| 3 | Integrity | Consistent features in training and serving (no training-serving skew), and historical features that are point-in-time correct, so training and evaluation never see values from the future |
+| 4 | Convenience | Simple APIs that look the same for training and serving, and interactive tools that speed up development and debugging |
+| 5 | Autopilot | Automating tedious work such as backfilling new features and monitoring feature distributions with alerts |
+
+Not every team needs every level. Most get the bulk of the value from access, serving, and the skew-prevention part of integrity; convenience and autopilot become worth building early mainly for large companies running their own feature store. How much each level demands also varies: a team with a few online use cases needs far less serving capacity than DoorDash, whose store handles millions of requests per second, and features that update during the day make point-in-time correctness harder. Integrity also needs monitoring: when each feature was last updated, whether schemas and distributions still hold, and whether serving meets its latency and throughput targets. *(Yan, [Feature Stores: A Hierarchy of Needs](https://eugeneyan.com/writing/feature-stores/))*
+
+Start lean. With three components and three people, each person can own one component, learn it in depth and still cover for a colleague; double the components and nobody knows their part well, with no one left to cover. Monzo had features in its analytics warehouse that its production stack couldn't reach, so rather than build real-time feature processing, it copied the feature tables into its production store on a schedule. Anything more would have been operational load that slowed a small team down. *(Yan, [The Metagame of Applying ML](https://eugeneyan.com/writing/machine-learning-metagame/))*
+
 ## 4.4.3 CI/CD
 
 ```mermaid
@@ -204,3 +220,49 @@ Keep the learning part of the system encapsulated so everything around it can be
   - **Code paths**: Test the code that creates examples in both training and serving, and make sure serving can load and use a fixed model.
 
 Run sanity checks right before exporting a model, since a bad exported model is a user-facing problem. Check performance on held-out data (many continuously deploying teams gate on AUC), and don't export if you still have doubts about the data. A problem caught before export costs an email alert; a problem in a live model may cost a page. *(Rules of ML #9)*
+
+### Testing Model Code
+
+Software tests check logic that someone wrote; ML code also produces logic learned from data, and that needs tests of its own. Pre-train tests run without the trained model, while post-train tests and evaluation need it. The examples come from a Titanic survival model *(Yan, [How to Test ML Code and Systems](https://eugeneyan.com/writing/testing-ml/))*:
+
+| Kind | What it checks | Examples |
+|---|---|---|
+| Pre-train tests | The implementation | One prediction per input row; probabilities between 0 and 1; no rows shared by train and test; a perfect fit on a tiny, separable dataset; training accuracy that rises as capacity (tree depth) grows |
+| Post-train tests | The learned behavior | **Invariance**: changing a feature that shouldn't matter (a passenger's name or ticket number) leaves the prediction unchanged. **Directional expectation**: changing one that should matter moves it the expected way (a lower fare lowers predicted survival) |
+| Evaluation | Performance | Metrics on held-out data above a floor; training time and serving latency under a limit at a high percentile (p95, p99), since consumers of the predictions may have strict latency requirements |
+
+Pre-train tests are close to white-box testing, since they check the internals; post-train tests and evaluation are close to black-box testing, since they check outcomes.
+
+Software unit tests usually mock dependencies such as databases, but in ML the logic sits inside the model, so some tests have to run the real one *(Yan, [Don't Mock ML Models in Unit Tests](https://eugeneyan.com/writing/unit-testing-ml/))*:
+
+  - **Small inline samples**: Write the few rows a test needs into the test itself rather than loading a data file, so each test stands on its own. They suit custom splitting logic, custom distance functions, pre- and postprocessing, and empty or malformed input.
+  - **Random or empty weights**: A model built from its configuration, without downloading trained weights, is enough to check output shapes and moving the model between devices.
+  - **The real model for what matters most**: Check that the loss falls and the model can overfit a small sample, that outputs map to the right labels (two models can encode the same class with different indices), and that the model server starts and answers a batch request. Mark these tests as slow and run them at checkpoints such as before a merge.
+  - **Not the libraries**: Assume data loaders, tokenizers and optimizers work.
+
+### Testing Data Pipelines
+
+Bigger test scopes give slower feedback: unit tests return results in milliseconds, but an A/B test can't report until the change is built and the experiment has run its course. Even fast offline tests can fail when the pipeline changes and the new code is correct. When Yan added a step to an example pipeline (count only the impressions a user could actually see, not every item the server sent), four of its six tests failed. Which ones failed follows a pattern *(Yan, [Robust Tests for Data & ML Pipelines](https://eugeneyan.com/writing/testing-pipelines/))*:
+
+| Test | What it covers | After new data or logic |
+|---|---|---|
+| Row-level unit test | A function that turns one input into one value | Unchanged; add tests for the new functions |
+| Schema test | The minimum set of columns and their types at key points | Unchanged; optionally cover the new columns |
+| Column- or table-level unit test | A function that returns a column or a table | Expected output rebuilt by hand |
+| Integration test | A fixed sample run through several steps | Expected output rebuilt by hand |
+
+New data or logic only adds to the first two kinds but reaches back into the last two, which is why those can take longer to maintain than the feature code itself. They are still a safety net worth having, so write row-level and schema tests generously and keep a handful of the others. To make those sturdier:
+
+  - **Assert coarse properties**: Row and column counts or the number of unique IDs, rather than exact values that tie the test to implementation details.
+  - **Test at the smallest scope**: Thorough row-level tests reduce how much you rely on integration tests.
+  - **Try property-based tests**: Generate many inputs from a specification (value ranges, valid categories), run them through the pipeline and check that the output keeps its expected properties. Yan isn't convinced they can check specific logic, such as the order of items before and after business rules.
+  - **Question tests that keep changing**: A test is there to catch regressions; one that has to be rewritten often probably isn't doing that.
+
+### Validating a Model Before Release
+
+Yan's version of the pre-export check runs on every retraining and covers the model (its metrics) and the system around it (error rate, latency) *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/); Yan, [More Design Patterns for ML Systems](https://eugeneyan.com/writing/more-patterns/))*:
+
+1.  **Hold out the most recent data**, such as the last seven days (more if the sample is small), and train on the rest. Split by time: a random split or cross-validation lets future data leak into training and makes the metrics look better than they are (see [3.2.4](../development/validation-and-tuning.md#324-choosing-a-splitting-strategy)).
+2.  **Evaluate on the holdout** with the usual metrics (for a ranker: AUC, NDCG, recall@k) and against a **naive baseline**, such as ranking products by yesterday's sales or by popularity.
+3.  **Compare with the current model's predictions.** If the current model ranks a product 10,000th and the new one ranks it first, investigate. The same check works for classification (change in probability) and regression (change in the predicted value).
+4.  **Fail the pipeline on any miss** and keep the current model: a stale model in production beats a misbehaving one. If the new model passes, retrain it on all the data, holdout included, and release it.

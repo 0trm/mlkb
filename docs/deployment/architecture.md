@@ -107,3 +107,43 @@ For a churn model, the request body carries one record per customer and the resp
   - **API Gateway:** Often used in production to manage, secure, and monitor API calls to various microservices, including ML models. It can handle authentication, rate limiting, logging, and routing.
 
 By using APIs, data scientists can focus on building and training models, while software engineers can easily integrate these models into user-facing applications without needing deep knowledge of the ML model's internal workings.
+
+## 4.2.3 Serving Patterns
+
+Several patterns from general system design come up again and again when models are served in production.
+
+### Cascade
+
+A **cascade** splits a problem into stages that run in sequence, each handling a smaller or harder subset of the cases. Cheap stages (rate limits, rules, heuristics, small models) go first and settle what they can with confidence; only the remaining cases reach the costlier, more precise models downstream. The system as a whole does less work, and separate teams can own separate stages. The risk is coupling: a downstream model can come to rely on the upstream stages behaving exactly as they do today. *(Yan, [More Design Patterns for ML Systems](https://eugeneyan.com/writing/more-patterns/))*
+
+```mermaid
+flowchart LR
+  I([Incoming<br>cases]) --> A[Rules and<br>heuristics]
+  A -->|unsure| B[Cheap<br>model]
+  B -->|unsure| C[Costlier, more<br>precise model]
+  A -->|confident| D([Decision])
+  B -->|confident| D
+  C --> D
+```
+
+*A cascade: each stage settles the cases it is confident about and passes the rest on, so the costliest model sees the fewest cases. Adapted from Eugene Yan, [More Design Patterns For Machine Learning Systems](https://eugeneyan.com/writing/more-patterns/).*
+
+Recommender systems are the classic case: retrieval cuts millions of items down to hundreds of candidates quickly and coarsely, optimizing for recall and speed, and ranking then scores only those candidates, slowly and precisely. *(Yan, [More Design Patterns for ML Systems](https://eugeneyan.com/writing/more-patterns/))*
+
+Spam, bot and abuse detection follow the same shape *(Yan, [Content Moderation & Fraud Detection](https://eugeneyan.com/writing/content-moderation/))*:
+
+  - **Stack Exchange** fights spam in three layers. Accounts that post faster than any person could get an HTTP 429 (Too Many Requests) and are blocked or rate-limited. Posts then go through a large set of regular expressions and rules; matches are shown to users, and six user flags mark a post as spam. Last, an automated system picks out the posts most likely to be spam; once shadow testing showed it was highly accurate, it was allowed to cast three flags on its own, which sharply cut the time until spam was deleted.
+  - **Cloudflare** runs heuristics before its bot-detection models: hundreds of heuristics take about 20 ms, against about 50 ms for one model inference. The heuristics classify 15% of all traffic (30% for bot-management customers) with the lowest false positive rate of any of its detection methods, so the models only see what is left.
+  - **LinkedIn** chains three models to detect harassment in messages, scoring the sender, then the message, then the whole conversation. Each model runs only if the one before it flags the exchange, so fewer accounts and messages get analyzed, which also protects privacy.
+
+### Cache Proxy
+
+A **cache proxy** stands in front of the model and answers repeat requests from a cache; only misses go through to real-time inference. It pays off when a few inputs make up most of the traffic, as in search, where a small share of queries accounts for most requests. Caching the results for the top queries (query suggestions, query classification, retrieval and ranking) saves much of the inference compute. *(Yan, [Design Patterns in ML Code and Systems](https://eugeneyan.com/writing/design-patterns/))*
+
+### Reverse Proxy
+
+To scale a model horizontally, run it on several servers behind a **reverse proxy**: clients call one address, and the proxy spreads requests across the servers to share the load and keep latency low. A plain **load balancer** only does the spreading; a reverse proxy usually also caches responses, shields the servers from direct internet access, and terminates SSL. *(Yan, [Design Patterns in ML Code and Systems](https://eugeneyan.com/writing/design-patterns/))*
+
+### Mediator
+
+A **mediator** sits between services so they never call each other directly, which keeps them loosely coupled. If your systems already have one, expect to serve models through it rather than straight to the applications that use them, and to follow its request schemas and its limits on latency and request rates. For example, recommendation widgets on a home page can go through a mediator that ranks the widgets, drops any with too few items, and removes items repeated across widgets. *(Yan, [Design Patterns in ML Code and Systems](https://eugeneyan.com/writing/design-patterns/))*

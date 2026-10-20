@@ -46,6 +46,8 @@ An important rule to remember is that both the validation set and the test set m
       - **YES:** You **should** use a **Stratified Split** (stratify=y). It prevents "bad luck" splits and is crucial for imbalanced datasets. It's good practice even for balanced datasets.
       - **NO (e.g., a regression problem):** A standard **Random Split** is usually fine.
 
+In production, the answer to the first question is usually yes, and a random split or cross-validation then gives an optimistic estimate. Repeated entities make it worse: in a system Yan built for a hospital group, many patients had several visits, so a random split could use a patient's later visits to predict earlier ones. One exception is a task where the link between inputs and label stays stable over time, such as classifying products from their title, description or image; there, a random split and a time split are unlikely to differ much. *(Yan, [Building an ML System](https://eugeneyan.com/speaking/machine-learning-in-healthcare/))*
+
 For production systems, the time-based split should mirror how the model is used: if the model is trained on data up to January 5th, test it on data from January 6th onward. Expect it to do somewhat worse on the newer data, but not radically worse. Because of daily effects, absolute rates (click rate, conversion rate) may shift; a ranking metric like AUC should stay reasonably close. *(Rules of ML #33)*
 
 ## 3.2.5 Balanced Splits for Small Datasets

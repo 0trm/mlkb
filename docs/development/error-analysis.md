@@ -30,3 +30,7 @@ Errors the model *knows* it got wrong (a false positive, or a positive ranked be
 ## 3.4.3 Quantify Undesirable Behavior
 
 When team members dislike behavior that the loss function doesn't capture, turn the complaint into a number: for example, have human raters label gag apps in top search results. Once measured, the issue can become a feature, an objective, or a metric. "Measure first, optimize second." *(Rules of ML #27)*
+
+## 3.4.4 Try Separate Models for Distinct Segments
+
+More data and more features don't guarantee a better model. When the data comes from segments that differ in kind (stores, regions, hospitals), compare one model per segment with a single pooled model. In a system Yan built for a large hospital group, he first trained one model on data from all the hospitals, expecting it to learn each one's quirks. It didn't (or, he allows, the models were underpowered). A separate model per hospital had much lower error, which made sense in hindsight: the hospitals differed in price point, specialties and doctors. *(Yan, [Building an ML System](https://eugeneyan.com/speaking/machine-learning-in-healthcare/))*

@@ -86,3 +86,13 @@ An ML project needs both business and technical people. Business roles define th
       - Data Engineer
       - Data Scientist
       - Machine Learning Engineer
+
+### End-to-End Ownership
+
+Splitting one project across many specialists has costs. Yan argues that a data scientist is more effective when they own the problem from framing to the deployed model and its measured outcome *(Yan, [Data Scientists Should Be More End-to-End](https://eugeneyan.com/writing/end-to-end-data-science/))*:
+
+  - **Context to find the root cause**: when conversion drops and the request is "improve the search algorithm", the cause may lie elsewhere: low-quality products eroding customer trust, delayed or broken data pipelines, or a model that no longer refreshes. Someone who sees the whole chain is more likely to find it, and to know which engineering and product constraints rule a solution out.
+  - **Lower coordination cost**: a team of N people has N(N-1)/2 relationships to maintain, so 7 people have 21 and 21 people have 210. With a data engineer, a data scientist, and an ML engineer working in sequence, each new dataset or model waits for the next person; the work itself may take days while the handoffs take weeks.
+  - **Ownership**: when features, model code, and production code are thrown over the wall from one role to the next, no one is clearly responsible when results go wrong. At Lazada, a ranking model Yan built won its A/B test, yet business stakeholders didn't trust it and kept picking top products by hand, which pulled the online metrics down; visits to the regional markets to explain the model and hear their concerns reduced the overrides.
+
+Specialists are still needed: some people want to go deep, research pushes the field forward, and in systems such as algorithmic trading or advertising a 0.01% gain is worth hyper-specialization. End-to-end work also depends on a solid platform: Stitch Fix's generalists rely on one that hides infrastructure setup, distributed processing, and monitoring, and at Netflix central teams built shared tooling for build and deploy pipelines, monitoring, and managed rollbacks. Yan later clarified that the point is end-to-end visibility and ownership, not full-stack skills: you need to use the tools well, not be able to build them from scratch. *(Yan, [Data Scientists Should Be More End-to-End](https://eugeneyan.com/writing/end-to-end-data-science/))*

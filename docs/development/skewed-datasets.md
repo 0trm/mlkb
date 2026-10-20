@@ -85,3 +85,21 @@ Instead, evaluate **precision and recall for each defect type** individually. Fo
 *Per-class precision, recall and F1 for four phone defect types. Adapted from DeepLearning.AI, MLOps Specialization.*
 
 Using the F1 score avoids the pitfalls of accuracy, which remains high even if the algorithm misses rare defects. It also guides prioritization by highlighting the most impactful defect types to improve.
+
+### Several Binary Classifiers or One Multi-class Model
+
+With many rare classes, Yan usually prefers one binary classifier per class over a single multi-class model, and the industry cases he surveys lean the same way. DoorDash trained a binary classifier for each food tag after multi-class models did worse: its training data didn't follow the natural distribution of tags, and it had too few labels. Airbnb trains one binary classifier per listing category. *(Yan, [Content Moderation & Fraud Detection](https://eugeneyan.com/writing/content-moderation/))*
+
+| | One binary classifier per class | One multi-class model |
+|---|---|---|
+| Performance | Tends to do better in practice | Tends to do worse |
+| Calibration | Easier to match the real class distribution | Harder, in DoorDash's experience and Yan's |
+| New class | Train and deploy one more model; add classes as labels arrive (Airbnb waited for enough labels per category) | Add the class and retrain the whole model |
+| Inference | One call per classifier | One call |
+| Operations | More models to support and monitor as classes grow | One model to run |
+
+*Trade-offs between several binary classifiers and one multi-class model. Adapted from Eugene Yan, [Content Moderation & Fraud Detection – Patterns in Industry](https://eugeneyan.com/writing/content-moderation/).*
+
+## 3.6.6 Anomaly Detection When Labels Are Scarce
+
+Supervised classifiers are the more precise option, but they struggle when labels are sparse or noisy, and they can't recognize a pattern they've never seen. Unsupervised anomaly detection fills that gap, so the two work well together. LinkedIn used isolation forests against abuse because its labels were few and fuzzy, attackers changed tactics quickly, and abusive traffic was a small share of the total; new abuse could still be caught as long as it looked different from normal behavior. Cloudflare used unsupervised methods to find bad bots, including ones never seen before, and found them harder to evade, since a bot's goal tends to make its behavior anomalous. *(Yan, [Content Moderation & Fraud Detection](https://eugeneyan.com/writing/content-moderation/))*

@@ -37,6 +37,8 @@ When humans initially perform a task, shadow mode is a common deployment strateg
 
 Shadow mode allows you to collect data on the algorithm’s performance compared to human judgment, enabling you to assess its accuracy before allowing it to make real decisions. This approach is highly effective for validating an algorithm’s reliability.
 
+Shadow releases also help when a retrained or new model replaces an existing one. Run the candidate on live production traffic and log its outputs without acting on them. That shows whether it is ready to operate (latency, stability, error rate; this matters most after a big change, such as moving from decision trees to a neural network) and how its live predictions score (precision, recall, and whether it leans toward false positives or false negatives). Combined with a validation check before each release ([4.4.3](reproducibility-cicd.md#validating-a-model-before-release)), users notice a model change only when it is an improvement. *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/))*
+
 ### Canary Deployment
 
 In a canary deployment, the algorithm is rolled out to a small fraction of traffic (e.g., 5% or less) to make real decisions. By limiting the scope, any errors affect only a small portion of users, allowing for close monitoring. Traffic is gradually increased as confidence in the algorithm’s performance grows.
@@ -96,3 +98,9 @@ A gradual rollout limits the damage while you check the new system. Whether to k
   - During the test, compare the metrics you instrumented before building the model ([2.1.4](../design/scoping.md#instrument-metrics-before-building-the-model)), not only the objective the model optimizes.
   - The decision weighs several metrics at once, each a proxy for long-term goals. If a simple heuristic beats the model on every metric, ship the heuristic ([2.1.5](../design/scoping.md#launch-decisions-are-proxies-for-long-term-goals)).
   - Keep rollback ready until the decision is made.
+
+### Rollback Readiness
+
+Rollback is insurance for what validation misses: a refreshed model can pass the data and model checks and still misbehave once deployed. Revert first, so customers stop seeing the problem, and look for the root cause afterward. With container-based serving, reverting means redeploying the last image that worked, so keep the images from several past releases (Yan suggests seven or more if resources allow). Easy rollback is also what makes frequent releases, and CI/CD, safe: a release that breaks production at night can be reverted at once and fixed the next morning. *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/))*
+
+So that each release can be traced, log its configuration along with the model: hyperparameters, the threshold that turns probabilities into decisions, the period of training data used, and the commit hash. Log experiments the same way, so every result can be tied to the settings that produced it. *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/))*

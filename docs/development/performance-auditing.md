@@ -51,6 +51,26 @@ Before any user sees a new model, compare it with the one in production *(Rules 
   - **Judge models by what the prediction is used for** (#25): If predictions rank documents, final ranking quality matters more than the predicted probability; if they feed a spam cutoff, the precision of what gets through matters most. If a change improves log loss but hurts the system, look for another feature. If this keeps happening, revisit the objective.
   - **Identical short-term behavior doesn't mean identical long-term behavior** (#28): A model keyed only on document ID and exact query can match production in side-by-sides and A/B tests, yet never surface new apps, because it can only show documents that already have history for that query. The only real test is training on data collected while the model is live, which is hard.
 
+### Counterfactual Evaluation
+
+Standard offline evaluation treats the model's job as **observational**: given the inputs, predict the outcome that was logged. That suits a product classifier, but not a system whose output changes what users do, such as recommendations. There the question is **interventional**: would users click or buy more if they had seen the new model's output instead? Scored on logged interactions, a new recommender is judged on how well it fits past behavior, not on whether it would change that behavior. An A/B test answers the question directly, but it takes effort, needs time to collect enough data, and risks showing users a bad model. *(Yan, [Counterfactual Evaluation](https://eugeneyan.com/writing/counterfactual-evaluation/))*
+
+**Counterfactual evaluation** estimates what the A/B test would show, using the logs alone. The best-known estimator, **inverse propensity scoring (IPS)**, reweights each logged reward $r_i$ (a click, a purchase) by how much more or less often the new policy $\pi_e$ would take the logged action $a_i$ in context $x_i$ than the production policy $\pi_0$ did, and averages over the $n$ logged observations:
+
+$$
+\hat{V}_{\text{IPS}}(\pi_e) = \frac{1}{n} \sum_{i=1}^{n} w_i \, r_i, \qquad w_i = \frac{\pi_e(a_i \mid x_i)}{\pi_0(a_i \mid x_i)}
+$$
+
+If production recommends an item on a page with probability 0.4 and the new model would do so with probability 0.6, each logged click on that recommendation counts 1.5 times. *(Yan, [Counterfactual Evaluation](https://eugeneyan.com/writing/counterfactual-evaluation/))*
+
+IPS has requirements and failure modes *(Yan, [Counterfactual Evaluation](https://eugeneyan.com/writing/counterfactual-evaluation/))*:
+
+  - **Logged propensities.** You need production's probability of each action: normalized model scores, the frequency of each recommendation in a precomputed table, or impression counts, which Yan prefers as the most direct measure and the best correction for presentation bias. Most public datasets lack these, which helps explain why the method is rare in papers.
+  - **Insufficient support.** If the new model takes an action production never took, $\pi_0 = 0$ and the weight is undefined. Give every eligible item a nonzero chance of being shown and sample by it, or show random items on a small slice of traffic.
+  - **High variance.** When the two models differ a lot, a few weights explode: one click logged at probability 0.001 and replayed at 0.1 counts 100 times. Keep candidates close to production, **clip** each weight at a maximum (clipped IPS, whose cap is tricky to tune), or **self-normalize** (SNIPS) by dividing by the sum of the weights instead of $n$: $\hat{V}_{\text{SNIPS}} = \sum_i w_i r_i / \sum_i w_i$.
+
+In experiments on synthetic data from a RecSys 2021 tutorial, SNIPS had the lowest error and needed no tuning, though it requires a weight for every logged observation, not only those with a reward. Offline evaluation on logged data is still the place to start. Turn to counterfactual evaluation when offline metrics stop agreeing with A/B results, or whenever you want to simulate an A/B test offline; the method isn't limited to recommenders. *(Yan, [Counterfactual Evaluation](https://eugeneyan.com/writing/counterfactual-evaluation/))*
+
 ## 3.7.4 You Are Not a Typical End User
 
 Dogfooding catches obviously bad changes, but engineers are too close to the code and too costly to act as the evaluation set. Test anything near production quality with crowdsourced raters or a live experiment. For qualitative feedback, use UX methods: personas early on, usability testing later. *(Rules of ML #23)*

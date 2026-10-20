@@ -199,6 +199,29 @@ This approach improves consistency by allowing labelers to flag ambiguity explic
 
 Consensus labeling (voting by multiple labelers) can improve accuracy but is overused. Instead of relying on voting to resolve inconsistent labels, prioritize clear labeling instructions to reduce noise initially. Voting should be a last resort, as it’s less efficient than standardizing conventions upfront.
 
+### Writing Labeling Guidelines
+
+Since clear instructions do more for consistency than voting, the guideline deserves real care. Yan frames a good one around five questions, with examples from Google's and Bing's guidelines for search raters *(Yan, [Labeling Guidelines](https://eugeneyan.com/writing/labeling-guidelines/))*:
+
+1.  **Why does the task matter?** Explain how the labels will improve the product or model, ideally with screenshots of the feature they power. Annotators who see the purpose put in the effort the task needs.
+2.  **What is the task?** Spell out exactly what annotators do, help them take the user's point of view, break a large task into smaller parts, and introduce the label options early.
+3.  **What do the terms mean?** Define every term, even ones that seem obvious: Google's search relevance guide defines "query", "locale" and even "results". Shared vocabulary matters most in technical domains and for newly coined product terms.
+4.  **How should annotators decide?** This is the core of the guideline: the factors to weigh, step-by-step instructions or a decision tree, and worked examples of hard cases with the correct label and the reason for it. A shared decision process calibrates annotators and raises inter-rater agreement.
+5.  **How should the task be performed?** Cover the tools and the logistics: how long to spend per item, how to choose between two plausible labels, what to do when the criteria don't cover a case, and what to do when an annotator can't do the task at all. An "Unsure" label, or the option to release the item, beats forcing a judgment that may be wrong.
+
+Simplify the task where possible: binary answers tend to give higher precision and throughput than a numeric scale or multiple choice. Make the criteria as objective as you can; "Is this nudity?" gets more consistent answers than "Is this adult content?". Some subjectivity is fine, since that is why humans do the labeling. To evaluate the guideline, measure how often annotators agree with each other, for example with Cohen's kappa: if agreement holds or improves as the task and guideline are revised, the revisions are working. *(Yan, [Labeling Guidelines](https://eugeneyan.com/writing/labeling-guidelines/))*
+
+DoorDash added checks on the annotators themselves when tagging menu items. New annotators got golden data (samples with high-confidence labels) mixed into their queue, to measure their baseline precision before they labeled new samples. To keep throughput high, the number of annotators who had to agree varied by tag, with more agreement required only for tags that annotators often disagreed on. DoorDash also compared agreement across annotation vendors to catch systematic bias. *(Yan, [Content Moderation & Fraud Detection](https://eugeneyan.com/writing/content-moderation/); Yan, [Bootstrapping Labels](https://eugeneyan.com/writing/bootstrapping-data-labels/))*
+
+### Designing a Tag Taxonomy
+
+When the labels are tags from a taxonomy, DoorDash's tips for its menu-item tags apply *(Yan, [Bootstrapping Labels](https://eugeneyan.com/writing/bootstrapping-data-labels/))*:
+
+  - **Mutually exclusive tags**: once a sample has a tag, the annotator can move on, which cuts annotation volume.
+  - **A top level split by separate attributes**, such as cuisine style or flavor: each branch can be annotated in parallel.
+  - **An "Other" tag at every level**: later, revisit only the "Other" items to add finer tags, instead of going back through every tag.
+  - **Objective tags**: tags like "popular" or "convenient" are subjective and change over time.
+
 ## 2.2.5 Human-level Performance (HLP)
 
 ### Role of HLP
@@ -316,6 +339,37 @@ Some tasks are inherently difficult for humans to label. In product recommendati
 
 Identifying the right labelers (e.g., SMEs for specialized tasks, fluent speakers for transcription) ensures high-quality labels.
 
+### Sources of Ground Truth
+
+Whatever the eventual solution (heuristics, a supervised model or an unsupervised one), it usually starts with a set of ground truth. That set trains supervised models, measures how well heuristics and unsupervised models do, and seeds the techniques for getting more labels below. In content moderation and fraud detection, ground truth comes from four kinds of sources *(Yan, [Content Moderation & Fraud Detection](https://eugeneyan.com/writing/content-moderation/))*:
+
+| Source | How labels arise | Examples |
+|---|---|---|
+| **Users** | People report problems while using the product | Stack Exchange users flag spam; LinkedIn users report harassment (blocking a sender is a fuzzier signal); Uber's disputed charges become fraud labels once investigated and confirmed |
+| **Pipelines and code** | Existing systems already carry the label | Meta's sensitive-data classifier took labels from data lineage (downstream tables inherit an upstream table's classification) and from code paths that handle known data types |
+| **Annotators** | Internal teams, annotation services or experts label samples | DoorDash tagged menu items and Airbnb categorized listings with human reviewers; Uber's fraud analysts spot new patterns that models trained on past data miss, confirm flagged cases, and write heuristics for them |
+| **High-precision heuristics or models** | Rules or a model label the cases they are sure of, or pick samples for review | Cloudflare's bot heuristics classify 15–30% of traffic with the lowest false positive rate of its detection methods, and their labels train ML models |
+
+*Four sources of ground truth, from content moderation and fraud detection. Adapted from Eugene Yan, [Content Moderation & Fraud Detection – Patterns in Industry](https://eugeneyan.com/writing/content-moderation/).*
+
+Human labelers handle the ambiguous and complex cases where rules fail, and domain experts make labels reflect the nuances of the problem, but human annotation is slow and costly, so it becomes the bottleneck. No single source is enough: a robust program usually starts with users or annotators, then grows that seed set with the techniques below. *(Yan, [More Design Patterns for ML Systems](https://eugeneyan.com/writing/more-patterns/); Yan, [Content Moderation & Fraud Detection](https://eugeneyan.com/writing/content-moderation/))*
+
+### Bootstrapping More Labels
+
+Once a small seed set exists, three techniques grow it *(Yan, [Bootstrapping Labels](https://eugeneyan.com/writing/bootstrapping-data-labels/))*:
+
+  - **Semi-supervised learning**: train a high-precision model on the labeled data, predict on unlabeled data, add the most confident predictions to the training set as pseudo-labels, retrain, and repeat until there are enough.
+  - **Active learning**: send humans the unlabeled samples that would teach the model most. Uncertainty sampling picks those the model is least sure about (probabilities near 0.5 for a binary classifier); query-by-committee picks those on which several models disagree. DoorDash selected samples similar to ones where model and annotator disagreed (for precision) and samples the model had low confidence on (for recall), sent them to crowd workers first, and passed the ambiguous ones on to professional annotators. When positives are rare (1 in 1,000 or rarer), Facebook first narrowed the pool to nearest neighbors of known positives; on ImageNet this matched fully supervised baselines with 2,000 labels per concept, 5% of the candidate pool.
+  - **Weak supervision**: encode heuristics (regex, aggregate statistics) or existing resources (knowledge graphs, internal models) as labeling functions that either return a label or abstain. A generative model estimates each function's accuracy from where the functions agree and disagree, then combines their outputs into probabilistic labels: noisier than hand labels, but plentiful and fast. At Google, Snorkel DryBell with 10 labeling functions for topic classification and 8 for product classification beat models trained on a small hand-labeled set; matching it took 80,000 and 12,000 hand-labeled examples.
+
+Which technique fits depends on maturity. Early on, use weak supervision (keyword rules, aggregate statistics, knowledge graphs, user segments), with humans verifying labels where needed. With some seed data, add pseudo-labels or active learning. A mature system produces a steady stream of good labels, enough for larger models, which may eventually decide on their own while the least confident predictions go to humans. *(Yan, [Bootstrapping Labels](https://eugeneyan.com/writing/bootstrapping-data-labels/))*
+
+Also look for labels that already exist in user data. To tag books by theme, the names Goodreads users give their bookshelves can seed the tags. Or launch an approach that needs no labels, such as lexical search (BM25), and use the clicks and purchases it generates to train a semantic search model later. Thumbs up/down feedback, label propagation over a graph, and transfer learning from a related task are other options. *(Yan, [Bootstrapping Labels](https://eugeneyan.com/writing/bootstrapping-data-labels/))*
+
+### Label Maturity
+
+Some labels change after they are first recorded: a purchase counted as a conversion may be returned within a 14-day window, and a transaction that looked legitimate may later prove fraudulent. Training on such labels too early can start a vicious cycle, where the model learns from wrong labels and its errors make the ground truth worse. Even in mature systems, account for how long labels take to settle before using them. *(Yan, [Bootstrapping Labels](https://eugeneyan.com/writing/bootstrapping-data-labels/))*
+
 ### Dataset Size Scaling
 
 When expanding a dataset (e.g., from 1,000 examples), avoid increasing by more than 10x at once (e.g., to 3,000–10,000 examples). Train a model on the expanded set, perform error analysis, and then decide if further increases are warranted. Large jumps (e.g., 100x) introduce unpredictability and risk over-investment.
@@ -379,6 +433,10 @@ flowchart TB
 ```
 
 *A pipeline to predict whether someone is looking for a job (x = user data, y = looking for a job?). Every model depends on upstream data and code, so keep track of data provenance (where it comes from) and lineage (the sequence of steps). Adapted from DeepLearning.AI, MLOps Specialization.*
+
+### Process Raw Data Once
+
+Process and aggregate raw data a single time, early in the pipeline, and have downstream jobs read the processed version instead of recomputing from the raw logs on every run. Take an e-commerce clickstream: one JSON event per page view, click, add-to-cart or purchase, too large and too awkward to analyze directly. Grouping it by session once and storing the result as tables lets several teams build funnel dashboards (visits, click-through, add-to-cart and conversion rates) and train session-based recommenders from the same data, instead of each team writing its own pipeline over the raw events. That saves compute and storage and keeps pipelines easier to maintain. The catch is that the processed data must be flexible enough for its consumers; a format that tries to serve every use case loses the benefit, and working from the raw data may then be simpler. Centralizing feature computation this way is what a feature store does ([4.4.2](../deployment/reproducibility-cicd.md#442-profiling-versioning-and-feature-stores)). *(Yan, [More Design Patterns for ML Systems](https://eugeneyan.com/writing/more-patterns/))*
 
 ### Metadata
 
