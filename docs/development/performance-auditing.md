@@ -74,3 +74,25 @@ In experiments on synthetic data from a RecSys 2021 tutorial, SNIPS had the lowe
 ## 3.7.4 You Are Not a Typical End User
 
 Dogfooding catches obviously bad changes, but engineers are too close to the code and too costly to act as the evaluation set. Test anything near production quality with crowdsourced raters or a live experiment. For qualitative feedback, use UX methods: personas early on, usability testing later. *(Rules of ML #23)*
+
+## 3.7.5 Fairness and Safety Checks
+
+The audit above asks whether the model works equally well for every group. Google's course adds where unfairness comes from and how to keep it out, as part of four goals for a responsible system: fairness, privacy (see [Privacy and Data Rights](../design/data.md#privacy-and-data-rights)), transparency (model cards, see [4.4.1](../deployment/reproducibility-cicd.md#441-pipelines-not-models)), and safety *(Managing ML Projects, [AI and ML Ethics](https://developers.google.com/machine-learning/managing-ml-projects/ethics))*.
+
+**How bias gets into a model.** A model picks up bias from training data that *(Managing ML Projects, [AI and ML Ethics](https://developers.google.com/machine-learning/managing-ml-projects/ethics))*:
+
+  - doesn't reflect the population of people who will use it;
+  - preserves biased past decisions or outcomes, such as sentencing lengths in criminal justice;
+  - relies on features that predict better for some groups of users than for others.
+
+**Checks that keep it out** *(Managing ML Projects, [AI and ML Ethics](https://developers.google.com/machine-learning/managing-ml-projects/ethics))*:
+
+  - **Check the training data first**: confirm that it reflects the distribution of your users. Understanding the data thoroughly is critical to finding and fixing its biases.
+  - **Find underrepresented groups**: look for groups that are rare in the evaluation data, or that get worse model quality than others (see [3.7.1](#371-auditing-framework)), and oversample them in the training data if needed.
+  - **Test against a golden dataset**: a benchmark set used to validate the model for fairness issues and detect implicit bias.
+  - **Leave out sensitive features**, such as gender or ethnicity, and features with little predictive or explanatory power, above all where the model makes high-impact decisions in areas like healthcare, finance, education, or employment. A home-loan model shouldn't see applicants' names: a name is irrelevant to repayment, yet the model could learn to link male names with a higher chance of repaying, or the reverse.
+  - **Measure adverse impact**: check how the model's predictions affect particular groups, and if you find harm in a sensitive context, correct for it deliberately with bias-correction techniques.
+
+Removing a sensitive feature doesn't make a model fair on its own: other features can stand in for it, as names can for gender. That is why the last check matters, and why the evaluation data needs to keep group labels even when the model never sees them.
+
+**Safety.** Design the model to operate safely when people try to break it: test it with hostile inputs to confirm it is secure, and check its failure conditions. Teams typically keep test sets of the inputs and conditions that made a model fail before. *(Managing ML Projects, [AI and ML Ethics](https://developers.google.com/machine-learning/managing-ml-projects/ethics))* Those sets fit into the pre-release checks in [Validating a Model Before Release](../deployment/reproducibility-cicd.md#validating-a-model-before-release), so a candidate that repeats an old failure never ships.
