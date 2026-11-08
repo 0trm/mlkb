@@ -1,5 +1,5 @@
-# Sphinx configuration for the MLKB site.
-project = "Machine Learning Knowledge Base"
+# Sphinx configuration for the MLLC site.
+project = "Machine Learning Life Cycle"
 author = "Tomás Ravalli"
 copyright = "2026, Tomás Ravalli"
 
@@ -27,7 +27,7 @@ mermaid_height = "auto"
 exclude_patterns = ["_build", "requirements.txt"]
 
 html_theme = "sphinx_book_theme"
-html_title = "MLKB"
+html_title = "MLLC"
 html_show_sphinx = False
 html_static_path = ["_static"]
 # The 🗃️ from the repo description, from Noto Emoji (Apache 2.0).
@@ -36,7 +36,7 @@ html_css_files = ["custom.css"]
 html_js_files = ["mermaid-size.js"]
 html_context = {"default_mode": "light"}
 html_theme_options = {
-    "repository_url": "https://github.com/0trm/mlkb",
+    "repository_url": "https://github.com/0trm/mllc",
     "repository_branch": "main",
     "path_to_docs": "docs",
     "use_repository_button": True,

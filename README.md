@@ -1,8 +1,8 @@
-# Machine Learning Knowledge Base
+# Machine Learning Life Cycle
 
 Study notes on designing, developing, and deploying ML systems, compiled from the courses, books, and essays listed under [Sources](docs/sources.md). Examples and case studies come from those sources; they are not my own projects.
 
-**Read them as a site: <https://0trm.dev/mlkb/>**
+**Read them as a site: <https://0trm.dev/mllc/>**
 
 The process is split into three stages: **Design**, **Development**, and **Deployment**. The overview walks the whole lifecycle once; each stage then has its own pages.
 
