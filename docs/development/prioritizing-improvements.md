@@ -53,3 +53,10 @@ Signs of a plateau: monthly gains shrink, and experiments start trading one metr
   - **Keep ensembles simple** (#40): Each model should be either a base model that takes features or an ensemble that takes only other models' outputs, never both. Use a simple ensembler, prefer calibrated base models, and enforce monotonicity: a higher base score should never lower the ensemble's score.
   - **Don't expect diversity, personalization, or relevance to track popularity** (#42): Clicks, watches, and shares measure popularity, and popularity is hard to beat. Features for personalization or diversity often get less weight than expected. Add them through post-processing, and keep them if long-term objectives improve.
   - **Reuse social signals, not interests, across products** (#43): Models of who your friends are often transfer between products; personalization features often don't. Raw data from one product, or simply knowing a user is active on another product, can still help.
+
+When a model in development stops improving for weeks, two more moves help *(Managing ML Projects, [Experiments](https://developers.google.com/machine-learning/managing-ml-projects/experiments))*:
+
+  - **Reframe the problem**: by now you know the data and the domain better than at the start. If a regression model can't predict a value well enough, predicting whether the value is above or below a threshold, a binary classification, may be enough for the use case. Expect progress in bursts: a slow stretch is often followed by a jump, and the reverse.
+  - **Diagnose the wrong predictions**: isolate a few and trace what the model does on them, which can expose a problem in the architecture or the data (see [3.4 Error Analysis](error-analysis.md)). More data can confirm the direction or show that something else is wrong. If the task needs human labels, secure a labeled evaluation set.
+
+Timebox the attempt and stop if nothing improves within it, though a strong problem statement usually deserves a solution.

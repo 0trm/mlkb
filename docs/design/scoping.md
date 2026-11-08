@@ -69,6 +69,14 @@ Examples:
   - **Fashion Trends from Social Media**: Predicting future trends is difficult (iffy).
   - **Stock Prices**: Historical prices are not predictive (infeasible).
 
+  - **Feasibility checklist**: a solution can work in theory and still be impractical to build. Five factors decide it *(Managing ML Projects, [Feasibility](https://developers.google.com/machine-learning/managing-ml-projects/feasibility))*:
+
+      - **Data availability**: enough labeled examples for every class (a classifier with few examples of some labels predicts those labels poorly); every training feature available at serving time (a click model trained on `user_age` has nothing to go on for visitors who haven't signed up); and regulations that limit storing or using the data.
+      - **Problem difficulty**: has a team inside or outside the organization solved a similar problem? If not, expect a research project with no guaranteed result. Human benchmarks show how hard the task is (people classify animals in images at about 95% accuracy and handwritten digits at about 99%), and bad actors who try to exploit the model, as spammers do, turn it into a race to keep the model updated.
+      - **Prediction quality**: how costly is a wrong prediction? A bad video recommendation annoys a user; wrongly flagging a video for a policy violation creates support costs or legal fees. Cost climbs steeply with the quality bar: raising precision from 99.9% to 99.99% can make a project ten times more expensive.
+      - **Technical requirements**: latency, queries per second, RAM for training and serving, where the model runs (an online server, the browser, a phone, or predictions precomputed into a table), whether predictions must be explained, and how often the model must be retrained. Most projects give up some model quality to meet them.
+      - **Cost**: people (deploying and maintaining a system takes more of them than a prototype), machines (compute, labeling, data licenses), and inference (does each prediction earn more than it costs?).
+
   - **Value**: Estimate business impact, bridging ML and business metrics:
 
       - ML teams optimize metrics like word-level accuracy (e.g., in speech recognition), while businesses prioritize user engagement or revenue.
@@ -106,6 +114,9 @@ Feasible candidates usually outnumber the people available to work on them, so c
 ### Define Milestones, Metrics, and Resources
 
   - Specify **ML metrics** (e.g., accuracy, precision-recall, fairness), **software metrics** (e.g., latency, throughput), and **business metrics** (e.g., revenue increase).
+  - **Business metrics come first**, since they are the reason for the project. Make them specific and quantified: cut a data center's monthly electricity cost by 30%, or raise revenue from recommendations by 12%. If you don't measure the metric yet, instrument it before setting a target ([2.1.4](#instrument-metrics-before-building-the-model)). Expect it to move once you launch: revenue from recommendations can rise while subscriptions fall. *(Managing ML Projects, [Measuring Success](https://developers.google.com/machine-learning/managing-ml-projects/success))*
+  - **Optimize one model metric and set acceptability goals.** When metrics disagree on which model is best, agree on a single one to optimize, plus thresholds a model must clear to be usable at all, such as "incorrect output below 0.1%". A fraud model might optimize recall while keeping precision above a floor. *(Managing ML Projects, [Measuring Success](https://developers.google.com/machine-learning/managing-ml-projects/success))*
+  - **Test the link between the two early.** Great model metrics don't guarantee a better business metric. A churn model with 95% prediction quality, tried on a small sample of users, left revenue flat and churn went up. Possible reasons: it predicted churn only seven days ahead, too late to offer an incentive; features that drive churn were missing from the training data; or the use case needed 97% or more. Release to a small share of users (often 1%) and watch the business metric before going further. *(Managing ML Projects, [Measuring Success](https://developers.google.com/machine-learning/managing-ml-projects/success))*
   - Estimate **resources**: Data volume, team involvement, cross-functional support, and timelines.
   - If specifications are unclear, conduct **benchmarking** (compare to similar projects) or build a **proof of concept** to refine estimates.
   - Agree on these with everyone involved: data scientists, subject matter experts, and business stakeholders.
@@ -265,7 +276,23 @@ After feasibility comes a **proof of concept** (POC): a prototype *hacked* toget
 
 If all goes well, the next stage is to **develop for production**, also time-boxed. An overly generous timeline can lead to non-essential features being squeezed in and never-ending development, and until the system is deployed, no one benefits from it. This usually takes 3-6 months, including infra, job orchestration, testing, monitoring, documentation, etc.
 
-Each phase is a natural point to write one of the documents in [Templates](../templates.md).
+Each phase is a natural point to write one of the documents in [Templates](../templates.md). These phases line up roughly with the three stages of these notes and with Google's four phases (see [1.2.4](../overview/lifecycle.md#124-goals-and-exit-outcomes)).
+
+### Planning Under Uncertainty
+
+ML progress isn't proportional to effort, which makes timelines hard to estimate *(Managing ML Projects, [Planning](https://developers.google.com/machine-learning/managing-ml-projects/planning))*:
+
+  - In one Kaggle competition, the top teams raised prediction quality from 35% to 65% in the first few weeks. Over the next two weeks the field grew from 350 teams to 1,400, and the best model reached only 68%.
+  - In an industry example, two teams took several months to get a model to 90% prediction quality; getting it to the 99.9% needed for production took several teams more than five years.
+
+So plan the work as a series of experiments rather than a fixed path *(Managing ML Projects, [Planning](https://developers.google.com/machine-learning/managing-ml-projects/planning))*:
+
+  - **Timebox each step** (see below): for example, two weeks to find out whether the right data can be had, two more to see whether a simple model works, and two more for a neural net if it doesn't. Each step ends with enough information to decide whether to continue.
+  - **Scope down** an ML feature the product doesn't strictly need: ship a very simple version this quarter and improve it over the next ones. Many teams have reached impactful ML this way.
+  - **Give an open question to an intern or a new hire**, with guidance, to learn how much effort a solution would take before committing a team to it.
+  - **Fail fast**: try the cheapest approaches with the highest potential payoff first. Estimate each approach's cost and chance of success, keep a portfolio of them, change one thing at a time, and plan for some to fail.
+
+Treat the plan as a living document that changes as experiments come back, and reserve more slack than you would for a non-ML project, especially under a tight deadline. *(Managing ML Projects, [Planning](https://developers.google.com/machine-learning/managing-ml-projects/planning), [Feasibility](https://developers.google.com/machine-learning/managing-ml-projects/feasibility))*
 
 ### Setting Timeboxes
 

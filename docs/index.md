@@ -6,24 +6,26 @@ These are study notes on building machine learning systems end to end. They comp
 
 ```mermaid
 flowchart LR
-  subgraph design[<b>Design</b>]
+  subgraph design[" "]
     direction TB
-    A[Scope the<br>project] --> B[Define data and<br>a baseline] --> C[Label and<br>organize data]
+    T1["<b>Design</b><br>Problem → plan"] ~~~ A[Scope the<br>project] --> B[Define data and<br>a baseline] --> C[Label and<br>organize data] --> O1([Reviewed<br>design doc])
   end
-  subgraph development[<b>Development</b>]
+  subgraph development[" "]
     direction TB
-    D[Train a<br>model] --> E[Analyze<br>errors] --> F[Audit before<br>launch]
+    T2["<b>Development</b><br>Data → model"] ~~~ D[Train a<br>model] --> E[Analyze<br>errors] --> F[Audit before<br>launch] --> O2([Production-<br>ready model])
   end
-  subgraph deployment[<b>Deployment</b>]
+  subgraph deployment[" "]
     direction TB
-    G[Deploy in<br>production] --> H[Monitor and<br>maintain]
+    T3["<b>Deployment</b><br>Model#nbsp;→#nbsp;live#nbsp;system"] ~~~ G[Build<br>pipelines] --> H[Deploy in<br>production] --> I[Monitor and<br>maintain] --> O3([Pipelines running<br>in production])
   end
   design --> development --> deployment
-  design <-. iterate .-> development
-  development <-. iterate .-> deployment
+  design <-.->|more data,<br>new framing| development
+  development <-.->|retrain,<br>fix the model| deployment
+  class T1,T2,T3 stagehead
+  class O1,O2,O3 outcome
 ```
 
-*From a business problem to a model serving users. Each stage is a set of steps, and work moves back and forth between stages: error analysis can call for more data, and monitoring triggers retraining. Adapted from DeepLearning.AI, MLOps Specialization.*
+*From a business problem to a model serving users. Each stage turns one thing into the next and ends with an outcome you can check (see [1.2.4](overview/lifecycle.md#124-goals-and-exit-outcomes)). Work moves back and forth between stages: error analysis can call for more data or a new framing, and live data can call for retraining or a fix to the model. Adapted from DeepLearning.AI, MLOps Specialization, and Google for Developers, Managing ML Projects.*
 
 ## 1 · Overview
 
@@ -34,14 +36,14 @@ New here? Start with the [lifecycle](overview/lifecycle.md), which walks all thr
 
 ## 2 · Design
 
-Design decides what to build before anything is trained: which business problem is worth solving, whether ML is the right tool, which single objective the model should optimize, and what data it needs, defined consistently enough that a model can learn from it.
+Design decides what to build before anything is trained: which business problem is worth solving, whether ML is the right tool, which single objective the model should optimize, and what data it needs, defined consistently enough that a model can learn from it. It ends with a design doc reviewed with stakeholders.
 
 - [2.1 Scoping](design/scoping.md)
 - [2.2 Data](design/data.md)
 
 ## 3 · Development
 
-Development turns scoped data into a working model: set up validation, get a baseline fast, then iterate with error analysis, more often by improving the data than the model. It ends with an audit before anything reaches users.
+Development turns scoped data into a working model: set up validation, get a baseline fast, then iterate with error analysis, more often by improving the data than the model. It ends with a model good enough for production, audited before anything reaches users.
 
 - [3.1 Modeling Overview](development/modeling-overview.md)
 - [3.2 Validation and Hyperparameter Tuning](development/validation-and-tuning.md)
@@ -55,7 +57,7 @@ Development turns scoped data into a working model: set up validation, get a bas
 
 ## 4 · Deployment
 
-Deployment puts the model in front of real data: choosing an architecture, rolling out gradually with a way back, making builds reproducible, and monitoring the system once it is live. A first deployment is only about halfway through the project, since live traffic reveals what development could not.
+Deployment puts the model in front of real data: building the pipelines that keep it fresh, choosing an architecture, rolling out gradually with a way back, making builds reproducible, and monitoring the system once it is live. It ends with validated pipelines running in production, yet a first deployment is only about halfway through the project, since live traffic reveals what development could not.
 
 - [4.1 Key Challenges in Deployment](deployment/key-challenges.md)
 - [4.2 Deployment Architecture](deployment/architecture.md)

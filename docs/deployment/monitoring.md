@@ -71,6 +71,7 @@ Metrics fall into two broad categories:
           - In speech recognition, monitor the frequency of null outputs (e.g., when no speech is detected).
           - For voice-based web search, track how often users repeat similar searches in quick succession, which may indicate misrecognition of the initial query.
           - Monitor instances where users switch from voice to typing, suggesting frustration or degraded performance.
+          - In a mail app, you don't know in real time which messages are spam, but you can track the share of messages users move to the spam folder: a jump from 0.5% to 3% signals a problem with the model. Watch how a proxy like this changes rather than its raw value. *(Managing ML Projects, [Productionization](https://developers.google.com/machine-learning/managing-ml-projects/production))*
 
 Since input and output metrics are application-specific, MLOps tools typically require custom configuration to track them effectively.
 
@@ -220,7 +221,7 @@ Break the gap into three parts:
 
 Yan's three must-haves for most teams, drawn from start-up experience *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/))*:
 
-1.  **Validate the model before deploying it** (see [4.4.3](reproducibility-cicd.md#validating-a-model-before-release)): a single check that stops most model misbehavior before users see it.
+1.  **Validate the model before deploying it** (see [4.4.4](reproducibility-cicd.md#validating-a-model-before-release)): a single check that stops most model misbehavior before users see it.
 2.  **Validate the input data** (see [Input Data Checks](#input-data-checks)): row counts, duplicates and null rates first, then numeric and date ranges and the values allowed in categorical columns.
 3.  **Make rollback easy** (see [Rollback Readiness](deployment-patterns.md#rollback-readiness)): it lets the team deploy often, because a release that breaks at night can be rolled back at once and fixed in the morning.
 

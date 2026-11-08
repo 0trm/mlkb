@@ -124,3 +124,34 @@ html[data-theme="dark"] .bd-content pre.mermaid > svg {
 :is(#ink, pre.mermaid) svg .node.solid .nodeLabel {
   color: var(--pst-color-background);
 }
+
+/* A stage header (class stagehead): filled like solid, with the <b> stage name
+   larger than the line under it, so the name is the first thing that reads. */
+:is(#ink, pre.mermaid) svg .node.stagehead :is(.label-container, .label-container path) {
+  fill: var(--pst-color-text-base);
+  stroke: var(--pst-color-text-base);
+}
+
+:is(#ink, pre.mermaid) svg .node.stagehead .nodeLabel {
+  color: color-mix(in srgb, var(--pst-color-background) 72%, var(--pst-color-text-base));
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+:is(#ink, pre.mermaid) svg .node.stagehead .nodeLabel b {
+  color: var(--pst-color-background);
+  font-size: 17px;
+}
+
+/* An exit outcome (class outcome): a thin muted outline and muted text,
+   quieter than the steps that lead to it. */
+:is(#ink, pre.mermaid) svg .node.outcome :is(.label-container, .label-container path) {
+  fill: var(--pst-color-background);
+  stroke: var(--pst-color-text-muted);
+  stroke-width: 1px;
+}
+
+:is(#ink, pre.mermaid) svg .node.outcome .nodeLabel {
+  color: var(--pst-color-text-muted);
+  font-size: 13px;
+}
