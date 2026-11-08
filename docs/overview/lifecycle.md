@@ -6,22 +6,26 @@ The ML project lifecycle consists of iterative stages that guide the development
 
 ```mermaid
 flowchart LR
-  subgraph design[Design]
+  subgraph design[" "]
     direction TB
-    A[Define project] --> B[Define data and<br>establish baseline] --> C[Label and<br>organize data]
+    T1["<b>Design</b><br>Problem → plan"] ~~~ A[Scope the<br>project] --> B[Define data and<br>a baseline] --> C[Label and<br>organize data] --> O1([Reviewed<br>design doc])
   end
-  subgraph development[Development]
+  subgraph development[" "]
     direction TB
-    D[Select and<br>train model] --> E[Perform<br>error analysis]
+    T2["<b>Development</b><br>Data → model"] ~~~ D[Train a<br>model] --> E[Analyze<br>errors] --> F[Audit before<br>launch] --> O2([Production-<br>ready model])
   end
-  subgraph deployment[Deployment]
+  subgraph deployment[" "]
     direction TB
-    F[Deploy in<br>production] --> G[Monitor and<br>maintain system]
+    T3["<b>Deployment</b><br>Model#nbsp;→#nbsp;live#nbsp;system"] ~~~ G[Build<br>pipelines] --> H[Deploy in<br>production] --> I[Monitor and<br>maintain] --> O3([Pipelines running<br>in production])
   end
   design --> development --> deployment
+  design <-.->|more data,<br>new framing| development
+  development <-.->|retrain,<br>fix the model| deployment
+  class T1,T2,T3 stagehead
+  class O1,O2,O3 outcome
 ```
 
-*The ML project lifecycle. Each stage also loops back: error analysis can send you back to collect more data, and monitoring triggers retraining. Adapted from DeepLearning.AI, MLOps Specialization.*
+*The ML project lifecycle: each stage's steps and the outcome that closes it (see [1.2.4](#124-goals-and-exit-outcomes)). The dashed edges are the ways back: error analysis can call for more data or a new framing, and monitoring can call for retraining or a fix to the model. Adapted from DeepLearning.AI, MLOps Specialization, and Google for Developers, Managing ML Projects.*
 
 The iterative nature of this lifecycle means feedback from later stages often informs adjustments to earlier ones. ML projects are often highly iterative. During error analysis, you may need to refine the model or revisit earlier steps to collect additional data. Before deployment, you typically perform a final check or audit to verify that the system’s performance is adequate and reliable for its intended application. Deploying a system for the first time means you’re only about halfway to completion. Live traffic often reveals critical insights needed to optimize performance.
 
@@ -59,6 +63,7 @@ Covered in depth in [3 · Development](../index.md#3--development), starting wit
 
 To deploy the system, integrate it into production, develop the necessary software, and monitor the system. Continuously track incoming data and maintain the system’s performance. For instance, if the data distribution shifts, you may need to update the model.
 
+  - Build the pipelines that keep the model fresh: data, training, validation, and serving (see [4.4.1](../deployment/reproducibility-cicd.md#441-pipelines-not-models)).
   - Integrate the model into a production environment (e.g., via APIs).
   - Ensure compliance with performance requirements (e.g., latency, throughput).
   - Address operational constraints (e.g., resource availability, security).
@@ -73,19 +78,53 @@ Post-deployment maintenance often involves further error analysis, retraining th
 
 Covered in depth in [4 · Deployment](../index.md#4--deployment), starting with [4.1 Key Challenges](../deployment/key-challenges.md).
 
-## 1.2.4 Roles
+## 1.2.4 Goals and Exit Outcomes
+
+A stage is done when it has produced something you can check, not when its time runs out. Naming that outcome up front tells the team what to aim for, and gives stakeholders a milestone to look for: people used to deterministic software often read a stalled week or uneven progress as a project in trouble, so be clear about what each stage delivers and how long it may take *(Managing ML Projects, [Development Phases](https://developers.google.com/machine-learning/managing-ml-projects/phases), [Working with Stakeholders](https://developers.google.com/machine-learning/managing-ml-projects/stakeholders))*.
+
+| Stage | Goal | Exit outcome | Google's phase | Yan's phase and timebox |
+|---|---|---|---|---|
+| Design | Decide whether ML is the right tool, what it should optimize, and what data it needs | A design doc reviewed with stakeholders and peers (see [Templates](../templates.md)) | Ideation and planning | Feasibility assessment, 1–2 weeks |
+| Development | Build a model that solves the business problem well enough to deploy | A model good enough for production, plus the record of experiments behind it | Experimentation | Proof of concept, 1–2 months |
+| Deployment | Keep the model good on live data | Validated pipelines for data, retraining, validation, and serving, running in production | Pipeline building, then productionization | Develop for production, 3–6 months, then operational maintenance |
+
+*Each stage's goal and the outcome that closes it, next to the two other phase models these notes draw on. The rows line up only roughly: Google counts all data work as part of experimentation, while these notes, following Ng, start defining and labeling data in design. Adapted from Google for Developers, Managing ML Projects, and Eugene Yan, [Writing Docs: Why, What, and How](https://eugeneyan.com/writing/writing-docs-why-what-how/).*
+
+Google splits deployment into two phases because the deliverable changes: in production the goal isn't one model but automated pipelines that keep replacing it with a fresh one (see [4.4.1](../deployment/reproducibility-cicd.md#441-pipelines-not-models)). When an outcome is out of reach, work goes back a stage *(Managing ML Projects, [Development Phases](https://developers.google.com/machine-learning/managing-ml-projects/phases))*:
+
+  - **Experiments don't produce a viable model**: go back to scoping and frame the problem again.
+  - **Building the training pipeline exposes a flaw in the model**: go back to development.
+  - **Deploying exposes a problem in the pipeline**: fix the pipeline before going further.
+  - **The live system needs better predictions**: go back to development and train a better model.
+
+## 1.2.5 Roles
 
 An ML project needs both business and technical people. Business roles define the problem and judge whether the result is useful; technical roles build the data pipelines, the model, and the system around it.
 
-  - Business roles
+On the business side, the main roles are the **business stakeholder** and the **subject matter expert**. On the technical side, each role has its own deliverable:
 
-      - Business stakeholder
-      - Subject matter expert
-  - Technical roles
+| Role | What they do | Main deliverable |
+|---|---|---|
+| ML product manager | Matches business problems to ML solutions with the team, end users, and stakeholders; sets the product vision, use cases, and requirements; prioritizes projects | Product requirements document (PRD) |
+| Engineering manager | Sets and communicates the team's priorities, aligns ML work with business goals, and manages and develops the people on the team | Design docs, project plans, and performance reviews |
+| Data scientist | Uses statistical analysis to find and test features, prototype models, and explain what they do | Reports and visualizations that answer business questions |
+| ML engineer | Designs, builds, productionizes, and maintains models; a strong software engineer who knows ML well | A deployed model good enough to meet the business goals |
+| Data engineer | Builds the pipelines that collect, store, and transform raw data for training and serving, and owns the data across the project | Production data pipelines with monitoring and alerting |
+| DevOps engineer | Builds, deploys, scales, and monitors the serving infrastructure | Automated serving, monitoring, testing, and alerting for the model |
 
-      - Data Engineer
-      - Data Scientist
-      - Machine Learning Engineer
+*The usual roles on an ML team and what each delivers. On a small team, one person covers several. Adapted from Google for Developers, [Managing ML Projects](https://developers.google.com/machine-learning/managing-ml-projects/team).*
+
+### Team Practices
+
+People arrive with different habits: one engineer thinks getting the right data is enough to start training, another first checks that it is anonymized and records where it came from. Agree on tools, infrastructure, and processes before writing code, and write them down in process docs that answer questions like these *(Managing ML Projects, [Assembling a Team](https://developers.google.com/machine-learning/managing-ml-projects/team))*:
+
+  - How is the training data generated, and how do we examine, validate, and visualize it?
+  - How do we change a feature or a label, and the model architecture to match?
+  - Which metrics judge model quality, and where do test examples come from?
+  - How do we launch a model, and how will we know something is wrong with it?
+  - Which upstream systems does the model depend on?
+
+Because ML outcomes are uncertain, set expectations and deliverables early, and don't tie a person's performance review to whether the project succeeds. Weeks spent on an approach that fails can still produce high-quality code, thorough documentation, and good collaboration, and those should count. *(Managing ML Projects, [Assembling a Team](https://developers.google.com/machine-learning/managing-ml-projects/team))*
 
 ### End-to-End Ownership
 

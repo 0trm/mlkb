@@ -48,7 +48,8 @@ html_theme_options = {
     "show_toc_level": 2,
     "footer_content_items": ["copyright.html", "extra-footer.html"],
     "extra_footer": (
-        "<em>Rules of Machine Learning</em> by Martin Zinkevich is paraphrased under "
+        "<em>Rules of Machine Learning</em> by Martin Zinkevich and <em>Managing ML Projects</em> "
+        "by Google for Developers are paraphrased under "
         '<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.'
     ),
 }

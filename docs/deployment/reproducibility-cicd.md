@@ -1,8 +1,50 @@
 # 4.4 Reproducibility and CI/CD
 
-A model that works in a notebook still has to be rebuilt, validated, and shipped the same way every time. This section covers what makes that possible: tracking where a model came from, validating its data, versioning everything, and automating the build.
+A model that works in a notebook still has to be rebuilt, validated, and shipped the same way every time. This section covers what makes that possible: the pipelines that keep a fresh model in production, tracking where a model came from, validating its data, versioning everything, and automating the build.
 
-## 4.4.1 Transparency and Reproducibility
+## 4.4.1 Pipelines, Not Models
+
+In production the goal isn't to build one model and deploy it, but to build automated pipelines that keep training, validating, and deploying new ones. The world changes, the data shifts, and a model starts going stale as soon as it is deployed; replacing it by hand (collect and process new data, train, validate, deploy) is slow and error-prone. Each pipeline either delivers predictions or updates the model *(Managing ML Projects, [ML Pipelines](https://developers.google.com/machine-learning/managing-ml-projects/pipelines))*:
+
+| Pipeline | Takes | Produces |
+|---|---|---|
+| Serving | User requests | Predictions, either online (computed per request) or offline (precomputed and looked up), usually post-processed before delivery, e.g., to filter or rerank results |
+| Data | Application logs | Fresh training and test datasets, with the same features and label as the original |
+| Training | The new training dataset | A candidate model |
+| Validation | The candidate, the production model, and the new test dataset | A decision: deploy the candidate if it isn't meaningfully worse than the production model, and raise an alert if it is |
+
+*The four pipelines of a production ML system. Adapted from Google for Developers, Managing ML Projects.*
+
+```mermaid
+flowchart LR
+  U([User]) <-->|requests and<br>predictions| S[Serving<br>pipeline]
+  S --> L([Logged predictions<br>and app data])
+  L --> update
+  subgraph update[Updating the model]
+    direction TB
+    D[Data<br>pipeline] --> T[Training<br>pipeline] --> V[Validation<br>pipeline]
+  end
+  update -->|not worse:<br>deploy| S
+```
+
+*Once a model is live, the data pipeline builds new datasets from the logs; on a schedule or a trigger, the training and validation pipelines produce a candidate, which replaces the production model if it isn't worse. Adapted from Google for Developers, Managing ML Projects.*
+
+**Train before the model goes stale.** How fast that happens depends on the data: a clothing recommender goes stale quickly because tastes change, while a flower classifier may never need it. Retraining early leaves a buffer for a failed pipeline run or a poor candidate. Google's default is to train and deploy daily, like a daily software build; [4.5.4](monitoring.md#454-iterative-monitoring-process) covers how to choose a frequency. *(Managing ML Projects, [ML Pipelines](https://developers.google.com/machine-learning/managing-ml-projects/pipelines))*
+
+**Log predictions, and the ground truth when you can get it.** Aggregated predictions show when the model starts to lose quality: on average, a model's predictions should match the average label in its training data, and a gap between the two is called **prediction bias**. Ground truth can arrive late (a six-week weather forecast can only be checked after six weeks), so build feedback into the product where you can, and know its limits: users who leave spam unopened in the inbox label it "not spam". *(Managing ML Projects, [ML Pipelines](https://developers.google.com/machine-learning/managing-ml-projects/pipelines))*
+
+**Version datasets and models, and document them.** Versioned datasets give reproducibility, audit trails for compliance, retention rules, access control, a history of changes for debugging, and discoverability for other teams (see [4.4.3](#443-profiling-versioning-and-feature-stores)). A model registry adds a release process: review, approve, release, or roll back a model, and trace its datasets and dependencies. Describe a dataset in the design doc, or in a **data card** if you share it, and a model's purpose, architecture, hardware needs, and metrics in a **model card**. *(Managing ML Projects, [ML Pipelines](https://developers.google.com/machine-learning/managing-ml-projects/pipelines))*
+
+**Check during development what could block the pipeline.** A problem found only when the pipeline is built sends you back to experimentation *(Managing ML Projects, [ML Pipelines](https://developers.google.com/machine-learning/managing-ml-projects/pipelines), [Productionization](https://developers.google.com/machine-learning/managing-ml-projects/production))*:
+
+  - **Data access**: you may have to justify why you need the data and how personal information will be handled; a proof of concept that shows the gain helps.
+  - **Features in production**: some features used in experiments aren't available in real-time data.
+  - **How the data was collected**: learning who collected it and how takes time, and a production model shouldn't train on data you don't trust.
+  - **Effort and cost against quality**: a feature can be costly to add to the pipeline, or to obtain and store, for a small gain.
+  - **Compute**: estimate quota for the data and training pipelines from similar projects, and for serving from the expected queries per second, then add what ongoing experiments need. Training usually needs bigger hardware than serving.
+  - **Golden datasets**: when the data changes often, keeping consistent, accurate labels for a golden set is hard.
+
+## 4.4.2 Transparency and Reproducibility
 
 A model handed over for deployment raises questions the person who trained it may not have answered: will it run on the production infrastructure, can anyone see how it was built, can it be reproduced, are its inputs validated, and how will it be monitored and debugged? Answering these early is cheaper than answering them at deployment time.
 
@@ -34,7 +76,7 @@ flowchart TB
 
 *Input data validation at prediction time; the prediction or the error message goes back to the user. The data profile is created in the model build pipeline and saved with the metadata. Logging the input data, error messages and predictions is what makes the service debuggable.*
 
-## 4.4.2 Profiling, Versioning, and Feature Stores
+## 4.4.3 Profiling, Versioning, and Feature Stores
 
 ### Data Profiling
 
@@ -125,7 +167,7 @@ Not every team needs every level. Most get the bulk of the value from access, se
 
 Start lean. With three components and three people, each person can own one component, learn it in depth and still cover for a colleague; double the components and nobody knows their part well, with no one left to cover. Monzo had features in its analytics warehouse that its production stack couldn't reach, so rather than build real-time feature processing, it copied the feature tables into its production store on a schedule. Anything more would have been operational load that slowed a small team down. *(Yan, [The Metagame of Applying ML](https://eugeneyan.com/writing/machine-learning-metagame/))*
 
-## 4.4.3 CI/CD
+## 4.4.4 CI/CD
 
 ```mermaid
 flowchart TB
