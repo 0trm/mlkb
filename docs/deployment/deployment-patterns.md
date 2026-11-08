@@ -104,3 +104,15 @@ A gradual rollout limits the damage while you check the new system. Whether to k
 Rollback is insurance for what validation misses: a refreshed model can pass the data and model checks and still misbehave once deployed. Revert first, so customers stop seeing the problem, and look for the root cause afterward. With container-based serving, reverting means redeploying the last image that worked, so keep the images from several past releases (Yan suggests seven or more if resources allow). Easy rollback is also what makes frequent releases, and CI/CD, safe: a release that breaks production at night can be reverted at once and fixed the next morning. *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/))*
 
 So that each release can be traced, log its configuration along with the model: hyperparameters, the threshold that turns probabilities into decisions, the period of training data used, and the commit hash. Log experiments the same way, so every result can be tied to the settings that produced it. *(Yan, [Maintaining ML in Production](https://eugeneyan.com/writing/practical-guide-to-maintaining-machine-learning/))*
+
+### Deployment Runbook
+
+Write down how a model reaches production, so anyone on the team can deploy it the same way *(Managing ML Projects, [Productionization](https://developers.google.com/machine-learning/managing-ml-projects/production))*:
+
+  - **Approvals**: who signs off before a deployment starts, and before the rollout widens.
+  - **Steps**: how to put a model into production.
+  - **Environments**: where it goes first, such as a staging or canary environment (see [4.3.2](#432-deployment-types)).
+  - **Failure**: what to do when a deployment fails.
+  - **Rollback**: how to revert a model already in production (see [Rollback Readiness](#rollback-readiness)).
+
+Once training is automated, automate validation and deployment too. A scripted deployment doesn't wait on the one person who knows how to run it, makes fewer mistakes, and lets an on-call rotation or site reliability engineers handle releases. *(Managing ML Projects, [Productionization](https://developers.google.com/machine-learning/managing-ml-projects/production))*

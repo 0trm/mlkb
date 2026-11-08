@@ -86,7 +86,7 @@ A stage is done when it has produced something you can check, not when its time 
 |---|---|---|---|---|
 | Design | Decide whether ML is the right tool, what it should optimize, and what data it needs | A design doc reviewed with stakeholders and peers (see [Templates](../templates.md)) | Ideation and planning | Feasibility assessment, 1–2 weeks |
 | Development | Build a model that solves the business problem well enough to deploy | A model good enough for production, plus the record of experiments behind it | Experimentation | Proof of concept, 1–2 months |
-| Deployment | Keep the model good on live data | Validated pipelines for data, retraining, validation, and serving, running in production | Pipeline building, then productionization | Develop for production, 3–6 months, then operational maintenance |
+| Deployment | Keep the model good on live data | Validated pipelines for data, retraining, validation, and serving, running in production, with docs for the engineers who maintain them (see [Handover Docs](../templates.md#handover-docs)) | Pipeline building, then productionization | Develop for production, 3–6 months, then operational maintenance |
 
 *Each stage's goal and the outcome that closes it, next to the two other phase models these notes draw on. The rows line up only roughly: Google counts all data work as part of experimentation, while these notes, following Ng, start defining and labeling data in design. Adapted from Google for Developers, Managing ML Projects, and Eugene Yan, [Writing Docs: Why, What, and How](https://eugeneyan.com/writing/writing-docs-why-what-how/).*
 
@@ -116,13 +116,7 @@ On the business side, the main roles are the **business stakeholder** and the **
 
 ### Team Practices
 
-People arrive with different habits: one engineer thinks getting the right data is enough to start training, another first checks that it is anonymized and records where it came from. Agree on tools, infrastructure, and processes before writing code, and write them down in process docs that answer questions like these *(Managing ML Projects, [Assembling a Team](https://developers.google.com/machine-learning/managing-ml-projects/team))*:
-
-  - How is the training data generated, and how do we examine, validate, and visualize it?
-  - How do we change a feature or a label, and the model architecture to match?
-  - Which metrics judge model quality, and where do test examples come from?
-  - How do we launch a model, and how will we know something is wrong with it?
-  - Which upstream systems does the model depend on?
+People arrive with different habits: one engineer thinks getting the right data is enough to start training, another first checks that it is anonymized and records where it came from. Agree on tools, infrastructure, and processes before writing code, and write them down in a process doc: how the training data is generated and validated, how to change a feature, a label, or the model, which metrics judge quality, how a model is launched and how you'll know it's broken, and which upstream systems it depends on. The full list of questions is under [Process Docs](../templates.md#process-docs). *(Managing ML Projects, [Assembling a Team](https://developers.google.com/machine-learning/managing-ml-projects/team))*
 
 Because ML outcomes are uncertain, set expectations and deliverables early, and don't tie a person's performance review to whether the project succeeds. Weeks spent on an approach that fails can still produce high-quality code, thorough documentation, and good collaboration, and those should count. *(Managing ML Projects, [Assembling a Team](https://developers.google.com/machine-learning/managing-ml-projects/team))*
 

@@ -68,7 +68,7 @@ Deployment puts the model in front of real data: building the pipelines that kee
 
 ## Appendix
 
-- [Templates](templates.md): the three documents worth writing along the way: one-pagers, design docs, and after-action reviews
+- [Templates](templates.md): the documents worth writing along the way: one-pagers, design docs, process and handover docs, and after-action reviews
 - [Sources](sources.md): the courses, books, and articles these notes draw on
 
 ```{toctree}

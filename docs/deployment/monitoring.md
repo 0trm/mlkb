@@ -156,6 +156,21 @@ To monitor pipelines with two or more components effectively:
       - Track input and output metrics for each component to detect changes in data or performance.
   - **Apply the Brainstorming Principle**: As with single-model systems, brainstorm everything that could go wrong across the pipeline and design metrics to track those risks.
 
+**Monitoring the Update Pipelines**
+
+The model isn't the only part that can fail. In a system that retrains itself ([4.4.1](reproducibility-cicd.md#441-pipelines-not-models)), the data, training, and validation pipelines are jobs that can break or drift too, and each needs its own logs, metrics, and alerts *(Managing ML Projects, [Productionization](https://developers.google.com/machine-learning/managing-ml-projects/production))*:
+
+| Pipeline | What to monitor |
+|---|---|
+| Serving | Skew or drift in serving data against training data, and in predictions; missing or corrupted values; a proxy for model quality (see [4.5.3](#453-types-of-metrics)); latency; outages; quota usage |
+| Data | Skew or drift in feature values and in label values; missing or corrupted values; how fast quota is being used, and whether it is about to run out |
+| Training | How long training takes; failed training runs; quota usage |
+| Validation | Skew or drift in the test datasets |
+
+*What to monitor in each of the four pipelines. Adapted from Google for Developers, Managing ML Projects.*
+
+When pipelines share one compute quota, check that it covers all of them, and alert on usage so that one runaway pipeline can't use it all and starve the rest. A candidate model that comes out worse than the production model also deserves an alert: the cause can be a problem in the data or validation pipeline rather than in the model. *(Managing ML Projects, [Productionization](https://developers.google.com/machine-learning/managing-ml-projects/production), [ML Pipelines](https://developers.google.com/machine-learning/managing-ml-projects/pipelines))*
+
 ## 4.5.6 Rate of Data Change
 
 The speed at which data changes varies by application:
