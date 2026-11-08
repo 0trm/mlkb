@@ -323,6 +323,15 @@ Brainstorm potential data sources and evaluate their costs and timelines. For sp
 
 Consider data quality, privacy, and regulatory constraints alongside financial and time costs. This inventory ensures informed decisions.
 
+### Privacy and Data Rights
+
+Apply privacy design principles from the start of the project *(Managing ML Projects, [AI and ML Ethics](https://developers.google.com/machine-learning/managing-ml-projects/ethics))*:
+
+  - **Know the laws that apply**, such as the EU's GDPR, and its Digital Markets Act (DMA) for consent to share or use personal data.
+  - **Remove personally identifiable information (PII)** from datasets.
+  - **Restrict access**: set up data and model repositories with the right permissions, never world-readable.
+  - **Respect others' rights**: make sure the way you handle the data doesn't infringe anyone's intellectual property.
+
 ### Labeling Methods
 
 Common labeling approaches include:
