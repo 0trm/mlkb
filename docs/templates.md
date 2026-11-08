@@ -29,6 +29,8 @@ An error review (e.g., the system goes down) diagnoses the root cause and identi
   - **Design doc**: before building, to get feedback on methodology and system design while changes are still cheap ([2.1.6 Project Phases and Timeboxes](design/scoping.md#216-project-phases-and-timeboxes)).
   - **After-action review**: after shipping, or after a production incident ([4 · Deployment](index.md#4--deployment)).
 
+Google's *Managing ML Projects* course adds two more: a **process doc**, written before the first line of code, records how the team works ([Process Docs](#process-docs)), and a **handover doc** goes with the production system to the engineers who will maintain it ([Handover Docs](#handover-docs)).
+
 ## Design Docs for ML Systems
 
 *Adapted from Eugene Yan, [How to Write Design Docs for Machine Learning Systems](https://eugeneyan.com/writing/ml-design-docs/).*
@@ -56,3 +58,29 @@ A design doc does two jobs: writing it makes the author work through the problem
 **Two-stage review:** First, a **pre-review**: share a rough outline one-on-one with a teammate or mentor while the design can still change direction, and say plainly that it is an early draft. Then the **review**: a formal session with senior engineers and decision-makers, on a complete doc in prose with quantified estimates (throughput, latency, cost), offline results, diagrams, and a FAQ appendix for questions raised in the pre-review. Say what you need from it: which risks to address, which decisions to make, what help you want.
 
 **When to write one:** when the problem or the solution is ambiguous, when the impact is high (customer-facing, or other services depend on it), or when the effort is high (several teams over a few months). Small changes like adding a feature column, or tasks of a few days, don't justify one. Templates followed to the letter turn into filling in blanks, so treat any template as a prompt for thinking; Yan keeps a deliberately minimal one at [`eugeneyan/ml-design-docs`](https://github.com/eugeneyan/ml-design-docs).
+
+## Process Docs
+
+A process doc records the tools, infrastructure, and processes a team uses for ML development, so that new and current members work the same way (see [Team Practices](overview/lifecycle.md#team-practices)). Agree on it before writing code, and update it as practices change. It should answer questions like these *(Managing ML Projects, [Assembling a Team](https://developers.google.com/machine-learning/managing-ml-projects/team))*:
+
+| Area | Questions |
+|---|---|
+| Data | How is the training data generated? How do we examine, validate, and visualize it? How do we change a feature or a label? Where does the SQL that generates data live, and how do we keep it maintainable and reusable? |
+| Model | How do we change the architecture when features or labels change? Can one pipeline train on different datasets, for example to fine-tune? How do we add a new test dataset? |
+| Training and evaluation | Where do test examples come from? Which metrics judge model quality, and how do we compute standard and custom ones on a chosen dataset? How do we check a prediction on a hand-crafted example, find the examples the model gets wrong, and see which features drove a prediction? How do we compare models offline, across many evaluations at once, and against the model from 10 months ago? |
+| Production | How do we launch a model, and check that it runs correctly once it is live? Where is the history of its evaluations? How will we know something is wrong, and what do we do when a page or bug mentions the model? |
+| Pipelines | How do we customize the data generation, training, and evaluation pipeline, and when should we build a new one instead? |
+| Infrastructure | How does serving work, and is there a diagram? Which upstream systems does the model depend on? |
+| Help | Who do I contact when I'm stuck, and how? |
+
+*What a process doc should answer, grouped by area. Adapted from Google for Developers, Managing ML Projects.*
+
+## Handover Docs
+
+The production-ready system, with its pipelines for training and serving, is the last deliverable, and it should come with documentation for the engineers who will maintain it. That documentation explains three things *(Managing ML Projects, [Working with Stakeholders](https://developers.google.com/machine-learning/managing-ml-projects/stakeholders))*:
+
+  - **Modeling decisions**: why the model and its features are what they are.
+  - **Deployment and monitoring**: how the model is released and what is watched once it's live.
+  - **Data peculiarities**: the quirks of the data that someone new would otherwise trip over.
+
+Most of the material exists by then: the design doc and the experiment log ([3.9 Experiment Tracking](development/experiment-tracking.md)) hold the modeling decisions, the [deployment runbook](deployment/deployment-patterns.md#deployment-runbook) and the monitoring setup ([4.5](deployment/monitoring.md)) cover operations, and data and model cards ([4.4.1](deployment/reproducibility-cicd.md#441-pipelines-not-models)) describe the datasets and the model.

@@ -11,6 +11,8 @@ An experiment is a testable, reproducible hypothesis. Run them like this *(Manag
 3.  **Record every result, failures included**: experiments that match or trail the baseline show which directions don't work, and because progress is non-linear, they are also how you show the work is moving.
 4.  **Run independent experiments in parallel**, since one full training run on real data can take hours or days.
 
+Around that loop, start each round by writing down the hypothesis ("we expect that...") and setting up tracking ([3.9.2](#392-what-to-track)), and end it by testing the candidates on a held-out test set, registering the best model ([4.4.1](../deployment/reproducibility-cicd.md#441-pipelines-not-models)), and reporting the results and next steps to the team and stakeholders.
+
 **Noise in results.** A difference between two runs can come from the run rather than the change: the order the data is shuffled in, how the weights are initialized, asynchronous parallel training, or an evaluation set too small to be representative. Rerun an experiment several times before trusting a small gain. *(Managing ML Projects, [Experiments](https://developers.google.com/machine-learning/managing-ml-projects/experiments))*
 
 **Agree on what an experiment is.** Decide as a team which artifacts an experiment produces (usually the logged metadata, such as features and hyperparameters, that lets someone else reproduce it), whether people work in their own environments or in shared libraries, and the standard for reproducibility: the same data pipeline and versioning for everyone, or are plots enough? Also decide where results live: a doc, a spreadsheet, or a tracking system ([3.9.3](#393-tracking-tools)). *(Managing ML Projects, [Experiments](https://developers.google.com/machine-learning/managing-ml-projects/experiments))*
@@ -52,14 +54,3 @@ When selecting a tracking tool, prioritize:
 3.  **Additional Features**: Consider resource monitoring (e.g., CPU/GPU usage), model visualization, or support for detailed error analysis.
 
 The most important takeaway is to use *some* tracking system—whether a text file, spreadsheet, or advanced tool—and include as much relevant information as practical. This ensures you can revisit and build upon past experiments efficiently.
-
-**The Process**
-
-1.  Formulate a hypothesis: "We expect that..."
-2.  Gather images and labels
-3.  Define experiments, e.g., types of models, hyperparameters, datasets
-4.  Set up experiment tracking
-5.  Train the machine learning model(s)
-6.  Test the models on a hold-out test set
-7.  Register the most suitable model
-8.  Visualize and report back to team and stakeholders, and determine next steps

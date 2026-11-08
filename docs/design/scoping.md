@@ -119,7 +119,7 @@ Feasible candidates usually outnumber the people available to work on them, so c
   - **Test the link between the two early.** Great model metrics don't guarantee a better business metric. A churn model with 95% prediction quality, tried on a small sample of users, left revenue flat and churn went up. Possible reasons: it predicted churn only seven days ahead, too late to offer an incentive; features that drive churn were missing from the training data; or the use case needed 97% or more. Release to a small share of users (often 1%) and watch the business metric before going further. *(Managing ML Projects, [Measuring Success](https://developers.google.com/machine-learning/managing-ml-projects/success))*
   - Estimate **resources**: Data volume, team involvement, cross-functional support, and timelines.
   - If specifications are unclear, conduct **benchmarking** (compare to similar projects) or build a **proof of concept** to refine estimates.
-  - Agree on these with everyone involved: data scientists, subject matter experts, and business stakeholders.
+  - Agree on these with everyone involved: data scientists, subject matter experts, and business stakeholders. As early as possible, list the stakeholders, including any team that must approve part of the solution (for example, whoever grants access to personal data), what each expects to receive at each stage, and how you'll keep them informed. *(Managing ML Projects, [Working with Stakeholders](https://developers.google.com/machine-learning/managing-ml-projects/stakeholders))*
 
 ## 2.1.3 Workflows
 
