@@ -1,4 +1,4 @@
-# Machine Learning Knowledge Base
+# Machine Learning Life Cycle
 
 These are study notes on building machine learning systems end to end. They compress the process into three stages, **design**, **development**, and **deployment**, and follow one idea through all of them: most of the work in production ML is engineering and data, not algorithms.
 
