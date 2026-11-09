@@ -8,6 +8,7 @@ div.mermaid {
 }
 
 pre.mermaid {
+  position: relative;
   text-align: center;
 }
 
@@ -57,10 +58,21 @@ pre.mermaid {
   border-top: 1px solid var(--pst-color-border);
 }
 
-/* Ink diagrams: outlined boxes on the page background, stages as a flat tint.
-   :is(#ink, ...) lends these rules an id's weight so they beat Mermaid's own
-   #diagram-id rules, while classDef and style lines in a diagram (inline) still win.
-   .diagram-viewer is the full-screen view (diagrams.js), which shows a copy. */
+/* Soft tint diagrams: borderless boxes in a pale tint of the site's blue, dashed
+   outlines around groups, and the blue itself for stage headers, outcomes and
+   highlights. :is(#tint, ...) lends these rules an id's weight so they beat
+   Mermaid's own #diagram-id rules, while classDef and style lines in a diagram
+   (inline) still win. .diagram-viewer is the full-screen view (diagrams.js),
+   which shows a copy. */
+html {
+  --diagram-tint: color-mix(in srgb, var(--pst-color-primary) 9%, var(--pst-color-background));
+  --diagram-edge: color-mix(in srgb, var(--pst-color-primary) 38%, var(--pst-color-text-muted));
+}
+
+html[data-theme="dark"] {
+  --diagram-tint: color-mix(in srgb, var(--pst-color-primary) 18%, var(--pst-color-background));
+}
+
 html[data-theme="dark"] .bd-content pre.mermaid > svg {
   /* The colors below already follow dark mode, so drop the theme's invert filter. */
   filter: none;
@@ -68,93 +80,102 @@ html[data-theme="dark"] .bd-content pre.mermaid > svg {
 
 /* Rounded and cylinder shapes draw their outline as paths inside the container,
    which Mermaid's own .node path rule would otherwise color. */
-:is(#ink, pre.mermaid, .diagram-viewer) svg .node :is(.label-container, .label-container path) {
-  fill: var(--pst-color-background);
-  stroke: var(--pst-color-text-base);
-  stroke-width: 1.4px;
-}
-
-:is(#ink, pre.mermaid, .diagram-viewer) svg .cluster rect {
-  fill: var(--pst-color-surface);
+:is(#tint, pre.mermaid, .diagram-viewer) svg .node :is(.label-container, .label-container path) {
+  fill: var(--diagram-tint);
   stroke: none;
 }
 
-/* A highlighted stage (class hl on a subgraph) gets an outline; the diagram's
-   classDef sets its width inline, this rule supplies the color. */
-:is(#ink, pre.mermaid, .diagram-viewer) svg .cluster.hl rect {
-  stroke: var(--pst-color-text-base);
+:is(#tint, pre.mermaid, .diagram-viewer) svg .node :is(rect.label-container, .label-container rect) {
+  rx: 9px;
+  ry: 9px;
 }
 
-:is(#ink, pre.mermaid, .diagram-viewer) svg .nodeLabel {
+:is(#tint, pre.mermaid, .diagram-viewer) svg .nodeLabel {
   color: var(--pst-color-text-base);
+  font-weight: 500;
 }
 
-:is(#ink, pre.mermaid, .diagram-viewer) svg .cluster-label .nodeLabel {
+:is(#tint, pre.mermaid, .diagram-viewer) svg .cluster rect {
+  fill: none;
+  stroke: var(--pst-color-border);
+  stroke-width: 1px;
+  stroke-dasharray: 5 4;
+  rx: 14px;
+  ry: 14px;
+}
+
+:is(#tint, pre.mermaid, .diagram-viewer) svg .cluster-label .nodeLabel {
   color: var(--pst-color-text-muted);
+  font-size: 12.5px;
   font-weight: 600;
 }
 
-:is(#ink, pre.mermaid, .diagram-viewer) svg .flowchart-link {
-  stroke: var(--pst-color-text-base);
+/* A highlighted stage or step (class hl): the diagram's classDef sets the outline
+   width inline, this rule supplies the color. */
+:is(#tint, pre.mermaid, .diagram-viewer) svg .cluster.hl rect {
+  stroke: var(--pst-color-primary);
+  stroke-dasharray: none;
+}
+
+:is(#tint, pre.mermaid, .diagram-viewer) svg .node.hl :is(.label-container, .label-container path) {
+  stroke: var(--pst-color-primary);
+}
+
+:is(#tint, pre.mermaid, .diagram-viewer) svg .flowchart-link {
+  stroke: var(--diagram-edge);
+  stroke-width: 1.6px;
+}
+
+:is(#tint, pre.mermaid, .diagram-viewer) svg .marker {
+  fill: var(--diagram-edge);
+  stroke: var(--diagram-edge);
+}
+
+:is(#tint, pre.mermaid, .diagram-viewer) svg :is(.edgeLabel, .edgeLabel p, .labelBkg) {
+  background-color: var(--pst-color-background);
+  color: var(--pst-color-text-muted);
+  font-size: 12.5px;
+}
+
+:is(#tint, pre.mermaid, .diagram-viewer) svg .edgeLabel rect {
+  fill: var(--pst-color-background);
+}
+
+/* A filled box marks the one node a diagram is about (class solid), and a stage
+   header (class stagehead) opens each stage column, its <b> name larger than the
+   line under it. Mermaid writes classDef colors inline with !important, so they
+   can't follow dark mode; the fills live here instead. */
+:is(#tint, pre.mermaid, .diagram-viewer) svg .node:is(.solid, .stagehead) :is(.label-container, .label-container path) {
+  fill: var(--pst-color-primary);
+}
+
+:is(#tint, pre.mermaid, .diagram-viewer) svg .node.solid .nodeLabel {
+  color: #fff;
+}
+
+:is(#tint, pre.mermaid, .diagram-viewer) svg .node.stagehead .nodeLabel {
+  color: color-mix(in srgb, #fff 82%, var(--pst-color-primary));
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+:is(#tint, pre.mermaid, .diagram-viewer) svg .node.stagehead .nodeLabel b {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 650;
+}
+
+/* An exit outcome (class outcome): a blue outline and blue text. */
+:is(#tint, pre.mermaid, .diagram-viewer) svg .node.outcome :is(.label-container, .label-container path) {
+  fill: var(--pst-color-background);
+  stroke: var(--pst-color-primary);
   stroke-width: 1.3px;
 }
 
-:is(#ink, pre.mermaid, .diagram-viewer) svg .marker {
-  fill: var(--pst-color-text-base);
-  stroke: var(--pst-color-text-base);
-}
-
-:is(#ink, pre.mermaid, .diagram-viewer) svg :is(.edgeLabel, .edgeLabel p, .labelBkg) {
-  background-color: var(--pst-color-background);
-  color: var(--pst-color-text-muted);
-  font-style: italic;
-}
-
-:is(#ink, pre.mermaid, .diagram-viewer) svg .edgeLabel rect {
-  fill: var(--pst-color-background);
-}
-
-/* A filled box marks the one node a diagram is about (class solid). Mermaid
-   writes classDef colors inline with !important, so they can't follow dark mode;
-   the fill lives here instead. */
-:is(#ink, pre.mermaid, .diagram-viewer) svg .node.solid :is(.label-container, .label-container path) {
-  fill: var(--pst-color-text-base);
-  stroke: var(--pst-color-text-base);
-}
-
-:is(#ink, pre.mermaid, .diagram-viewer) svg .node.solid .nodeLabel {
-  color: var(--pst-color-background);
-}
-
-/* A stage header (class stagehead): filled like solid, with the <b> stage name
-   larger than the line under it, so the name is the first thing that reads. */
-:is(#ink, pre.mermaid, .diagram-viewer) svg .node.stagehead :is(.label-container, .label-container path) {
-  fill: var(--pst-color-text-base);
-  stroke: var(--pst-color-text-base);
-}
-
-:is(#ink, pre.mermaid, .diagram-viewer) svg .node.stagehead .nodeLabel {
-  color: color-mix(in srgb, var(--pst-color-background) 72%, var(--pst-color-text-base));
-  font-size: 13px;
-  line-height: 1.35;
-}
-
-:is(#ink, pre.mermaid, .diagram-viewer) svg .node.stagehead .nodeLabel b {
-  color: var(--pst-color-background);
-  font-size: 17px;
-}
-
-/* An exit outcome (class outcome): a thin muted outline and muted text,
-   quieter than the steps that lead to it. */
-:is(#ink, pre.mermaid, .diagram-viewer) svg .node.outcome :is(.label-container, .label-container path) {
-  fill: var(--pst-color-background);
-  stroke: var(--pst-color-text-muted);
-  stroke-width: 1px;
-}
-
-:is(#ink, pre.mermaid, .diagram-viewer) svg .node.outcome .nodeLabel {
-  color: var(--pst-color-text-muted);
-  font-size: 13px;
+:is(#tint, pre.mermaid, .diagram-viewer) svg .node.outcome .nodeLabel {
+  color: var(--pst-color-primary);
+  font-size: 12.5px;
+  font-weight: 550;
 }
 
 /* Focus rings in muted ink instead of the theme's pink. */
@@ -209,7 +230,7 @@ html:not([data-theme]) {
   }
 }
 
-/* Back to top (shown below 1200px when scrolling up) in ink instead of orange. */
+/* Back to top (shown between 992 and 1200px when scrolling up) in ink, not orange. */
 #pst-back-to-top,
 #pst-back-to-top:hover {
   color: var(--pst-color-background);
@@ -218,7 +239,7 @@ html:not([data-theme]) {
 }
 
 /* One navigator below 1200px: the Contents drawer goes, and the page's sections
-   are listed under the page in the left menu instead (nav.js). */
+   are listed under the page in the left menu instead (mobile.js). */
 @media (max-width: 1199.98px) {
   button.sidebar-toggle.secondary-toggle {
     display: none !important;
@@ -250,7 +271,7 @@ nav.bd-links .page-sections a:hover {
 nav.bd-links .page-sections a.is-reading {
   color: var(--pst-color-text-base);
   font-weight: 600;
-  box-shadow: inset 2px 0 0 var(--pst-color-text-base);
+  box-shadow: inset 2px 0 0 var(--pst-color-primary);
 }
 
 @media (min-width: 1200px) {
@@ -259,8 +280,213 @@ nav.bd-links .page-sections a.is-reading {
   }
 }
 
-/* Phones: smaller headings, jumps that clear the sticky bar, and previous/next
-   as two full-width buttons. */
+/* ---- Phones and tablets (below 992px, where the menu is a drawer) ---------------- */
+
+/* Added by mobile.js; only the drawer layout shows them. */
+.menu-close,
+.menu-footer,
+.header-title {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  /* The header: menu, the page title once scrolled past it, search. It slides
+     away while scrolling down and comes back on the way up (mobile.js). */
+  .bd-header-article {
+    padding: 0 0.25rem;
+    transition: transform 0.25s ease;
+  }
+
+  .bd-header-article.is-hidden {
+    transform: translateY(-100%);
+  }
+
+  .scrolled .bd-header-article {
+    box-shadow: none;
+    border-bottom: 1px solid var(--pst-color-border);
+  }
+
+  .bd-header-article .header-article-items__start {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .bd-header-article .btn {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    justify-content: center;
+  }
+
+  .header-title {
+    display: block;
+    min-width: 0;
+    padding: 0 0.25rem;
+    overflow: hidden;
+    font: 600 0.95rem/1.2 var(--pst-font-family-base);
+    color: var(--pst-color-text-base);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background: none;
+    border: 0;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .show-title .header-title {
+    opacity: 1;
+  }
+
+  /* GitHub and light/dark live in the menu; Back to top is the header's title. */
+  .bd-header-article :is(.btn-source-repository-button, .theme-switch-container),
+  #pst-back-to-top {
+    display: none !important;
+  }
+
+  /* The menu drawer: a close button, the search field, rows tall enough to tap,
+     and light/dark and GitHub at the bottom. */
+  #pst-primary-sidebar-modal {
+    width: min(85vw, 22rem);
+    padding: 0.75rem 1.25rem 1.5rem;
+  }
+
+  /* Sticky, so it stays in reach when the menu is scrolled. */
+  #pst-primary-sidebar-modal .menu-close {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    align-self: flex-end;
+    margin: -0.25rem -0.75rem -3rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    color: var(--pst-color-text-muted);
+    background: var(--pst-color-background);
+    border: 0;
+    border-radius: 50%;
+  }
+
+  .menu-close svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+  }
+
+  #pst-primary-sidebar-modal .navbar-brand {
+    justify-content: flex-start;
+  }
+
+  #pst-primary-sidebar-modal .navbar-brand .logo__title {
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  #pst-primary-sidebar-modal .search-button-field {
+    display: flex;
+    width: 100%;
+    min-height: 2.75rem;
+  }
+
+  #pst-primary-sidebar-modal .search-button__kbd-shortcut {
+    display: none;
+  }
+
+  #pst-primary-sidebar-modal .search-button__default-text {
+    display: inline;
+  }
+
+  #pst-primary-sidebar-modal nav.bd-links li > a {
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    line-height: 1.35;
+  }
+
+  #pst-primary-sidebar-modal nav.bd-links .page-sections a {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  #pst-primary-sidebar-modal nav.bd-links p.caption {
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--pst-color-text-muted);
+  }
+
+  #pst-primary-sidebar-modal .menu-footer {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--pst-color-border);
+  }
+
+  .menu-modes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0.2rem;
+    background: var(--pst-color-surface);
+    border-radius: 0.6rem;
+  }
+
+  .menu-modes button {
+    min-height: 2.5rem;
+    font: 500 0.9rem var(--pst-font-family-base);
+    color: var(--pst-color-text-muted);
+    background: none;
+    border: 0;
+    border-radius: 0.45rem;
+  }
+
+  .menu-modes button.active {
+    color: var(--pst-color-text-base);
+    background: var(--pst-color-background);
+    box-shadow: 0 1px 2px var(--pst-color-shadow);
+  }
+
+  .menu-repo {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--pst-color-text-muted);
+    text-decoration: none;
+  }
+
+  /* Diagrams too small to read become a card that opens full screen. */
+  pre.mermaid.is-expandable {
+    padding: 0.75rem 0.75rem 3.25rem;
+    border: 1px solid var(--pst-color-border);
+    border-radius: 0.75rem;
+    cursor: zoom-in;
+  }
+
+  .diagram-expand {
+    position: absolute;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.25rem;
+    padding: 0 0.85rem;
+    font: 500 0.85rem/1 var(--pst-font-family-base);
+    color: var(--pst-color-primary);
+    background: var(--diagram-tint);
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+}
+
+/* ---- Phones -------------------------------------------------------------------- */
 @media (max-width: 767.98px) {
   :root {
     --pst-font-size-h1: 2rem;
@@ -273,12 +499,24 @@ nav.bd-links .page-sections a.is-reading {
     scroll-padding-top: 4.5rem;
   }
 
+  .bd-main .bd-content .bd-article-container .bd-article {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .bd-article p,
+  .bd-article li {
+    line-height: 1.6;
+  }
+
+  /* Previous and next as two full-width buttons, with room around them. */
   .prev-next-area {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
     width: auto;
-    margin: 3rem 1rem 0;
+    margin: 3rem 1.25rem 0;
+    padding: 2rem 0 3rem;
   }
 
   .prev-next-area a,
@@ -287,9 +525,10 @@ nav.bd-links .page-sections a.is-reading {
     float: none;
     max-width: none;
     width: 100%;
-    padding: 0.75rem 1rem;
+    min-height: 4.25rem;
+    padding: 0.85rem 1rem;
     border: 1px solid var(--pst-color-border);
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
   }
 
   .prev-next-area a.right-next {
@@ -298,43 +537,118 @@ nav.bd-links .page-sections a.is-reading {
 
   .prev-next-area a p.prev-next-title,
   .prev-next-area a:hover p.prev-next-title {
+    margin-top: 0.15rem;
     color: var(--pst-color-text-base);
     text-decoration: none;
   }
+
+  /* The footer: its own quiet block under the buttons. */
+  .bd-footer-content {
+    padding: 2rem 1.25rem 3rem;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--pst-color-text-muted);
+    text-align: center;
+    border-top: 1px solid var(--pst-color-border);
+  }
+
+  .bd-footer-content .bd-footer-content__inner {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0;
+  }
+
+  .bd-footer-content p {
+    margin: 0;
+  }
+
+  /* Tables of sentences: one card per row, the first cell as its title and each
+     other cell under its column's name (mobile.js sorts the tables). */
+  .bd-article .pst-scrollable-table-container:has(> table.table-cards) {
+    overflow: visible;
+  }
+
+  .bd-article table.table-cards,
+  .bd-article table.table-cards :is(tbody, tr, td) {
+    display: block;
+    width: 100%;
+  }
+
+  .bd-article table.table-cards {
+    margin: 1.5rem 0 1rem;
+    border: 0;
+  }
+
+  .bd-article table.table-cards thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .bd-article table.table-cards tr {
+    margin-bottom: 0.75rem;
+    padding: 0.25rem 1rem 0.9rem;
+    background: var(--pst-color-background) !important;
+    border: 1px solid var(--pst-color-border);
+    border-radius: 0.75rem;
+  }
+
+  .bd-article table.table-cards td {
+    padding: 0.6rem 0 0 !important;
+    text-align: left !important;
+    background: none !important;
+    border: 0 !important;
+  }
+
+  .bd-article table.table-cards td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--pst-color-text-muted);
+  }
+
+  .bd-article table.table-cards td:first-child {
+    padding-top: 0.75rem !important;
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .bd-article table.table-cards td:first-child::before,
+  .bd-article table.table-cards td[data-label=""]::before {
+    display: none;
+  }
+
+  /* Tables of short values: a grid that scrolls sideways, the first column pinned
+     and the right edge fading while there's more to see. */
+  .bd-article table.table-grid :is(th, td):first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background-color: var(--pst-color-background);
+  }
+
+  .bd-article table.table-grid thead :is(th, td):first-child {
+    background-color: var(--pst-color-table-heading-bg);
+  }
+
+  .bd-article table.table-grid :is(th, td) {
+    white-space: nowrap;
+  }
+
+  .bd-article .pst-scrollable-table-container.has-more {
+    mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
+  }
 }
 
-/* Diagrams shown too small to read get an Expand button that opens them full
-   screen (diagrams.js). */
-pre.mermaid {
-  position: relative;
-}
-
-pre.mermaid.is-expandable {
-  cursor: zoom-in;
-  padding-bottom: 2.75rem;
-}
-
-.diagram-expand {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.75rem;
-  font-family: var(--pst-font-family-base);
-  font-size: 0.8rem;
-  line-height: 1.2;
-  color: var(--pst-color-text-muted);
-  background: var(--pst-color-background);
-  border: 1px solid var(--pst-color-border);
-  border-radius: 999px;
-  cursor: pointer;
-}
-
+/* ---- Full-screen diagram view (diagrams.js) ------------------------------------ */
 :is(.diagram-expand, .diagram-viewer__bar) svg {
-  width: 0.85rem;
-  height: 0.85rem;
+  width: 0.9rem;
+  height: 0.9rem;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.6;
@@ -374,13 +688,13 @@ dialog.diagram-viewer::backdrop {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
   color: var(--pst-color-text-base);
   background: none;
   border: 0;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
 }
 
 .diagram-viewer__bar svg {

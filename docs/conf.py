@@ -1,6 +1,4 @@
 # Sphinx configuration for the MLLC site.
-from pathlib import Path
-
 project = "Machine Learning Life Cycle"
 author = "Tomás Ravalli"
 copyright = "2026, Tomás Ravalli"
@@ -14,18 +12,18 @@ myst_links_external_new_tab = True
 myst_fence_as_directive = ["mermaid"]
 
 mermaid_version = "12.1.0"
-# _static/diagrams.js imports this same build by URL, so it can wrap the instance the
-# plugin renders with. Bumping the version above means bumping it there too.
-if f"/mermaid@{mermaid_version}/" not in (Path(__file__).parent / "_static" / "diagrams.js").read_text():
-    raise ValueError(f"_static/diagrams.js must import mermaid@{mermaid_version}")
-# Ink style: outlined boxes, straight edges, no shadows. Colors live in custom.css so they follow light and dark mode.
+# Soft tint style: borderless tinted boxes, dashed groups, blue stage headers. Colors live in
+# custom.css so they follow light and dark mode; the font is the site's, so labels are measured
+# in the font they're drawn in.
+DIAGRAM_FONT = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
 mermaid_light_theme = "base"
 mermaid_dark_theme = "base"
 mermaid_init_config = {
     "startOnLoad": False,
     "look": "classic",
-    "flowchart": {"curve": "linear", "nodeSpacing": 40, "rankSpacing": 48, "padding": 14},
-    "themeVariables": {"fontSize": "14px"},
+    "fontFamily": DIAGRAM_FONT,
+    "flowchart": {"nodeSpacing": 44, "rankSpacing": 52, "padding": 16},
+    "themeVariables": {"fontSize": "14px", "fontFamily": DIAGRAM_FONT},
 }
 mermaid_fullscreen = False
 mermaid_height = "auto"
@@ -39,8 +37,7 @@ html_static_path = ["_static"]
 # The 🗃️ from the repo description, from Noto Emoji (Apache 2.0).
 html_favicon = "_static/favicon.ico"
 html_css_files = ["custom.css"]
-# diagrams.js is a module so it runs after sphinxcontrib-mermaid's module and can wrap it.
-html_js_files = [("diagrams.js", {"type": "module"}), ("nav.js", {"defer": "defer"})]
+html_js_files = [("diagrams.js", {"defer": "defer"}), ("mobile.js", {"defer": "defer"})]
 html_context = {"default_mode": "light"}
 html_theme_options = {
     "repository_url": "https://github.com/0trm/mllc",

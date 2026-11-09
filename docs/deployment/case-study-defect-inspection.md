@@ -4,15 +4,16 @@ Automated visual defect inspection is a widely adopted process in modern manufac
 
 ```mermaid
 flowchart LR
-  subgraph edge[Edge device: inspection software]
+  subgraph edge[Edge device]
     Cam[Camera]
-    Ctl[Control software]
   end
   subgraph cloud[Cloud]
     PS[Prediction server]
   end
-  Cam -->|API call with<br>photo from camera| PS
-  PS -->|prediction| Ctl
+  subgraph back[Edge device]
+    Ctl[Control software]
+  end
+  Cam -->|API call with<br>photo from camera| PS -->|prediction| Ctl
 ```
 
 *The inspection software on the edge device sends each photo to the prediction server through an API and acts on the prediction it gets back. Adapted from DeepLearning.AI, MLOps Specialization.*
